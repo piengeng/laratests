@@ -38,9 +38,15 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	 */
 	public static function make($items)
 	{
-		if (is_null($items)) return new static;
+		if (is_null($items))
+		{
+			return new static;
+		}
 
-		if ($items instanceof Collection) return $items;
+		if ($items instanceof Collection)
+		{
+			return $items;
+		}
 
 		return new static(is_array($items) ? $items : array($items));
 	}
@@ -66,7 +72,10 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 
 		foreach ($this->items as $values)
 		{
-			if ($values instanceof Collection) $values = $values->all();
+			if ($values instanceof Collection)
+			{
+				$values = $values->all();
+			}
 
 			$results = array_merge($results, $values);
 		}
@@ -84,7 +93,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	{
 		if ($value instanceof Closure)
 		{
-			return ! is_null($this->first($value));
+			return  ! is_null($this->first($value));
 		}
 
 		return in_array($value, $this->items);
@@ -283,7 +292,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	/**
 	 * Intersect the collection with the given items.
 	 *
- 	 * @param  \Illuminate\Support\Collection|\Illuminate\Support\Contracts\ArrayableInterface|array  $items
+	 * @param  \Illuminate\Support\Collection|\Illuminate\Support\Contracts\ArrayableInterface|array  $items
 	 * @return static
 	 */
 	public function intersect($items)
@@ -312,10 +321,10 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	}
 
 	/**
-	* Get the last item from the collection.
-	*
-	* @return mixed|null
-	*/
+	 * Get the last item from the collection.
+	 *
+	 * @return mixed|null
+	 */
 	public function last()
 	{
 		return count($this->items) > 0 ? end($this->items) : null;
@@ -419,7 +428,10 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	 */
 	public function random($amount = 1)
 	{
-		if ($this->isEmpty()) return null;
+		if ($this->isEmpty())
+		{
+			return null;
+		}
 
 		$keys = array_rand($this->items, $amount);
 
@@ -450,7 +462,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 		{
 			return $this->filter(function($item) use ($callback)
 			{
-				return ! $callback($item);
+				return  ! $callback($item);
 			});
 		}
 
@@ -561,8 +573,11 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	{
 		$results = array();
 
-		if (is_string($callback)) $callback =
-                          $this->valueRetriever($callback);
+		if (is_string($callback))
+		{
+			$callback =
+			$this->valueRetriever($callback);
+		}
 
 		// First we will loop through the items and get the comparator from a callback
 		// function which we were given. Then, we will sort the returned values and
@@ -573,7 +588,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 		}
 
 		$descending ? arsort($results, $options)
-                    : asort($results, $options);
+		: asort($results, $options);
 
 		// Once we have sorted all of the keys in the array, we will loop through them
 		// and grab the corresponding model so we can set the underlying items list
@@ -646,7 +661,10 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	 */
 	public function take($limit = null)
 	{
-		if ($limit < 0) return $this->slice($limit, abs($limit));
+		if ($limit < 0)
+		{
+			return $this->slice($limit, abs($limit));
+		}
 
 		return $this->slice(0, $limit);
 	}
@@ -831,7 +849,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	/**
 	 * Results array of items from Collection or ArrayableInterface.
 	 *
-  	 * @param  \Illuminate\Support\Collection|\Illuminate\Support\Contracts\ArrayableInterface|array  $items
+	 * @param  \Illuminate\Support\Collection|\Illuminate\Support\Contracts\ArrayableInterface|array  $items
 	 * @return array
 	 */
 	protected function getArrayableItems($items)

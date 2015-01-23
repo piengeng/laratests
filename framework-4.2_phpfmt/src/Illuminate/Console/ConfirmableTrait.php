@@ -17,7 +17,10 @@ trait ConfirmableTrait {
 
 		if (call_user_func($shouldConfirm))
 		{
-			if ($this->option('force')) return true;
+			if ($this->option('force'))
+			{
+				return true;
+			}
 
 			$this->comment(str_repeat('*', strlen($warning) + 12));
 			$this->comment('*     '.$warning.'     *');
@@ -44,7 +47,9 @@ trait ConfirmableTrait {
 	 */
 	protected function getDefaultConfirmCallback()
 	{
-		return function() { return $this->getLaravel()->environment() == 'production'; };
+		return function()
+		{
+			return $this->getLaravel()->environment() == 'production';};
 	}
 
 }

@@ -217,8 +217,8 @@ class Builder {
 	 * @return void
 	 */
 	public function __construct(ConnectionInterface $connection,
-                                Grammar $grammar,
-                                Processor $processor)
+		Grammar $grammar,
+		Processor $processor)
 	{
 		$this->grammar = $grammar;
 		$this->processor = $processor;
@@ -869,7 +869,7 @@ class Builder {
 	{
 		return $this->whereNotNull($column, 'or');
 	}
-	
+
 	/**
 	 * Add a "where date" statement to the query.
 	 *
@@ -883,7 +883,7 @@ class Builder {
 	{
 		return $this->addDateBasedWhere('Date', $column, $operator, $value, $boolean);
 	}
-	
+
 	/**
 	 * Add a "where day" statement to the query.
 	 *
@@ -1097,7 +1097,7 @@ class Builder {
 	 */
 	public function orderBy($column, $direction = 'asc')
 	{
-		$property = $this->unions ? 'unionOrders' : 'orders';
+		$property  = $this->unions ? 'unionOrders' : 'orders';
 		$direction = strtolower($direction) == 'asc' ? 'asc' : 'desc';
 
 		$this->{$property}[] = compact('column', 'direction');
@@ -1181,7 +1181,10 @@ class Builder {
 	{
 		$property = $this->unions ? 'unionLimit' : 'limit';
 
-		if ($value > 0) $this->$property = $value;
+		if ($value > 0)
+		{
+			$this->$property = $value;
+		}
 
 		return $this;
 	}
@@ -1379,7 +1382,10 @@ class Builder {
 	 */
 	public function get($columns = array('*'))
 	{
-		if ( ! is_null($this->cacheMinutes)) return $this->getCached($columns);
+		if ( ! is_null($this->cacheMinutes))
+		{
+			return $this->getCached($columns);
+		}
 
 		return $this->getFresh($columns);
 	}
@@ -1392,7 +1398,10 @@ class Builder {
 	 */
 	public function getFresh($columns = array('*'))
 	{
-		if (is_null($this->columns)) $this->columns = $columns;
+		if (is_null($this->columns))
+		{
+			$this->columns = $columns;
+		}
 
 		return $this->processor->processSelect($this, $this->runSelect());
 	}
@@ -1420,7 +1429,10 @@ class Builder {
 	 */
 	public function getCached($columns = array('*'))
 	{
-		if (is_null($this->columns)) $this->columns = $columns;
+		if (is_null($this->columns))
+		{
+			$this->columns = $columns;
+		}
 
 		// If the query is requested to be cached, we will cache it using a unique key
 		// for this database connection and query statement, including the bindings
@@ -1494,7 +1506,9 @@ class Builder {
 	 */
 	protected function getCacheCallback($columns)
 	{
-		return function() use ($columns) { return $this->getFresh($columns); };
+		return function() use ($columns)
+		{
+			return $this->getFresh($columns);};
 	}
 
 	/**
@@ -1583,7 +1597,10 @@ class Builder {
 	 */
 	public function implode($column, $glue = null)
 	{
-		if (is_null($glue)) return implode($this->lists($column));
+		if (is_null($glue))
+		{
+			return implode($this->lists($column));
+		}
 
 		return implode($glue, $this->lists($column));
 	}
@@ -1867,7 +1884,8 @@ class Builder {
 		{
 			foreach ($values as $key => $value)
 			{
-				ksort($value); $values[$key] = $value;
+				ksort($value);
+				$values[$key] = $value;
 			}
 		}
 
@@ -1970,7 +1988,10 @@ class Builder {
 		// If an ID is passed to the method, we will set the where clause to check
 		// the ID to allow developers to simply and quickly remove a single row
 		// from their database without manually specifying the where clauses.
-		if ( ! is_null($id)) $this->where('id', '=', $id);
+		if ( ! is_null($id))
+		{
+			$this->where('id', '=', $id);
+		}
 
 		$sql = $this->grammar->compileDelete($this);
 
@@ -2024,7 +2045,7 @@ class Builder {
 	{
 		return array_values(array_filter($bindings, function($binding)
 		{
-			return ! $binding instanceof Expression;
+			return  ! $binding instanceof Expression;
 		}));
 	}
 

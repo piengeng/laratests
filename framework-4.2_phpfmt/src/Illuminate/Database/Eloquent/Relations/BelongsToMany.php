@@ -133,7 +133,10 @@ class BelongsToMany extends Relation {
 	 */
 	public function firstOrFail($columns = array('*'))
 	{
-		if ( ! is_null($model = $this->first($columns))) return $model;
+		if ( ! is_null($model = $this->first($columns)))
+		{
+			return $model;
+		}
 
 		throw new ModelNotFoundException;
 	}
@@ -243,7 +246,11 @@ class BelongsToMany extends Relation {
 	{
 		$this->setJoin();
 
-		if (static::$constraints) $this->setWhere();
+		if (static::$constraints)
+		{
+			$this->setWhere();
+		}
+
 	}
 
 	/**
@@ -586,10 +593,13 @@ class BelongsToMany extends Relation {
 	public function sync($ids, $detaching = true)
 	{
 		$changes = array(
-			'attached' => array(), 'detached' => array(), 'updated' => array()
+			'attached' => array(), 'detached' => array(), 'updated' => array(),
 		);
 
-		if ($ids instanceof Collection) $ids = $ids->modelKeys();
+		if ($ids instanceof Collection)
+		{
+			$ids = $ids->modelKeys();
+		}
 
 		// First we need to attach any of the associated models that are not currently
 		// in this joining table. We'll spin through the given IDs, checking to see
@@ -607,7 +617,9 @@ class BelongsToMany extends Relation {
 		{
 			$this->detach($detach);
 
-			$changes['detached'] = (array) array_map(function($v) { return (int) $v; }, $detach);
+			$changes['detached'] = (array) array_map(function($v)
+			{
+				return (int) $v;}, $detach);
 		}
 
 		// Now we are finally ready to attach the new records. Note that we'll disable
@@ -702,7 +714,10 @@ class BelongsToMany extends Relation {
 
 		$updated = $this->newPivotStatementForId($id)->update($attributes);
 
-		if ($touch) $this->touchIfTouching();
+		if ($touch)
+		{
+			$this->touchIfTouching();
+		}
 
 		return $updated;
 	}
@@ -717,13 +732,20 @@ class BelongsToMany extends Relation {
 	 */
 	public function attach($id, array $attributes = array(), $touch = true)
 	{
-		if ($id instanceof Model) $id = $id->getKey();
+		if ($id instanceof Model)
+		{
+			$id = $id->getKey();
+		}
 
 		$query = $this->newPivotStatement();
 
 		$query->insert($this->createAttachRecords((array) $id, $attributes));
 
-		if ($touch) $this->touchIfTouching();
+		if ($touch)
+		{
+			$this->touchIfTouching();
+		}
+
 	}
 
 	/**
@@ -846,7 +868,10 @@ class BelongsToMany extends Relation {
 	 */
 	public function detach($ids = array(), $touch = true)
 	{
-		if ($ids instanceof Model) $ids = (array) $ids->getKey();
+		if ($ids instanceof Model)
+		{
+			$ids = (array) $ids->getKey();
+		}
 
 		$query = $this->newPivotQuery();
 
@@ -860,7 +885,10 @@ class BelongsToMany extends Relation {
 			$query->whereIn($this->otherKey, (array) $ids);
 		}
 
-		if ($touch) $this->touchIfTouching();
+		if ($touch)
+		{
+			$this->touchIfTouching();
+		}
 
 		// Once we have all of the conditions set on the statement, we are ready
 		// to run the delete on the pivot table. Then, if the touch parameter
@@ -877,9 +905,16 @@ class BelongsToMany extends Relation {
 	 */
 	public function touchIfTouching()
 	{
-		if ($this->touchingParent()) $this->getParent()->touch();
+		if ($this->touchingParent())
+		{
+			$this->getParent()->touch();
+		}
 
-		if ($this->getParent()->touches($this->relationName)) $this->touch();
+		if ($this->getParent()->touches($this->relationName))
+		{
+			$this->touch();
+		}
+
 	}
 
 	/**

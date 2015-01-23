@@ -56,7 +56,7 @@ class Listener {
 	public function __construct($commandPath)
 	{
 		$this->commandPath = $commandPath;
-		$this->workerCommand =  '"'.PHP_BINARY.'" artisan queue:work %s --queue="%s" --delay=%s --memory=%s --sleep=%s --tries=%s';
+		$this->workerCommand = '"'.PHP_BINARY.'" artisan queue:work %s --queue="%s" --delay=%s --memory=%s --sleep=%s --tries=%s';
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Listener {
 	{
 		$process = $this->makeProcess($connection, $queue, $delay, $memory, $timeout);
 
-		while(true)
+		while (true)
 		{
 			$this->runProcess($process, $memory);
 		}
@@ -98,7 +98,7 @@ class Listener {
 		// process managers will restart this with a clean slate of memory.
 		if ($this->memoryExceeded($memory))
 		{
-			$this->stop(); return;
+			$this->stop();return;
 		}
 	}
 

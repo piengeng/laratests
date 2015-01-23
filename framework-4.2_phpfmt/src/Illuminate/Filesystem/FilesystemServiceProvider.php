@@ -11,7 +11,9 @@ class FilesystemServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bindShared('files', function() { return new Filesystem; });
+		$this->app->bindShared('files', function()
+		{
+			return new Filesystem;});
 	}
 
 }

@@ -1,6 +1,7 @@
 <?php namespace Illuminate\Routing;
 
-use ReflectionClass, ReflectionMethod;
+use ReflectionClass;
+use ReflectionMethod;
 
 class ControllerInspector {
 
@@ -11,7 +12,7 @@ class ControllerInspector {
 	 */
 	protected $verbs = array(
 		'any', 'get', 'post', 'put', 'patch',
-		'delete', 'head', 'options'
+		'delete', 'head', 'options',
 	);
 
 	/**
@@ -61,7 +62,10 @@ class ControllerInspector {
 	 */
 	public function isRoutable(ReflectionMethod $method)
 	{
-		if ($method->class == 'Illuminate\Routing\Controller') return false;
+		if ($method->class == 'Illuminate\Routing\Controller')
+		{
+			return false;
+		}
 
 		return starts_with($method->name, $this->verbs);
 	}

@@ -44,7 +44,11 @@ class EnvironmentDetector {
 			// are currently processing here, then return back these environment's names.
 			foreach ((array) $hosts as $host)
 			{
-				if ($this->isMachine($host)) return $environment;
+				if ($this->isMachine($host))
+				{
+					return $environment;
+				}
+
 			}
 		}
 

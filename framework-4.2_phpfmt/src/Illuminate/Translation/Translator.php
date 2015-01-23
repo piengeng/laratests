@@ -83,13 +83,20 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface {
 				$namespace, $group, $locale, $item, $replace
 			);
 
-			if ( ! is_null($line)) break;
+			if ( ! is_null($line))
+			{
+				break;
+			}
+
 		}
 
 		// If the line doesn't exist, we will return back the key which was requested as
 		// that will be quick to spot in the UI if language keys are wrong or missing
 		// from the application's language files. Otherwise we can return the line.
-		if ( ! isset($line)) return $key;
+		if ( ! isset($line))
+		{
+			return $key;
+		}
 
 		return $line;
 	}
@@ -208,7 +215,10 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface {
 	 */
 	public function load($namespace, $group, $locale)
 	{
-		if ($this->isLoaded($namespace, $group, $locale)) return;
+		if ($this->isLoaded($namespace, $group, $locale))
+		{
+			return;
+		}
 
 		// The loader is responsible for returning the array of language lines for the
 		// given namespace, group, and locale. We'll set the lines in this array of
@@ -253,7 +263,10 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface {
 	{
 		$segments = parent::parseKey($key);
 
-		if (is_null($segments[0])) $segments[0] = '*';
+		if (is_null($segments[0]))
+		{
+			$segments[0] = '*';
+		}
 
 		return $segments;
 	}

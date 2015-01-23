@@ -134,7 +134,11 @@ class Arr {
 	{
 		foreach ($array as $key => $value)
 		{
-			if (call_user_func($callback, $key, $value)) return $value;
+			if (call_user_func($callback, $key, $value))
+			{
+				return $value;
+			}
+
 		}
 
 		return value($default);
@@ -163,7 +167,9 @@ class Arr {
 	{
 		$return = array();
 
-		array_walk_recursive($array, function($x) use (&$return) { $return[] = $x; });
+		array_walk_recursive($array, function($x) use (&$return)
+		{
+			$return[] = $x;});
 
 		return $return;
 	}
@@ -177,7 +183,7 @@ class Arr {
 	 */
 	public static function forget(&$array, $keys)
 	{
-		$original =& $array;
+		$original = &$array;
 
 		foreach ((array) $keys as $key)
 		{
@@ -189,14 +195,14 @@ class Arr {
 
 				if (isset($array[$part]) && is_array($array[$part]))
 				{
-					$array =& $array[$part];
+					$array = &$array[$part];
 				}
 			}
 
 			unset($array[array_shift($parts)]);
 
 			// clean up after each pass
-			$array =& $original;
+			$array = &$original;
 		}
 	}
 
@@ -210,13 +216,19 @@ class Arr {
 	 */
 	public static function get($array, $key, $default = null)
 	{
-		if (is_null($key)) return $array;
+		if (is_null($key))
+		{
+			return $array;
+		}
 
-		if (isset($array[$key])) return $array[$key];
+		if (isset($array[$key]))
+		{
+			return $array[$key];
+		}
 
 		foreach (explode('.', $key) as $segment)
 		{
-			if ( ! is_array($array) || ! array_key_exists($segment, $array))
+			if ( ! is_array($array) ||  ! array_key_exists($segment, $array))
 			{
 				return value($default);
 			}
@@ -236,13 +248,19 @@ class Arr {
 	 */
 	public static function has($array, $key)
 	{
-		if (empty($array) || is_null($key)) return false;
+		if (empty($array) || is_null($key))
+		{
+			return false;
+		}
 
-		if (array_key_exists($key, $array)) return true;
+		if (array_key_exists($key, $array))
+		{
+			return true;
+		}
 
 		foreach (explode('.', $key) as $segment)
 		{
-			if ( ! is_array($array) || ! array_key_exists($segment, $array))
+			if ( ! is_array($array) ||  ! array_key_exists($segment, $array))
 			{
 				return false;
 			}
@@ -328,7 +346,10 @@ class Arr {
 	 */
 	public static function set(&$array, $key, $value)
 	{
-		if (is_null($key)) return $array = $value;
+		if (is_null($key))
+		{
+			return $array = $value;
+		}
 
 		$keys = explode('.', $key);
 
@@ -339,12 +360,12 @@ class Arr {
 			// If the key doesn't exist at this depth, we will just create an empty array
 			// to hold the next value, allowing us to create the arrays to hold final
 			// values at the correct depth. Then we'll keep digging into the array.
-			if ( ! isset($array[$key]) || ! is_array($array[$key]))
+			if ( ! isset($array[$key]) ||  ! is_array($array[$key]))
 			{
 				$array[$key] = array();
 			}
 
-			$array =& $array[$key];
+			$array = &$array[$key];
 		}
 
 		$array[array_shift($keys)] = $value;
@@ -377,7 +398,11 @@ class Arr {
 
 		foreach ($array as $key => $value)
 		{
-			if (call_user_func($callback, $key, $value)) $filtered[$key] = $value;
+			if (call_user_func($callback, $key, $value))
+			{
+				$filtered[$key] = $value;
+			}
+
 		}
 
 		return $filtered;

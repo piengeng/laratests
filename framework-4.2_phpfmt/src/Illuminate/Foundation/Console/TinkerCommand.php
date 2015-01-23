@@ -57,11 +57,14 @@ class TinkerCommand extends Command {
 	 */
 	protected function setupBorisErrorHandling()
 	{
-		restore_error_handler(); restore_exception_handler();
+		restore_error_handler();
+		restore_exception_handler();
 
 		$this->laravel->make('artisan')->setCatchExceptions(false);
 
-		$this->laravel->error(function() { return ''; });
+		$this->laravel->error(function()
+		{
+			return '';});
 	}
 
 	/**

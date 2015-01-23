@@ -1,8 +1,8 @@
 <?php namespace Illuminate\Queue\Console;
 
 use RuntimeException;
-use Illuminate\Queue\IronQueue;
 use Illuminate\Console\Command;
+use Illuminate\Queue\IronQueue;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -58,7 +58,7 @@ class SubscribeCommand extends Command {
 	protected function getQueueOptions()
 	{
 		return array(
-			'push_type' => $this->getPushType(), 'subscribers' => $this->getSubscriberList()
+			'push_type' => $this->getPushType(), 'subscribers' => $this->getSubscriberList(),
 		);
 	}
 
@@ -69,7 +69,10 @@ class SubscribeCommand extends Command {
 	 */
 	protected function getPushType()
 	{
-		if ($this->option('type')) return $this->option('type');
+		if ($this->option('type'))
+		{
+			return $this->option('type');
+		}
 
 		try
 		{
@@ -119,7 +122,10 @@ class SubscribeCommand extends Command {
 	 */
 	protected function getQueue()
 	{
-		if (isset($this->meta)) return $this->meta;
+		if (isset($this->meta))
+		{
+			return $this->meta;
+		}
 
 		return $this->meta = $this->laravel['queue']->getIron()->getQueue($this->argument('queue'));
 	}

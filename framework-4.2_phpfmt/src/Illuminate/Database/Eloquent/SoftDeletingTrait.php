@@ -98,7 +98,7 @@ trait SoftDeletingTrait {
 	 */
 	public function trashed()
 	{
-		return ! is_null($this->{$this->getDeletedAtColumn()});
+		return  ! is_null($this->{$this->getDeletedAtColumn()});
 	}
 
 	/**
@@ -108,7 +108,7 @@ trait SoftDeletingTrait {
 	 */
 	public static function withTrashed()
 	{
-		return (new static)->newQueryWithoutScope(new SoftDeletingScope);
+		return (new static )->newQueryWithoutScope(new SoftDeletingScope);
 	}
 
 	/**

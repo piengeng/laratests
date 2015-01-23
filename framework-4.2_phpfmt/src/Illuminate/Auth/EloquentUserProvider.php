@@ -54,9 +54,9 @@ class EloquentUserProvider implements UserProviderInterface {
 		$model = $this->createModel();
 
 		return $model->newQuery()
-                        ->where($model->getKeyName(), $identifier)
-                        ->where($model->getRememberTokenName(), $token)
-                        ->first();
+               ->where($model->getKeyName(), $identifier)
+               ->where($model->getRememberTokenName(), $token)
+               ->first();
 	}
 
 	/**
@@ -88,7 +88,11 @@ class EloquentUserProvider implements UserProviderInterface {
 
 		foreach ($credentials as $key => $value)
 		{
-			if ( ! str_contains($key, 'password')) $query->where($key, $value);
+			if ( ! str_contains($key, 'password'))
+			{
+				$query->where($key, $value);
+			}
+
 		}
 
 		return $query->first();

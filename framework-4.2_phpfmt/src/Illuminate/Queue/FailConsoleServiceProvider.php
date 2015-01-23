@@ -3,8 +3,8 @@
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Console\RetryCommand;
 use Illuminate\Queue\Console\ListFailedCommand;
-use Illuminate\Queue\Console\FlushFailedCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
+use Illuminate\Queue\Console\FlushFailedCommand;
 use Illuminate\Queue\Console\ForgetFailedCommand;
 
 class FailConsoleServiceProvider extends ServiceProvider {

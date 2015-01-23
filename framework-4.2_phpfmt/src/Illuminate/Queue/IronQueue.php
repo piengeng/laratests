@@ -75,7 +75,10 @@ class IronQueue extends Queue implements QueueInterface {
 	 */
 	public function pushRaw($payload, $queue = null, array $options = array())
 	{
-		if ($this->shouldEncrypt) $payload = $this->crypt->encrypt($payload);
+		if ($this->shouldEncrypt)
+		{
+			$payload = $this->crypt->encrypt($payload);
+		}
 
 		return $this->iron->postMessage($this->getQueue($queue), $payload, $options)->id;
 	}

@@ -10,6 +10,8 @@ class Config extends Facade {
 	 *
 	 * @return string
 	 */
-	protected static function getFacadeAccessor() { return 'config'; }
+	protected static function getFacadeAccessor()
+	{
+		return 'config';}
 
 }

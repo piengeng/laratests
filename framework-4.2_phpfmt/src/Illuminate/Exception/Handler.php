@@ -61,9 +61,9 @@ class Handler {
 	 * @return void
 	 */
 	public function __construct(ResponsePreparerInterface $responsePreparer,
-                                ExceptionDisplayerInterface $plainDisplayer,
-                                ExceptionDisplayerInterface $debugDisplayer,
-                                $debug = true)
+		ExceptionDisplayerInterface $plainDisplayer,
+		ExceptionDisplayerInterface $debugDisplayer,
+		$debug = true)
 	{
 		$this->debug = $debug;
 		$this->plainDisplayer = $plainDisplayer;
@@ -83,7 +83,11 @@ class Handler {
 
 		$this->registerExceptionHandler();
 
-		if ($environment != 'testing') $this->registerShutdownHandler();
+		if ($environment != 'testing')
+		{
+			$this->registerShutdownHandler();
+		}
+
 	}
 
 	/**
@@ -186,7 +190,10 @@ class Handler {
 		{
 			extract($error);
 
-			if ( ! $this->isFatal($type)) return;
+			if ( ! $this->isFatal($type))
+			{
+				return;
+			}
 
 			$this->handleException(new FatalError($message, $type, 0, $file, $line))->send();
 		}
@@ -260,7 +267,7 @@ class Handler {
 			// If this handler returns a "non-null" response, we will return it so it will
 			// get sent back to the browsers. Once the handler returns a valid response
 			// we will cease iterating through them and calling these other handlers.
-			if (isset($response) && ! is_null($response))
+			if (isset($response) &&  ! is_null($response))
 			{
 				return $response;
 			}
@@ -307,7 +314,7 @@ class Handler {
 
 		$expected = $parameters[0];
 
-		return ! $expected->getClass() || $expected->getClass()->isInstance($exception);
+		return  ! $expected->getClass() || $expected->getClass()->isInstance($exception);
 	}
 
 	/**

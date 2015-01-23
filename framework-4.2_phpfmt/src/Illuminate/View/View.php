@@ -1,7 +1,7 @@
 <?php namespace Illuminate\View;
 
-use ArrayAccess;
 use Closure;
+use ArrayAccess;
 use Illuminate\Support\MessageBag;
 use Illuminate\View\Engines\EngineInterface;
 use Illuminate\Support\Contracts\MessageProviderInterface;

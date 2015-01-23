@@ -115,7 +115,9 @@ class Request extends SymfonyRequest {
 	{
 		$segments = explode('/', $this->path());
 
-		return array_values(array_filter($segments, function($v) { return $v != ''; }));
+		return array_values(array_filter($segments, function($v)
+		{
+			return $v != '';}));
 	}
 
 	/**
@@ -191,7 +193,11 @@ class Request extends SymfonyRequest {
 
 		foreach ($keys as $value)
 		{
-			if ( ! array_key_exists($value, $input)) return false;
+			if ( ! array_key_exists($value, $input))
+			{
+				return false;
+			}
+
 		}
 
 		return true;
@@ -209,7 +215,11 @@ class Request extends SymfonyRequest {
 
 		foreach ($keys as $value)
 		{
-			if ($this->isEmptyString($value)) return false;
+			if ($this->isEmptyString($value))
+			{
+				return false;
+			}
+
 		}
 
 		return true;
@@ -225,7 +235,7 @@ class Request extends SymfonyRequest {
 	{
 		$boolOrArray = is_bool($this->input($key)) || is_array($this->input($key));
 
-		return ! $boolOrArray && trim((string) $this->input($key)) === '';
+		return  ! $boolOrArray && trim((string) $this->input($key)) === '';
 	}
 
 	/**
@@ -311,7 +321,7 @@ class Request extends SymfonyRequest {
 	 */
 	public function hasCookie($key)
 	{
-		return ! is_null($this->cookie($key));
+		return  ! is_null($this->cookie($key));
 	}
 
 	/**
@@ -346,11 +356,18 @@ class Request extends SymfonyRequest {
 	 */
 	public function hasFile($key)
 	{
-		if ( ! is_array($files = $this->file($key))) $files = array($files);
+		if ( ! is_array($files = $this->file($key)))
+		{
+			$files = array($files);
+		}
 
 		foreach ($files as $file)
 		{
-			if ($this->isValidFile($file)) return true;
+			if ($this->isValidFile($file))
+			{
+				return true;
+			}
+
 		}
 
 		return false;
@@ -507,7 +524,10 @@ class Request extends SymfonyRequest {
 			$this->json = new ParameterBag((array) json_decode($this->getContent(), true));
 		}
 
-		if (is_null($key)) return $this->json;
+		if (is_null($key))
+		{
+			return $this->json;
+		}
 
 		return array_get($this->json->all(), $key, $default);
 	}
@@ -519,7 +539,10 @@ class Request extends SymfonyRequest {
 	 */
 	protected function getInputSource()
 	{
-		if ($this->isJson()) return $this->json();
+		if ($this->isJson())
+		{
+			return $this->json();
+		}
 
 		return $this->getMethod() == 'GET' ? $this->query : $this->request;
 	}
@@ -556,7 +579,11 @@ class Request extends SymfonyRequest {
 	{
 		foreach ($this->getAcceptableContentTypes() as $type)
 		{
-			if ($format = $this->getFormat($type)) return $format;
+			if ($format = $this->getFormat($type))
+			{
+				return $format;
+			}
+
 		}
 
 		return $default;
@@ -570,9 +597,12 @@ class Request extends SymfonyRequest {
 	 */
 	public static function createFromBase(SymfonyRequest $request)
 	{
-		if ($request instanceof static) return $request;
+		if ($request instanceof static )
+		{
+			return $request;
+		}
 
-		return (new static)->duplicate(
+		return (new static )->duplicate(
 
 			$request->query->all(), $request->request->all(), $request->attributes->all(),
 

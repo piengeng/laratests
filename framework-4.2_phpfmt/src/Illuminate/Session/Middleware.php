@@ -92,7 +92,10 @@ class Middleware implements HttpKernelInterface {
 	 */
 	public function checkRequestForArraySessions(Request $request)
 	{
-		if (is_null($this->reject)) return;
+		if (is_null($this->reject))
+		{
+			return;
+		}
 
 		if (call_user_func($this->reject, $request))
 		{
@@ -221,7 +224,7 @@ class Middleware implements HttpKernelInterface {
 	 */
 	protected function sessionConfigured()
 	{
-		return ! is_null(array_get($this->manager->getSessionConfig(), 'driver'));
+		return  ! is_null(array_get($this->manager->getSessionConfig(), 'driver'));
 	}
 
 	/**
@@ -237,7 +240,7 @@ class Middleware implements HttpKernelInterface {
 		// session cookies will not need to get set on any responses in those cases.
 		$config = $config ?: $this->manager->getSessionConfig();
 
-		return ! in_array($config['driver'], array(null, 'array'));
+		return  ! in_array($config['driver'], array(null, 'array'));
 	}
 
 	/**

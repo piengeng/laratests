@@ -229,7 +229,7 @@ class Encrypter {
 	 */
 	protected function invalidPayload($data)
 	{
-		return ! is_array($data) || ! isset($data['iv']) || ! isset($data['value']) || ! isset($data['mac']);
+		return  ! is_array($data) ||  ! isset($data['iv']) ||  ! isset($data['value']) ||  ! isset($data['mac']);
 	}
 
 	/**
@@ -249,9 +249,15 @@ class Encrypter {
 	 */
 	protected function getRandomizer()
 	{
-		if (defined('MCRYPT_DEV_URANDOM')) return MCRYPT_DEV_URANDOM;
+		if (defined('MCRYPT_DEV_URANDOM'))
+		{
+			return MCRYPT_DEV_URANDOM;
+		}
 
-		if (defined('MCRYPT_DEV_RANDOM')) return MCRYPT_DEV_RANDOM;
+		if (defined('MCRYPT_DEV_RANDOM'))
+		{
+			return MCRYPT_DEV_RANDOM;
+		}
 
 		mt_srand();
 

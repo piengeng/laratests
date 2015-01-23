@@ -50,7 +50,10 @@ class ResetCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ( ! $this->confirmToProceed()) return;
+		if ( ! $this->confirmToProceed())
+		{
+			return;
+		}
 
 		$this->migrator->setConnection($this->input->getOption('database'));
 
@@ -68,7 +71,11 @@ class ResetCommand extends Command {
 				$this->output->writeln($note);
 			}
 
-			if ($count == 0) break;
+			if ($count == 0)
+			{
+				break;
+			}
+
 		}
 	}
 

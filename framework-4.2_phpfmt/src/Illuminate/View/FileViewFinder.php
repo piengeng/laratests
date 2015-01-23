@@ -73,7 +73,10 @@ class FileViewFinder implements ViewFinderInterface {
 	 */
 	public function find($name)
 	{
-		if (isset($this->views[$name])) return $this->views[$name];
+		if (isset($this->views[$name]))
+		{
+			return $this->views[$name];
+		}
 
 		if ($this->hasHintInformation($name = trim($name)))
 		{

@@ -6,8 +6,8 @@ use Illuminate\Queue\Jobs\RedisJob;
 class RedisQueue extends Queue implements QueueInterface {
 
 	/**
-	* The Redis database instance.
-	*
+	 * The Redis database instance.
+	 *
 	 * @var \Illuminate\Redis\Database
 	 */
 	protected $redis;
@@ -175,7 +175,7 @@ class RedisQueue extends Queue implements QueueInterface {
 	{
 		$options = ['cas' => true, 'watch' => $from, 'retry' => 10];
 
-		$this->getConnection()->transaction($options, function ($transaction) use ($from, $to)
+		$this->getConnection()->transaction($options, function($transaction) use ($from, $to)
 		{
 			// First we need to get all of jobs that have expired based on the current time
 			// so that we can push them onto the main queue. After we get them we simply

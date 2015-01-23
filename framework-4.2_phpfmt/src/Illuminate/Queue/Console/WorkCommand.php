@@ -49,7 +49,10 @@ class WorkCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->downForMaintenance() && ! $this->option('daemon')) return;
+		if ($this->downForMaintenance() &&  ! $this->option('daemon'))
+		{
+			return;
+		}
 
 		$queue = $this->option('queue');
 
@@ -131,7 +134,10 @@ class WorkCommand extends Command {
 	 */
 	protected function downForMaintenance()
 	{
-		if ($this->option('force')) return false;
+		if ($this->option('force'))
+		{
+			return false;
+		}
 
 		return $this->laravel->isDownForMaintenance();
 	}

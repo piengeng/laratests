@@ -1,8 +1,8 @@
 <?php namespace Illuminate\Auth\Reminders;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Auth\Console\RemindersTableCommand;
 use Illuminate\Auth\Console\ClearRemindersCommand;
+use Illuminate\Auth\Console\RemindersTableCommand;
 use Illuminate\Auth\Console\RemindersControllerCommand;
 use Illuminate\Auth\Reminders\DatabaseReminderRepository as DbRepository;
 

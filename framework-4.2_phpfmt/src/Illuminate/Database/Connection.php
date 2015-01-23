@@ -1,11 +1,11 @@
 <?php namespace Illuminate\Database;
 
-use PDO;
 use Closure;
 use DateTime;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Database\Query\Processors\Processor;
 use Doctrine\DBAL\Connection as DoctrineConnection;
+use Illuminate\Database\Query\Processors\Processor;
+use PDO;
 
 class Connection implements ConnectionInterface {
 
@@ -193,7 +193,9 @@ class Connection implements ConnectionInterface {
 	 *
 	 * @return \Illuminate\Database\Schema\Grammars\Grammar
 	 */
-	protected function getDefaultSchemaGrammar() {}
+	protected function getDefaultSchemaGrammar()
+	{
+		}
 
 	/**
 	 * Set the query post processor to the default implementation.
@@ -222,7 +224,9 @@ class Connection implements ConnectionInterface {
 	 */
 	public function getSchemaBuilder()
 	{
-		if (is_null($this->schemaGrammar)) { $this->useDefaultSchemaGrammar(); }
+		if (is_null($this->schemaGrammar))
+		{
+			$this->useDefaultSchemaGrammar();}
 
 		return new Schema\Builder($this);
 	}
@@ -291,7 +295,10 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, $bindings, function($me, $query, $bindings) use ($useReadPdo)
 		{
-			if ($me->pretending()) return array();
+			if ($me->pretending())
+			{
+				return array();
+			}
 
 			// For select statements, we'll simply execute the query and return an array
 			// of the database result set. Each element in the array will be a single
@@ -362,7 +369,10 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, $bindings, function($me, $query, $bindings)
 		{
-			if ($me->pretending()) return true;
+			if ($me->pretending())
+			{
+				return true;
+			}
 
 			$bindings = $me->prepareBindings($bindings);
 
@@ -381,7 +391,10 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, $bindings, function($me, $query, $bindings)
 		{
-			if ($me->pretending()) return 0;
+			if ($me->pretending())
+			{
+				return 0;
+			}
 
 			// For update or delete statements, we want to get the number of rows affected
 			// by the statement and return that back to the developer. We'll first need
@@ -404,7 +417,10 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, array(), function($me, $query)
 		{
-			if ($me->pretending()) return true;
+			if ($me->pretending())
+			{
+				return true;
+			}
 
 			return (bool) $me->getPdo()->exec($query);
 		});
@@ -497,7 +513,10 @@ class Connection implements ConnectionInterface {
 	 */
 	public function commit()
 	{
-		if ($this->transactions == 1) $this->pdo->commit();
+		if ($this->transactions == 1)
+		{
+			$this->pdo->commit();
+		}
 
 		--$this->transactions;
 
@@ -719,7 +738,10 @@ class Connection implements ConnectionInterface {
 			$this->events->fire('illuminate.query', array($query, $bindings, $time, $this->getName()));
 		}
 
-		if ( ! $this->loggingQueries) return;
+		if ( ! $this->loggingQueries)
+		{
+			return;
+		}
 
 		$this->queryLog[] = compact('query', 'bindings', 'time');
 	}
@@ -818,7 +840,10 @@ class Connection implements ConnectionInterface {
 	 */
 	public function getReadPdo()
 	{
-		if ($this->transactions >= 1) return $this->getPdo();
+		if ($this->transactions >= 1)
+		{
+			return $this->getPdo();
+		}
 
 		return $this->readPdo ?: $this->pdo;
 	}
@@ -832,7 +857,9 @@ class Connection implements ConnectionInterface {
 	public function setPdo($pdo)
 	{
 		if ($this->transactions >= 1)
+		{
 			throw new \RuntimeException("Can't swap PDO instance while within transaction.");
+		}
 
 		$this->pdo = $pdo;
 

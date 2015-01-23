@@ -39,7 +39,10 @@ class FileEnvironmentVariablesLoader implements EnvironmentVariablesLoaderInterf
 	 */
 	public function load($environment = null)
 	{
-		if ($environment == 'production') $environment = null;
+		if ($environment == 'production')
+		{
+			$environment = null;
+		}
 
 		if ( ! $this->files->exists($path = $this->getFile($environment)))
 		{

@@ -23,7 +23,7 @@ class ControllerGenerator {
 		'show',
 		'edit',
 		'update',
-		'destroy'
+		'destroy',
 	);
 
 	/**

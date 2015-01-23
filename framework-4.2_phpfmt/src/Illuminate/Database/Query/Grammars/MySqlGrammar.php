@@ -63,7 +63,10 @@ class MySqlGrammar extends Grammar {
 	 */
 	protected function compileLock(Builder $query, $value)
 	{
-		if (is_string($value)) return $value;
+		if (is_string($value))
+		{
+			return $value;
+		}
 
 		return $value ? 'for update' : 'lock in share mode';
 	}
@@ -122,7 +125,10 @@ class MySqlGrammar extends Grammar {
 	 */
 	protected function wrapValue($value)
 	{
-		if ($value === '*') return $value;
+		if ($value === '*')
+		{
+			return $value;
+		}
 
 		return '`'.str_replace('`', '``', $value).'`';
 	}

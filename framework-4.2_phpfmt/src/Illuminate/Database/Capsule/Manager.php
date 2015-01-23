@@ -1,13 +1,13 @@
 <?php namespace Illuminate\Database\Capsule;
 
-use PDO;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Container\Container;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Traits\CapsuleManagerTrait;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Support\Traits\CapsuleManagerTrait;
+use PDO;
 
 class Manager {
 

@@ -31,7 +31,7 @@ class Client extends BaseClient {
 	{
 		return array(
 			$request->getUri(), $request->getMethod(), $request->getParameters(), $request->getCookies(),
-			$request->getFiles(), $request->getServer(), $request->getContent()
+			$request->getFiles(), $request->getServer(), $request->getContent(),
 		);
 	}
 

@@ -1,8 +1,8 @@
 <?php namespace Illuminate\Console;
 
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -44,9 +44,9 @@ class Application extends \Symfony\Component\Console\Application {
 		$app->boot();
 
 		$console = with($console = new static('Laravel Framework', $app::VERSION))
-								->setLaravel($app)
-								->setExceptionHandler($app['exception'])
-								->setAutoExit(false);
+			->setLaravel($app)
+   ->setExceptionHandler($app['exception'])
+   ->setAutoExit(false);
 
 		$app->instance('artisan', $console);
 
@@ -73,7 +73,7 @@ class Application extends \Symfony\Component\Console\Application {
 		if (isset($this->laravel['events']))
 		{
 			$this->laravel['events']
-					->fire('artisan.start', array($this));
+			     ->fire('artisan.start', array($this));
 		}
 
 		return $this;

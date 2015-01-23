@@ -40,8 +40,8 @@ class ListFailedCommand extends Command {
 		$table = $this->getHelperSet()->get('table');
 
 		$table->setHeaders(array('ID', 'Connection', 'Queue', 'Class', 'Failed At'))
-              ->setRows($rows)
-              ->render($this->output);
+		      ->setRows($rows)
+        ->render($this->output);
 	}
 
 	/**

@@ -31,8 +31,7 @@ class MySqlConnector extends Connector implements ConnectorInterface {
 		// is set on the server but needs to be set here on this client objects.
 		$charset = $config['charset'];
 
-		$names = "set names '$charset'".
-			( ! is_null($collation) ? " collate '$collation'" : '');
+		$names = "set names '$charset'".( ! is_null($collation) ? " collate '$collation'" : '');
 
 		$connection->prepare($names)->execute();
 
@@ -67,7 +66,7 @@ class MySqlConnector extends Connector implements ConnectorInterface {
 	 */
 	protected function configHasSocket(array $config)
 	{
-		return isset($config['unix_socket']) && ! empty($config['unix_socket']);
+		return isset($config['unix_socket']) &&  ! empty($config['unix_socket']);
 	}
 
 	/**
@@ -94,8 +93,8 @@ class MySqlConnector extends Connector implements ConnectorInterface {
 		extract($config);
 
 		return isset($config['port'])
-                        ? "mysql:host={$host};port={$port};dbname={$database}"
-                        : "mysql:host={$host};dbname={$database}";
+		? "mysql:host={$host};port={$port};dbname={$database}"
+		: "mysql:host={$host};dbname={$database}";
 	}
 
 }

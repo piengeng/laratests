@@ -15,7 +15,7 @@ trait AssertionsTrait {
 
 		$actual = $response->getStatusCode();
 
-		return $this->assertTrue($response->isOk(), 'Expected status code 200, got ' .$actual);
+		return $this->assertTrue($response->isOk(), 'Expected status code 200, got '.$actual);
 	}
 
 	/**
@@ -38,11 +38,14 @@ trait AssertionsTrait {
 	 */
 	public function assertViewHas($key, $value = null)
 	{
-		if (is_array($key)) return $this->assertViewHasAll($key);
+		if (is_array($key))
+		{
+			return $this->assertViewHasAll($key);
+		}
 
 		$response = $this->client->getResponse();
 
-		if ( ! isset($response->original) || ! $response->original instanceof View)
+		if ( ! isset($response->original) ||  ! $response->original instanceof View)
 		{
 			return $this->assertTrue(false, 'The response was not a view.');
 		}
@@ -88,7 +91,7 @@ trait AssertionsTrait {
 	{
 		$response = $this->client->getResponse();
 
-		if ( ! isset($response->original) || ! $response->original instanceof View)
+		if ( ! isset($response->original) ||  ! $response->original instanceof View)
 		{
 			return $this->assertTrue(false, 'The response was not a view.');
 		}
@@ -149,7 +152,10 @@ trait AssertionsTrait {
 	 */
 	public function assertSessionHas($key, $value = null)
 	{
-		if (is_array($key)) return $this->assertSessionHasAll($key);
+		if (is_array($key))
+		{
+			return $this->assertSessionHasAll($key);
+		}
 
 		if (is_null($value))
 		{

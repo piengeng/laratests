@@ -51,8 +51,8 @@ class Worker {
 	 * @return void
 	 */
 	public function __construct(QueueManager $manager,
-                                FailedJobProviderInterface $failer = null,
-                                Dispatcher $events = null)
+		FailedJobProviderInterface $failer = null,
+		Dispatcher $events = null)
 	{
 		$this->failer = $failer;
 		$this->events = $events;
@@ -112,7 +112,11 @@ class Worker {
 		}
 		catch (\Exception $e)
 		{
-			if ($this->exceptions) $this->exceptions->handleException($e);
+			if ($this->exceptions)
+			{
+				$this->exceptions->handleException($e);
+			}
+
 		}
 	}
 
@@ -171,11 +175,18 @@ class Worker {
 	 */
 	protected function getNextJob($connection, $queue)
 	{
-		if (is_null($queue)) return $connection->pop();
+		if (is_null($queue))
+		{
+			return $connection->pop();
+		}
 
 		foreach (explode(',', $queue) as $queue)
 		{
-			if ( ! is_null($job = $connection->pop($queue))) return $job;
+			if ( ! is_null($job = $connection->pop($queue)))
+			{
+				return $job;
+			}
+
 		}
 	}
 
@@ -204,17 +215,22 @@ class Worker {
 			// the delete method on the job. Otherwise we will just keep moving.
 			$job->fire();
 
-			if ($job->autoDelete()) $job->delete();
+			if ($job->autoDelete())
+			{
+				$job->delete();
+			}
 
 			return ['job' => $job, 'failed' => false];
 		}
-
 		catch (\Exception $e)
 		{
 			// If we catch an exception, we will attempt to release the job back onto
 			// the queue so it is not lost. This will let is be retried at a later
 			// time by another listener (or the same one). We will do that here.
-			if ( ! $job->isDeleted()) $job->release($delay);
+			if ( ! $job->isDeleted())
+			{
+				$job->release($delay);
+			}
 
 			throw $e;
 		}

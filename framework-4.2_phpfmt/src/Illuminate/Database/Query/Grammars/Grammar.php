@@ -33,7 +33,10 @@ class Grammar extends BaseGrammar {
 	 */
 	public function compileSelect(Builder $query)
 	{
-		if (is_null($query->columns)) $query->columns = array('*');
+		if (is_null($query->columns))
+		{
+			$query->columns = array('*');
+		}
 
 		return trim($this->concatenate($this->compileComponents($query)));
 	}
@@ -98,7 +101,10 @@ class Grammar extends BaseGrammar {
 		// If the query is actually performing an aggregating select, we will let that
 		// compiler handle the building of the select clauses, as it will need some
 		// more syntax that is best handled by that function to keep things neat.
-		if ( ! is_null($query->aggregate)) return;
+		if ( ! is_null($query->aggregate))
+		{
+			return;
+		}
 
 		$select = $query->distinct ? 'select distinct ' : 'select ';
 
@@ -192,7 +198,10 @@ class Grammar extends BaseGrammar {
 	{
 		$sql = array();
 
-		if (is_null($query->wheres)) return '';
+		if (is_null($query->wheres))
+		{
+			return '';
+		}
 
 		// Each type of where clauses has its own compiler function which is responsible
 		// for actually creating the where clauses SQL. This helps keep the code nice
@@ -306,7 +315,10 @@ class Grammar extends BaseGrammar {
 	 */
 	protected function whereIn(Builder $query, $where)
 	{
-		if (empty($where['values'])) return '0 = 1';
+		if (empty($where['values']))
+		{
+			return '0 = 1';
+		}
 
 		$values = $this->parameterize($where['values']);
 
@@ -322,7 +334,10 @@ class Grammar extends BaseGrammar {
 	 */
 	protected function whereNotIn(Builder $query, $where)
 	{
-		if (empty($where['values'])) return '1 = 1';
+		if (empty($where['values']))
+		{
+			return '1 = 1';
+		}
 
 		$values = $this->parameterize($where['values']);
 
@@ -527,11 +542,14 @@ class Grammar extends BaseGrammar {
 	{
 		return 'order by '.implode(', ', array_map(function($order)
 		{
-			if (isset($order['sql'])) return $order['sql'];
+			if (isset($order['sql']))
+			{
+				return $order['sql'];
+			}
 
 			return $this->wrap($order['column']).' '.$order['direction'];
 		}
-		, $orders));
+			, $orders));
 	}
 
 	/**

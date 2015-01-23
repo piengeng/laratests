@@ -67,7 +67,10 @@ class DatabaseStore implements StoreInterface {
 		// remove the records from the database table so it isn't returned again.
 		if ( ! is_null($cache))
 		{
-			if (is_array($cache)) $cache = (object) $cache;
+			if (is_array($cache))
+			{
+				$cache = (object) $cache;
+			}
 
 			if (time() >= $cache->expiration)
 			{

@@ -66,7 +66,11 @@ class Str {
 	{
 		foreach ((array) $needles as $needle)
 		{
-			if ($needle != '' && strpos($haystack, $needle) !== false) return true;
+			if ($needle != '' && strpos($haystack, $needle) !== false)
+			{
+				return true;
+			}
+
 		}
 
 		return false;
@@ -83,7 +87,11 @@ class Str {
 	{
 		foreach ((array) $needles as $needle)
 		{
-			if ((string) $needle === substr($haystack, -strlen($needle))) return true;
+			if ((string) $needle === substr($haystack, -strlen($needle)))
+			{
+				return true;
+			}
+
 		}
 
 		return false;
@@ -112,7 +120,10 @@ class Str {
 	 */
 	public static function is($pattern, $value)
 	{
-		if ($pattern == $value) return true;
+		if ($pattern == $value)
+		{
+			return true;
+		}
 
 		$pattern = preg_quote($pattern, '#');
 
@@ -145,7 +156,10 @@ class Str {
 	 */
 	public static function limit($value, $limit = 100, $end = '...')
 	{
-		if (mb_strlen($value) <= $limit) return $value;
+		if (mb_strlen($value) <= $limit)
+		{
+			return $value;
+		}
 
 		return rtrim(mb_substr($value, 0, $limit, 'UTF-8')).$end;
 	}
@@ -173,7 +187,10 @@ class Str {
 	{
 		preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
 
-		if ( ! isset($matches[0]) || strlen($value) === strlen($matches[0])) return $value;
+		if ( ! isset($matches[0]) || strlen($value) === strlen($matches[0]))
+		{
+			return $value;
+		}
 
 		return rtrim($matches[0]).$end;
 	}
@@ -335,7 +352,11 @@ class Str {
 	{
 		foreach ((array) $needles as $needle)
 		{
-			if ($needle != '' && strpos($haystack, $needle) === 0) return true;
+			if ($needle != '' && strpos($haystack, $needle) === 0)
+			{
+				return true;
+			}
+
 		}
 
 		return false;

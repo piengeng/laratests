@@ -29,10 +29,10 @@ class MorphTo extends BelongsTo {
 	protected $dictionary = array();
 
 	/*
-	 * Indicates if soft-deleted model instances should be fetched.
-	 *
-	 * @var bool
-	 */
+	* Indicates if soft-deleted model instances should be fetched.
+	*
+	* @var bool
+	*/
 	protected $withTrashed = false;
 
 	/**

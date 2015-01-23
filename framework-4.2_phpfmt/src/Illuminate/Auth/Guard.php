@@ -2,8 +2,8 @@
 
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Events\Dispatcher;
-use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Session\Store as SessionStore;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Guard {
@@ -87,8 +87,8 @@ class Guard {
 	 * @return void
 	 */
 	public function __construct(UserProviderInterface $provider,
-								SessionStore $session,
-								Request $request = null)
+		SessionStore $session,
+		Request $request = null)
 	{
 		$this->session = $session;
 		$this->request = $request;
@@ -102,7 +102,7 @@ class Guard {
 	 */
 	public function check()
 	{
-		return ! is_null($this->user());
+		return  ! is_null($this->user());
 	}
 
 	/**
@@ -112,7 +112,7 @@ class Guard {
 	 */
 	public function guest()
 	{
-		return ! $this->check();
+		return  ! $this->check();
 	}
 
 	/**
@@ -122,7 +122,10 @@ class Guard {
 	 */
 	public function user()
 	{
-		if ($this->loggedOut) return;
+		if ($this->loggedOut)
+		{
+			return;
+		}
 
 		// If we have already retrieved the user for the current request we can just
 		// return it back immediately. We do not want to pull the user data every
@@ -149,7 +152,7 @@ class Guard {
 		// the application. Once we have a user we can return it to the caller.
 		$recaller = $this->getRecaller();
 
-		if (is_null($user) && ! is_null($recaller))
+		if (is_null($user) &&  ! is_null($recaller))
 		{
 			$user = $this->getUserByRecaller($recaller);
 		}
@@ -164,7 +167,10 @@ class Guard {
 	 */
 	public function id()
 	{
-		if ($this->loggedOut) return;
+		if ($this->loggedOut)
+		{
+			return;
+		}
 
 		$id = $this->session->get($this->getName(), $this->getRecallerId());
 
@@ -184,13 +190,13 @@ class Guard {
 	 */
 	protected function getUserByRecaller($recaller)
 	{
-		if ($this->validRecaller($recaller) && ! $this->tokenRetrievalAttempted)
+		if ($this->validRecaller($recaller) &&  ! $this->tokenRetrievalAttempted)
 		{
 			$this->tokenRetrievalAttempted = true;
 
 			list($id, $token) = explode('|', $recaller, 2);
 
-			$this->viaRemember = ! is_null($user = $this->provider->retrieveByToken($id, $token));
+			$this->viaRemember =  ! is_null($user = $this->provider->retrieveByToken($id, $token));
 
 			return $user;
 		}
@@ -227,7 +233,10 @@ class Guard {
 	 */
 	protected function validRecaller($recaller)
 	{
-		if ( ! is_string($recaller) || ! str_contains($recaller, '|')) return false;
+		if ( ! is_string($recaller) ||  ! str_contains($recaller, '|'))
+		{
+			return false;
+		}
 
 		$segments = explode('|', $recaller);
 
@@ -272,14 +281,20 @@ class Guard {
 	 */
 	public function basic($field = 'email', Request $request = null)
 	{
-		if ($this->check()) return;
+		if ($this->check())
+		{
+			return;
+		}
 
 		$request = $request ?: $this->getRequest();
 
 		// If a username is set on the HTTP basic request, we will return out without
 		// interrupting the request lifecycle. Otherwise, we'll need to generate a
 		// request indicating that the given credentials were invalid for login.
-		if ($this->attemptBasic($request, $field)) return;
+		if ($this->attemptBasic($request, $field))
+		{
+			return;
+		}
 
 		return $this->getBasicResponse();
 	}
@@ -310,7 +325,10 @@ class Guard {
 	 */
 	protected function attemptBasic(Request $request, $field)
 	{
-		if ( ! $request->getUser()) return false;
+		if ( ! $request->getUser())
+		{
+			return false;
+		}
 
 		return $this->attempt($this->getBasicCredentials($request, $field));
 	}
@@ -358,7 +376,10 @@ class Guard {
 		// fact valid we'll log the users into the application and return true.
 		if ($this->hasValidCredentials($user, $credentials))
 		{
-			if ($login) $this->login($user, $remember);
+			if ($login)
+			{
+				$this->login($user, $remember);
+			}
 
 			return true;
 		}
@@ -375,7 +396,7 @@ class Guard {
 	 */
 	protected function hasValidCredentials($user, $credentials)
 	{
-		return ! is_null($user) && $this->provider->validateCredentials($user, $credentials);
+		return  ! is_null($user) && $this->provider->validateCredentials($user, $credentials);
 	}
 
 	/**

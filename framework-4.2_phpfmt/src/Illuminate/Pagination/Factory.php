@@ -197,7 +197,10 @@ class Factory {
 	 */
 	public function getViewName($view = null)
 	{
-		if ( ! is_null($view)) return $view;
+		if ( ! is_null($view))
+		{
+			return $view;
+		}
 
 		return $this->viewName ?: 'pagination::slider';
 	}

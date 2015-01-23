@@ -42,7 +42,7 @@ class RoutesCommand extends Command {
 	 * @var array
 	 */
 	protected $headers = array(
-		'Domain', 'URI', 'Name', 'Action', 'Before Filters', 'After Filters'
+		'Domain', 'URI', 'Name', 'Action', 'Before Filters', 'After Filters',
 	);
 
 	/**
@@ -107,7 +107,7 @@ class RoutesCommand extends Command {
 			'name'   => $route->getName(),
 			'action' => $route->getActionName(),
 			'before' => $this->getBeforeFilters($route),
-			'after'  => $this->getAfterFilters($route)
+			'after'  => $this->getAfterFilters($route),
 		));
 	}
 
@@ -191,8 +191,8 @@ class RoutesCommand extends Command {
 	 */
 	protected function filterRoute(array $route)
 	{
-		if (($this->option('name') && ! str_contains($route['name'], $this->option('name'))) ||
-			 $this->option('path') && ! str_contains($route['uri'], $this->option('path')))
+		if (($this->option('name') &&  ! str_contains($route['name'], $this->option('name'))) ||
+			$this->option('path') &&  ! str_contains($route['uri'], $this->option('path')))
 		{
 			return null;
 		}

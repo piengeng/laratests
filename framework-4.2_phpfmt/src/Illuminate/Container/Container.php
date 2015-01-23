@@ -348,7 +348,11 @@ class Container implements ArrayAccess {
 	{
 		$this->reboundCallbacks[$abstract][] = $callback;
 
-		if ($this->bound($abstract)) return $this->make($abstract);
+		if ($this->bound($abstract))
+		{
+			return $this->make($abstract);
+		}
+
 	}
 
 	/**

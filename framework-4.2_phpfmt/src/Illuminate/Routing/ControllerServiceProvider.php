@@ -53,7 +53,7 @@ class ControllerServiceProvider extends ServiceProvider {
 	public function provides()
 	{
 		return array(
-			'command.controller.make'
+			'command.controller.make',
 		);
 	}
 

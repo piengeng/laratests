@@ -190,7 +190,10 @@ class Dispatcher {
 		// If an array is not given to us as the payload, we will turn it into one so
 		// we can easily use call_user_func_array on the listeners, passing in the
 		// payload to each of them so that they receive each of these arguments.
-		if ( ! is_array($payload)) $payload = array($payload);
+		if ( ! is_array($payload))
+		{
+			$payload = array($payload);
+		}
 
 		$this->firing[] = $event;
 
@@ -211,7 +214,10 @@ class Dispatcher {
 			// If a boolean false is returned from a listener, we will stop propagating
 			// the event to any further listeners down in the chain, else we keep on
 			// looping through the listeners and firing every one in our sequence.
-			if ($response === false) break;
+			if ($response === false)
+			{
+				break;
+			}
 
 			$responses[] = $response;
 		}
@@ -251,7 +257,11 @@ class Dispatcher {
 
 		foreach ($this->wildcards as $key => $listeners)
 		{
-			if (str_is($key, $eventName)) $wildcards = array_merge($wildcards, $listeners);
+			if (str_is($key, $eventName))
+			{
+				$wildcards = array_merge($wildcards, $listeners);
+			}
+
 		}
 
 		return $wildcards;
@@ -344,7 +354,11 @@ class Dispatcher {
 	{
 		foreach ($this->listeners as $key => $value)
 		{
-			if (ends_with($key, '_queue')) $this->forget($key);
+			if (ends_with($key, '_queue'))
+			{
+				$this->forget($key);
+			}
+
 		}
 	}
 

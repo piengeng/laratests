@@ -2,8 +2,8 @@
 
 use Swift_Mailer;
 use Illuminate\Support\ServiceProvider;
-use Swift_SmtpTransport as SmtpTransport;
 use Swift_MailTransport as MailTransport;
+use Swift_SmtpTransport as SmtpTransport;
 use Illuminate\Mail\Transport\LogTransport;
 use Illuminate\Mail\Transport\MailgunTransport;
 use Illuminate\Mail\Transport\MandrillTransport;

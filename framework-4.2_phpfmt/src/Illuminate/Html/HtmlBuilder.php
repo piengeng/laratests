@@ -110,7 +110,10 @@ class HtmlBuilder {
 	{
 		$url = $this->url->to($url, array(), $secure);
 
-		if (is_null($title) || $title === false) $title = $url;
+		if (is_null($title) || $title === false)
+		{
+			$title = $url;
+		}
 
 		return '<a href="'.$url.'"'.$this->attributes($attributes).'>'.$this->entities($title).'</a>';
 	}
@@ -199,7 +202,7 @@ class HtmlBuilder {
 
 		$title = $title ?: $email;
 
-		$email = $this->obfuscate('mailto:') . $email;
+		$email = $this->obfuscate('mailto:').$email;
 
 		return '<a href="'.$email.'"'.$this->attributes($attributes).'>'.$this->entities($title).'</a>';
 	}
@@ -251,7 +254,10 @@ class HtmlBuilder {
 	{
 		$html = '';
 
-		if (count($list) == 0) return $html;
+		if (count($list) == 0)
+		{
+			return $html;
+		}
 
 		// Essentially we will just spin through the list and build the list of the HTML
 		// elements from the array. We will also handled nested lists in case that is
@@ -319,7 +325,11 @@ class HtmlBuilder {
 		{
 			$element = $this->attributeElement($key, $value);
 
-			if ( ! is_null($element)) $html[] = $element;
+			if ( ! is_null($element))
+			{
+				$html[] = $element;
+			}
+
 		}
 
 		return count($html) > 0 ? ' '.implode(' ', $html) : '';
@@ -334,9 +344,16 @@ class HtmlBuilder {
 	 */
 	protected function attributeElement($key, $value)
 	{
-		if (is_numeric($key)) $key = $value;
+		if (is_numeric($key))
+		{
+			$key = $value;
+		}
 
-		if ( ! is_null($value)) return $key.'="'.e($value).'"';
+		if ( ! is_null($value))
+		{
+			return $key.'="'.e($value).'"';
+		}
+
 	}
 
 	/**
@@ -351,7 +368,10 @@ class HtmlBuilder {
 
 		foreach (str_split($value) as $letter)
 		{
-			if (ord($letter) > 128) return $letter;
+			if (ord($letter) > 128)
+			{
+				return $letter;
+			}
 
 			// To properly obfuscate the value, we will randomly convert each letter to
 			// its entity or hexadecimal representation, keeping a bot from sniffing
@@ -359,10 +379,12 @@ class HtmlBuilder {
 			switch (rand(1, 3))
 			{
 				case 1:
-					$safe .= '&#'.ord($letter).';'; break;
+					$safe .= '&#'.ord($letter).';';
+					break;
 
 				case 2:
-					$safe .= '&#x'.dechex(ord($letter)).';'; break;
+					$safe .= '&#x'.dechex(ord($letter)).';';
+					break;
 
 				case 3:
 					$safe .= $letter;

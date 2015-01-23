@@ -28,7 +28,10 @@ abstract class Grammar {
 	 */
 	public function wrapTable($table)
 	{
-		if ($this->isExpression($table)) return $this->getValue($table);
+		if ($this->isExpression($table))
+		{
+			return $this->getValue($table);
+		}
 
 		return $this->wrap($this->tablePrefix.$table);
 	}
@@ -41,7 +44,10 @@ abstract class Grammar {
 	 */
 	public function wrap($value)
 	{
-		if ($this->isExpression($value)) return $this->getValue($value);
+		if ($this->isExpression($value))
+		{
+			return $this->getValue($value);
+		}
 
 		// If the value being wrapped has a column alias we will need to separate out
 		// the pieces so we can wrap each of the segments of the expression on it
@@ -83,7 +89,10 @@ abstract class Grammar {
 	 */
 	protected function wrapValue($value)
 	{
-		if ($value === '*') return $value;
+		if ($value === '*')
+		{
+			return $value;
+		}
 
 		return '"'.str_replace('"', '""', $value).'"';
 	}

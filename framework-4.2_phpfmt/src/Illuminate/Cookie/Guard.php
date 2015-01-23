@@ -83,8 +83,8 @@ class Guard implements HttpKernelInterface {
 	protected function decryptCookie($cookie)
 	{
 		return is_array($cookie)
-						? $this->decryptArray($cookie)
-						: $this->encrypter->decrypt($cookie);
+		? $this->decryptArray($cookie)
+		: $this->encrypter->decrypt($cookie);
 	}
 
 	/**

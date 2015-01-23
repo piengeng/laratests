@@ -2,8 +2,8 @@
 
 use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;
-use Whoops\Handler\JsonResponseHandler;
 use Illuminate\Support\ServiceProvider;
+use Whoops\Handler\JsonResponseHandler;
 
 class ExceptionServiceProvider extends ServiceProvider {
 

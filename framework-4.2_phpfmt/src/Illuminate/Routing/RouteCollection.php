@@ -234,7 +234,10 @@ class RouteCollection implements Countable, IteratorAggregate {
 	 */
 	protected function get($method = null)
 	{
-		if (is_null($method)) return $this->getRoutes();
+		if (is_null($method))
+		{
+			return $this->getRoutes();
+		}
 
 		return array_get($this->routes, $method, array());
 	}
@@ -247,7 +250,7 @@ class RouteCollection implements Countable, IteratorAggregate {
 	 */
 	public function hasNamedRoute($name)
 	{
-		return ! is_null($this->getByName($name));
+		return  ! is_null($this->getByName($name));
 	}
 
 	/**

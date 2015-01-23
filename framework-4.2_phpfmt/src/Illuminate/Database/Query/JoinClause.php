@@ -24,10 +24,10 @@ class JoinClause {
 	public $clauses = array();
 
 	/**
-	* The "on" bindings for the join.
-	*
-	* @var array
-	*/
+	 * The "on" bindings for the join.
+	 *
+	 * @var array
+	 */
 	public $bindings = array();
 
 	/**
@@ -57,7 +57,10 @@ class JoinClause {
 	{
 		$this->clauses[] = compact('first', 'operator', 'second', 'boolean', 'where');
 
-		if ($where) $this->bindings[] = $second;
+		if ($where)
+		{
+			$this->bindings[] = $second;
+		}
 
 		return $this;
 	}

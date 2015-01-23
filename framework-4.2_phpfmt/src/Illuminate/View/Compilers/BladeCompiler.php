@@ -27,7 +27,7 @@ class BladeCompiler extends Compiler implements CompilerInterface {
 		'Extensions',
 		'Statements',
 		'Comments',
-		'Echos'
+		'Echos',
 	);
 
 	/**
@@ -126,7 +126,7 @@ class BladeCompiler extends Compiler implements CompilerInterface {
 		if (count($this->footer) > 0)
 		{
 			$result = ltrim($result, PHP_EOL)
-					.PHP_EOL.implode(PHP_EOL, array_reverse($this->footer));
+.PHP_EOL.implode(PHP_EOL, array_reverse($this->footer));
 		}
 
 		return $result;
@@ -445,7 +445,7 @@ class BladeCompiler extends Compiler implements CompilerInterface {
 	 */
 	protected function compileForelse($expression)
 	{
-		$empty = '$__empty_' . ++$this->forelseCounter;
+		$empty = '$__empty_'.++$this->forelseCounter;
 
 		return "<?php {$empty} = true; foreach{$expression}: {$empty} = false; ?>";
 	}
@@ -480,7 +480,7 @@ class BladeCompiler extends Compiler implements CompilerInterface {
 	 */
 	protected function compileEmpty($expression)
 	{
-		$empty = '$__empty_' . $this->forelseCounter--;
+		$empty = '$__empty_'.$this->forelseCounter--;
 
 		return "<?php endforeach; if ({$empty}): ?>";
 	}
@@ -692,20 +692,20 @@ class BladeCompiler extends Compiler implements CompilerInterface {
 	}
 
 	/**
-	* Gets the content tags used for the compiler.
-	*
-	* @return string
-	*/
+	 * Gets the content tags used for the compiler.
+	 *
+	 * @return string
+	 */
 	public function getContentTags()
 	{
 		return $this->getTags();
 	}
 
 	/**
-	* Gets the escaped content tags used for the compiler.
-	*
-	* @return string
-	*/
+	 * Gets the escaped content tags used for the compiler.
+	 *
+	 * @return string
+	 */
 	public function getEscapedContentTags()
 	{
 		return $this->getTags(true);

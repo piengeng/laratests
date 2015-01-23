@@ -10,6 +10,8 @@ class Form extends Facade {
 	 *
 	 * @return string
 	 */
-	protected static function getFacadeAccessor() { return 'form'; }
+	protected static function getFacadeAccessor()
+	{
+		return 'form';}
 
 }

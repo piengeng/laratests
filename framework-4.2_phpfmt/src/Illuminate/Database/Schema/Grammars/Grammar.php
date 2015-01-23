@@ -216,7 +216,10 @@ abstract class Grammar extends BaseGrammar {
 	 */
 	public function wrapTable($table)
 	{
-		if ($table instanceof Blueprint) $table = $table->getTable();
+		if ($table instanceof Blueprint)
+		{
+			$table = $table->getTable();
+		}
 
 		return parent::wrapTable($table);
 	}
@@ -229,7 +232,10 @@ abstract class Grammar extends BaseGrammar {
 	 */
 	public function wrap($value)
 	{
-		if ($value instanceof Fluent) $value = $value->name;
+		if ($value instanceof Fluent)
+		{
+			$value = $value->name;
+		}
 
 		return parent::wrap($value);
 	}
@@ -242,9 +248,15 @@ abstract class Grammar extends BaseGrammar {
 	 */
 	protected function getDefaultValue($value)
 	{
-		if ($value instanceof Expression) return $value;
+		if ($value instanceof Expression)
+		{
+			return $value;
+		}
 
-		if (is_bool($value)) return "'".(int) $value."'";
+		if (is_bool($value))
+		{
+			return "'".(int) $value."'";
+		}
 
 		return "'".strval($value)."'";
 	}

@@ -35,7 +35,10 @@ class Collection extends BaseCollection {
 	{
 		if (count($this->items) > 0)
 		{
-			if (is_string($relations)) $relations = func_get_args();
+			if (is_string($relations))
+			{
+				$relations = func_get_args();
+			}
 
 			$query = $this->first()->newQuery()->with($relations);
 
@@ -66,7 +69,7 @@ class Collection extends BaseCollection {
 	 */
 	public function contains($key)
 	{
-		return ! is_null($this->find($key));
+		return  ! is_null($this->find($key));
 	}
 
 	/**
@@ -115,7 +118,9 @@ class Collection extends BaseCollection {
 	 */
 	public function modelKeys()
 	{
-		return array_map(function($m) { return $m->getKey(); }, $this->items);
+		return array_map(function($m)
+		{
+			return $m->getKey();}, $this->items);
 	}
 
 	/**
@@ -162,7 +167,7 @@ class Collection extends BaseCollection {
 	/**
 	 * Intersect the collection with the given items.
 	 *
- 	 * @param  \ArrayAccess|array  $items
+	 * @param  \ArrayAccess|array  $items
 	 * @return static
 	 */
 	public function intersect($items)

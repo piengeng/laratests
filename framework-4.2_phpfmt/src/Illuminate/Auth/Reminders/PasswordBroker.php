@@ -86,9 +86,9 @@ class PasswordBroker {
 	 * @return void
 	 */
 	public function __construct(ReminderRepositoryInterface $reminders,
-                                UserProviderInterface $users,
-                                Mailer $mailer,
-                                $reminderView)
+		UserProviderInterface $users,
+		Mailer $mailer,
+		$reminderView)
 	{
 		$this->users = $users;
 		$this->mailer = $mailer;
@@ -144,7 +144,11 @@ class PasswordBroker {
 		{
 			$m->to($user->getReminderEmail());
 
-			if ( ! is_null($callback)) call_user_func($callback, $m, $user, $token);
+			if ( ! is_null($callback))
+			{
+				call_user_func($callback, $m, $user, $token);
+			}
+
 		});
 	}
 
@@ -261,7 +265,7 @@ class PasswordBroker {
 
 		$user = $this->users->retrieveByCredentials($credentials);
 
-		if ($user && ! $user instanceof RemindableInterface)
+		if ($user &&  ! $user instanceof RemindableInterface)
 		{
 			throw new \UnexpectedValueException("User must implement Remindable interface.");
 		}

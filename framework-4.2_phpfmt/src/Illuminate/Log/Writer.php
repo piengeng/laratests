@@ -3,9 +3,9 @@
 use Closure;
 use Illuminate\Events\Dispatcher;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger as MonologLogger;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger as MonologLogger;
 use Monolog\Handler\RotatingFileHandler;
 use Illuminate\Support\Contracts\JsonableInterface;
 use Illuminate\Support\Contracts\ArrayableInterface;

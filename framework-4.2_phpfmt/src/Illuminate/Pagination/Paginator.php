@@ -237,7 +237,10 @@ class Paginator implements ArrayableInterface, ArrayAccess, Countable, IteratorA
 	 */
 	public function fragment($fragment = null)
 	{
-		if (is_null($fragment)) return $this->fragment;
+		if (is_null($fragment))
+		{
+			return $this->fragment;
+		}
 
 		$this->fragment = $fragment;
 
@@ -263,7 +266,10 @@ class Paginator implements ArrayableInterface, ArrayAccess, Countable, IteratorA
 	 */
 	public function appends($key, $value = null)
 	{
-		if (is_array($key)) return $this->appendArray($key);
+		if (is_array($key))
+		{
+			return $this->appendArray($key);
+		}
 
 		return $this->addQuery($key, $value);
 	}
@@ -409,11 +415,11 @@ class Paginator implements ArrayableInterface, ArrayAccess, Countable, IteratorA
 	}
 
 	/**
-	* Set the base URL in use by the paginator.
-	*
-	* @param  string  $baseUrl
-	* @return void
-	*/
+	 * Set the base URL in use by the paginator.
+	 *
+	 * @param  string  $baseUrl
+	 * @return void
+	 */
 	public function setBaseUrl($baseUrl)
 	{
 		$this->factory->setBaseUrl($baseUrl);
@@ -514,7 +520,7 @@ class Paginator implements ArrayableInterface, ArrayAccess, Countable, IteratorA
 		return array(
 			'total' => $this->total, 'per_page' => $this->perPage,
 			'current_page' => $this->currentPage, 'last_page' => $this->lastPage,
-			'from' => $this->from, 'to' => $this->to, 'data' => $this->getCollection()->toArray(),
+			'from'  => $this->from, 'to'  => $this->to, 'data'  => $this->getCollection()->toArray(),
 		);
 	}
 

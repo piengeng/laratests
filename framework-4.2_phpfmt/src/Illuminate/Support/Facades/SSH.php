@@ -11,6 +11,8 @@ class SSH extends Facade {
 	 *
 	 * @return string
 	 */
-	protected static function getFacadeAccessor() { return 'remote'; }
+	protected static function getFacadeAccessor()
+	{
+		return 'remote';}
 
 }

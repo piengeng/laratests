@@ -115,7 +115,10 @@ class TailCommand extends Command {
 	 */
 	protected function getPath($connection)
 	{
-		if ($this->option('path')) return $this->option('path');
+		if ($this->option('path'))
+		{
+			return $this->option('path');
+		}
 
 		if (is_null($connection))
 		{

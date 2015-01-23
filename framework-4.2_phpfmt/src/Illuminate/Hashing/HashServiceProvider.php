@@ -18,7 +18,9 @@ class HashServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bindShared('hash', function() { return new BcryptHasher; });
+		$this->app->bindShared('hash', function()
+		{
+			return new BcryptHasher;});
 	}
 
 	/**

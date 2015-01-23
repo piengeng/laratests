@@ -91,7 +91,10 @@ class Builder {
 	 */
 	public function findMany($id, $columns = array('*'))
 	{
-		if (empty($id)) return $this->model->newCollection();
+		if (empty($id))
+		{
+			return $this->model->newCollection();
+		}
 
 		$this->query->whereIn($this->model->getQualifiedKeyName(), $id);
 
@@ -109,7 +112,10 @@ class Builder {
 	 */
 	public function findOrFail($id, $columns = array('*'))
 	{
-		if ( ! is_null($model = $this->find($id, $columns))) return $model;
+		if ( ! is_null($model = $this->find($id, $columns)))
+		{
+			return $model;
+		}
 
 		throw (new ModelNotFoundException)->setModel(get_class($this->model));
 	}
@@ -135,7 +141,10 @@ class Builder {
 	 */
 	public function firstOrFail($columns = array('*'))
 	{
-		if ( ! is_null($model = $this->first($columns))) return $model;
+		if ( ! is_null($model = $this->first($columns)))
+		{
+			return $model;
+		}
 
 		throw (new ModelNotFoundException)->setModel(get_class($this->model));
 	}
@@ -171,7 +180,11 @@ class Builder {
 	{
 		$result = $this->first(array($column));
 
-		if ($result) return $result->{$column};
+		if ($result)
+		{
+			return $result->{$column};
+		}
+
 	}
 
 	/**
@@ -354,7 +367,10 @@ class Builder {
 	 */
 	protected function addUpdatedAtColumn(array $values)
 	{
-		if ( ! $this->model->usesTimestamps()) return $values;
+		if ( ! $this->model->usesTimestamps())
+		{
+			return $values;
+		}
 
 		$column = $this->model->getUpdatedAtColumn();
 
@@ -606,7 +622,10 @@ class Builder {
 
 		$query = $relation->getRelationCountQuery($relation->getRelated()->newQuery(), $this);
 
-		if ($callback) call_user_func($callback, $query);
+		if ($callback)
+		{
+			call_user_func($callback, $query);
+		}
 
 		return $this->addHasWhere($query, $relation, $operator, $count, $boolean);
 	}
@@ -628,7 +647,7 @@ class Builder {
 		// In order to nest "has", we need to add count relation constraints on the
 		// callback Closure. We'll do this by simply passing the Closure its own
 		// reference to itself so it calls itself recursively on each segment.
-		$closure = function ($q) use (&$closure, &$relations, $operator, $count, $boolean, $callback)
+		$closure = function($q) use (&$closure, &$relations, $operator, $count, $boolean, $callback)
 		{
 			if (count($relations) > 1)
 			{
@@ -776,7 +795,10 @@ class Builder {
 	 */
 	public function with($relations)
 	{
-		if (is_string($relations)) $relations = func_get_args();
+		if (is_string($relations))
+		{
+			$relations = func_get_args();
+		}
 
 		$eagers = $this->parseRelations($relations);
 
@@ -802,7 +824,9 @@ class Builder {
 			// an empty Closure with the loader so that we can treat all the same.
 			if (is_numeric($name))
 			{
-				$f = function() {};
+				$f = function()
+				{
+					};
 
 				list($name, $constraints) = array($constraints, $f);
 			}
@@ -838,7 +862,9 @@ class Builder {
 
 			if ( ! isset($results[$last = implode('.', $progress)]))
 			{
-				$results[$last] = function() {};
+				$results[$last] = function()
+				{
+					};
 			}
 		}
 

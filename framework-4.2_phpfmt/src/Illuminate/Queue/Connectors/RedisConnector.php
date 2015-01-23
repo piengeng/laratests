@@ -6,8 +6,8 @@ use Illuminate\Queue\RedisQueue;
 class RedisConnector implements ConnectorInterface {
 
 	/**
-	* The Redis database instance.
-	*
+	 * The Redis database instance.
+	 *
 	 * @var \Illuminate\Redis\Database
 	 */
 	protected $redis;

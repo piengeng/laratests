@@ -223,7 +223,10 @@ class FormBuilder {
 	 */
 	public function input($type, $name, $value = null, $options = array())
 	{
-		if ( ! isset($options['name'])) $options['name'] = $name;
+		if ( ! isset($options['name']))
+		{
+			$options['name'] = $name;
+		}
 
 		// We will get the appropriate value for the given field. We will look for the
 		// value in the session for the value in the old input data then we'll look
@@ -331,7 +334,10 @@ class FormBuilder {
 	 */
 	public function textarea($name, $value = null, $options = array())
 	{
-		if ( ! isset($options['name'])) $options['name'] = $name;
+		if ( ! isset($options['name']))
+		{
+			$options['name'] = $name;
+		}
 
 		// Next we will look for the rows and cols attributes, as each of these are put
 		// on the textarea element definition. If they are not present, we will just
@@ -419,7 +425,10 @@ class FormBuilder {
 
 		$options['id'] = $this->getIdAttribute($name, $options);
 
-		if ( ! isset($options['name'])) $options['name'] = $name;
+		if ( ! isset($options['name']))
+		{
+			$options['name'] = $name;
+		}
 
 		// We will simply loop through the options and build an HTML value for each of
 		// them until we have an array of HTML declarations. Then we will join them
@@ -591,7 +600,10 @@ class FormBuilder {
 	 */
 	public function radio($name, $value = null, $checked = null, $options = array())
 	{
-		if (is_null($value)) $value = $name;
+		if (is_null($value))
+		{
+			$value = $name;
+		}
 
 		return $this->checkable('radio', $name, $value, $checked, $options);
 	}
@@ -610,7 +622,10 @@ class FormBuilder {
 	{
 		$checked = $this->getCheckedState($type, $name, $value, $checked);
 
-		if ($checked) $options['checked'] = 'checked';
+		if ($checked)
+		{
+			$options['checked'] = 'checked';
+		}
 
 		return $this->input($type, $name, $value, $options);
 	}
@@ -649,9 +664,15 @@ class FormBuilder {
 	 */
 	protected function getCheckboxCheckedState($name, $value, $checked)
 	{
-		if (isset($this->session) && ! $this->oldInputIsEmpty() && is_null($this->old($name))) return false;
+		if (isset($this->session) &&  ! $this->oldInputIsEmpty() && is_null($this->old($name)))
+		{
+			return false;
+		}
 
-		if ($this->missingOldAndModel($name)) return $checked;
+		if ($this->missingOldAndModel($name))
+		{
+			return $checked;
+		}
 
 		$posted = $this->getValueAttribute($name);
 
@@ -668,7 +689,10 @@ class FormBuilder {
 	 */
 	protected function getRadioCheckedState($name, $value, $checked)
 	{
-		if ($this->missingOldAndModel($name)) return $checked;
+		if ($this->missingOldAndModel($name))
+		{
+			return $checked;
+		}
 
 		return $this->getValueAttribute($name) == $value;
 	}
@@ -891,14 +915,20 @@ class FormBuilder {
 	 */
 	public function getValueAttribute($name, $value = null)
 	{
-		if (is_null($name)) return $value;
+		if (is_null($name))
+		{
+			return $value;
+		}
 
 		if ( ! is_null($this->old($name)))
 		{
 			return $this->old($name);
 		}
 
-		if ( ! is_null($value)) return $value;
+		if ( ! is_null($value))
+		{
+			return $value;
+		}
 
 		if (isset($this->model))
 		{

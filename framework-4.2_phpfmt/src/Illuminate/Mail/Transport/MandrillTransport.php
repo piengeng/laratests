@@ -57,8 +57,8 @@ class MandrillTransport implements Swift_Transport {
 		$client = $this->getHttpClient();
 
 		$client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', [
-			'body' => [
-				'key' => $this->key,
+			'body'   => [
+				'key'   => $this->key,
 				'raw_message' => (string) $message,
 				'async' => false,
 			],

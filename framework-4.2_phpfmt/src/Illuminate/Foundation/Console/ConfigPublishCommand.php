@@ -58,7 +58,10 @@ class ConfigPublishCommand extends Command {
 			return $this->config->alreadyPublished($package);
 		});
 
-		if ( ! $proceed) return;
+		if ( ! $proceed)
+		{
+			return;
+		}
 
 		if ( ! is_null($path = $this->getPath()))
 		{

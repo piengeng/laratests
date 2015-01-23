@@ -130,7 +130,9 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 		$this->routes = new RouteCollection;
 		$this->container = $container ?: new Container;
 
-		$this->bind('_missing', function($v) { return explode('/', $v); });
+		$this->bind('_missing', function($v)
+		{
+			return explode('/', $v);});
 	}
 
 	/**
@@ -420,7 +422,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function getResourceUri($resource)
 	{
-		if ( ! str_contains($resource, '.')) return $resource;
+		if ( ! str_contains($resource, '.'))
+		{
+			return $resource;
+		}
 
 		// Once we have built the base URI, we'll remove the wildcard holder for this
 		// base resource name so that the individual route adders can suffix these
@@ -476,7 +481,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function getResourceName($resource, $method, $options)
 	{
-		if (isset($options['names'][$method])) return $options['names'][$method];
+		if (isset($options['names'][$method]))
+		{
+			return $options['names'][$method];
+		}
 
 		// If a global prefix has been assigned to all names for this resource, we will
 		// grab that so we can prepend it onto the name when we create this name for
@@ -733,7 +741,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 
 		$new['prefix'] = static::formatGroupPrefix($new, $old);
 
-		if (isset($new['domain'])) unset($old['domain']);
+		if (isset($new['domain']))
+		{
+			unset($old['domain']);
+		}
 
 		$new['where'] = array_merge(array_get($old, 'where', []), array_get($new, 'where', []));
 
@@ -902,7 +913,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function routingToController($action)
 	{
-		if ($action instanceof Closure) return false;
+		if ($action instanceof Closure)
+		{
+			return false;
+		}
 
 		return is_string($action) || is_string(array_get($action, 'uses'));
 	}
@@ -915,7 +929,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function getControllerAction($action)
 	{
-		if (is_string($action)) $action = array('uses' => $action);
+		if (is_string($action))
+		{
+			$action = array('uses' => $action);
+		}
 
 		// Here we'll get an instance of this controller dispatcher and hand it off to
 		// the Closure so it will be used to resolve the class instances out of our
@@ -1148,7 +1165,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function parseFilter($callback)
 	{
-		if (is_string($callback) && ! str_contains($callback, '@'))
+		if (is_string($callback) &&  ! str_contains($callback, '@'))
 		{
 			return $callback.'@filter';
 		}
@@ -1166,7 +1183,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function when($pattern, $name, $methods = null)
 	{
-		if ( ! is_null($methods)) $methods = array_map('strtoupper', (array) $methods);
+		if ( ! is_null($methods))
+		{
+			$methods = array_map('strtoupper', (array) $methods);
+		}
 
 		$this->patternFilters[$pattern][] = compact('name', 'methods');
 	}
@@ -1181,7 +1201,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function whenRegex($pattern, $name, $methods = null)
 	{
-		if ( ! is_null($methods)) $methods = array_map('strtoupper', (array) $methods);
+		if ( ! is_null($methods))
+		{
+			$methods = array_map('strtoupper', (array) $methods);
+		}
 
 		$this->regexFilters[$pattern][] = compact('name', 'methods');
 	}
@@ -1200,7 +1223,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	{
 		$this->bind($key, function($value) use ($class, $callback)
 		{
-			if (is_null($value)) return null;
+			if (is_null($value))
+			{
+				return null;
+			}
 
 			// For model binders, we will attempt to retrieve the models using the find
 			// method on the model instance. If we cannot retrieve the models we'll
@@ -1298,7 +1324,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function callFilter($filter, $request, $response = null)
 	{
-		if ( ! $this->filtering) return null;
+		if ( ! $this->filtering)
+		{
+			return null;
+		}
 
 		return $this->events->until('router.'.$filter, array($request, $response));
 	}
@@ -1330,7 +1359,11 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 		{
 			$response = $this->callRouteFilter($filter, $parameters, $route, $request);
 
-			if ( ! is_null($response)) return $response;
+			if ( ! is_null($response))
+			{
+				return $response;
+			}
+
 		}
 	}
 
@@ -1429,7 +1462,11 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 		{
 			$response = $this->callRouteFilter($filter, $parameters, $route, $request);
 
-			if ( ! is_null($response)) return $response;
+			if ( ! is_null($response))
+			{
+				return $response;
+			}
+
 		}
 	}
 
@@ -1461,7 +1498,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function callRouteFilter($filter, $parameters, $route, $request, $response = null)
 	{
-		if ( ! $this->filtering) return null;
+		if ( ! $this->filtering)
+		{
+			return null;
+		}
 
 		$data = array_merge(array($route, $request, $response), $parameters);
 
@@ -1478,7 +1518,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	{
 		return array_filter($parameters, function($p)
 		{
-			return ! is_null($p) && $p !== '';
+			return  ! is_null($p) && $p !== '';
 		});
 	}
 
@@ -1624,7 +1664,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function currentRouteAction()
 	{
-		if ( ! $this->current()) return;
+		if ( ! $this->current())
+		{
+			return;
+		}
 
 		$action = $this->current()->getAction();
 
