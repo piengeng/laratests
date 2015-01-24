@@ -479,10 +479,7 @@ class MySqlGrammar extends Grammar {
 	 */
 	protected function typeTimestamp(Fluent $column)
 	{
-		if ( ! $column->nullable)
-		{
-			return 'timestamp default 0';
-		}
+		if ( ! $column->nullable) return 'timestamp default 0';
 
 		return 'timestamp';
 	}
@@ -507,11 +504,7 @@ class MySqlGrammar extends Grammar {
 	 */
 	protected function modifyUnsigned(Blueprint $blueprint, Fluent $column)
 	{
-		if ($column->unsigned)
-		{
-			return ' unsigned';
-		}
-
+		if ($column->unsigned) return ' unsigned';
 	}
 
 	/**
@@ -594,10 +587,7 @@ class MySqlGrammar extends Grammar {
 	 */
 	protected function wrapValue($value)
 	{
-		if ($value === '*')
-		{
-			return $value;
-		}
+		if ($value === '*') return $value;
 
 		return '`'.str_replace('`', '``', $value).'`';
 	}

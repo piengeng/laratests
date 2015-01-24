@@ -161,10 +161,7 @@ class PackageCreator {
 	 */
 	protected function getComposerStub($plain)
 	{
-		if ($plain)
-		{
-			return $this->files->get(__DIR__.'/stubs/plain.composer.json');
-		}
+		if ($plain) return $this->files->get(__DIR__.'/stubs/plain.composer.json');
 
 		return $this->files->get(__DIR__.'/stubs/composer.json');
 	}
@@ -227,10 +224,7 @@ class PackageCreator {
 	 */
 	public function writePublicDirectory(Package $package, $directory, $plain)
 	{
-		if ($plain)
-		{
-			return;
-		}
+		if ($plain) return;
 
 		$this->files->makeDirectory($directory.'/public');
 

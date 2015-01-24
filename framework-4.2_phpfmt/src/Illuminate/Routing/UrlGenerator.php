@@ -108,10 +108,7 @@ class UrlGenerator {
 		// First we will check if the URL is already a valid URL. If it is we will not
 		// try to generate a new one but will simply return the URL as is, which is
 		// convenient since developers do not always have to check if it's valid.
-		if ($this->isValidUrl($path))
-		{
-			return $path;
-		}
+		if ($this->isValidUrl($path)) return $path;
 
 		$scheme = $this->getScheme($secure);
 
@@ -148,10 +145,7 @@ class UrlGenerator {
 	 */
 	public function asset($path, $secure = null)
 	{
-		if ($this->isValidUrl($path))
-		{
-			return $path;
-		}
+		if ($this->isValidUrl($path)) return $path;
 
 		// Once we get the root URL, we will check to see if it contains an index.php
 		// file in the paths. If it does, we will remove it since it is not needed
@@ -316,10 +310,7 @@ class UrlGenerator {
 		// First we will get all of the string parameters that are remaining after we
 		// have replaced the route wildcards. We'll then build a query string from
 		// these string parameters then use it as a starting point for the rest.
-		if (count($parameters) == 0)
-		{
-			return '';
-		}
+		if (count($parameters) == 0) return '';
 
 		$query = http_build_query(
 			$keyed = $this->getStringParameters($parameters)
@@ -498,10 +489,7 @@ class UrlGenerator {
 	 */
 	public function isValidUrl($path)
 	{
-		if (starts_with($path, ['#', '//', 'mailto:', 'tel:', 'http://', 'https://']))
-		{
-			return true;
-		}
+		if (starts_with($path, ['#', '//', 'mailto:', 'tel:', 'http://', 'https://'])) return true;
 
 		return filter_var($path, FILTER_VALIDATE_URL) !== false;
 	}

@@ -468,10 +468,7 @@ if ( ! function_exists('data_get'))
 	 */
 	function data_get($target, $key, $default = null)
 	{
-		if (is_null($key))
-		{
-			return $target;
-		}
+		if (is_null($key)) return $target;
 
 		foreach (explode('.', $key) as $segment)
 		{
@@ -656,14 +653,11 @@ if ( ! function_exists('object_get'))
 	 */
 	function object_get($object, $key, $default = null)
 	{
-		if (is_null($key) || trim($key) == '')
-		{
-			return $object;
-		}
+		if (is_null($key) || trim($key) == '') return $object;
 
 		foreach (explode('.', $key) as $segment)
 		{
-			if ( ! is_object($object) ||  ! isset($object->{$segment}))
+			if ( ! is_object($object) || ! isset($object->{$segment}))
 			{
 				return value($default);
 			}

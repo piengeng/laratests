@@ -219,10 +219,7 @@ class Migrator {
 		// Once we have the array of files in the directory we will just remove the
 		// extension and take the basename of the file which is all we need when
 		// finding the migrations that haven't been run against the databases.
-		if ($files === false)
-		{
-			return array();
-		}
+		if ($files === false) return array();
 
 		$files = array_map(function($file)
 		{
@@ -247,10 +244,7 @@ class Migrator {
 	 */
 	public function requireFiles($path, array $files)
 	{
-		foreach ($files as $file)
-		{
-			$this->files->requireOnce($path.'/'.$file.'.php');
-		}
+		foreach ($files as $file) $this->files->requireOnce($path.'/'.$file.'.php');
 	}
 
 	/**

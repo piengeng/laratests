@@ -63,72 +63,66 @@ class MySqlGrammar extends Grammar {
 	 */
 	protected function compileLock(Builder $query, $value)
 	{
-		if (is_string($value))
-		{
-			return $value;
-		}
+		if (is_string($value)) return $value;
 
 		return $value ? 'for update' : 'lock in share mode';
-	}
+		}
 
-	/**
-	 * Compile an update statement into SQL.
-	 *
-	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @param  array  $values
-	 * @return string
-	 */
-	public function compileUpdate(Builder $query, $values)
+		/**
+		 * Compile an update statement into SQL.
+		 *
+		 * @param  \Illuminate\Database\Query\Builder  $query
+		 * @param  array  $values
+		 * @return string
+		 */
+		public function compileUpdate(Builder $query, $values)
 	{
-		$sql = parent::compileUpdate($query, $values);
+			$sql = parent::compileUpdate($query, $values);
 
-		if (isset($query->orders))
+			if (isset($query->orders))
 		{
-			$sql .= ' '.$this->compileOrders($query, $query->orders);
+				$sql .= ' '.$this->compileOrders($query, $query->orders);
+			}
+
+			if (isset($query->limit))
+		{
+				$sql .= ' '.$this->compileLimit($query, $query->limit);
+			}
+
+			return rtrim($sql);
 		}
 
-		if (isset($query->limit))
-		{
-			$sql .= ' '.$this->compileLimit($query, $query->limit);
-		}
-
-		return rtrim($sql);
-	}
-
-	/**
-	 * Compile a delete statement into SQL.
-	 *
-	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @return string
-	 */
-	public function compileDelete(Builder $query)
+		/**
+		 * Compile a delete statement into SQL.
+		 *
+		 * @param  \Illuminate\Database\Query\Builder  $query
+		 * @return string
+		 */
+		public function compileDelete(Builder $query)
 	{
-		$table = $this->wrapTable($query->from);
+			$table = $this->wrapTable($query->from);
 
-		$where = is_array($query->wheres) ? $this->compileWheres($query) : '';
+			$where = is_array($query->wheres) ? $this->compileWheres($query) : '';
 
-		if (isset($query->joins))
+			if (isset($query->joins))
 		{
-			$joins = ' '.$this->compileJoins($query, $query->joins);
+				$joins = ' '.$this->compileJoins($query, $query->joins);
 
-			return trim("delete $table from {$table}{$joins} $where");
+				return trim("delete $table from {$table}{$joins} $where");
+			}
+
+			return trim("delete from $table $where");
 		}
 
-		return trim("delete from $table $where");
-	}
-
-	/**
-	 * Wrap a single string in keyword identifiers.
-	 *
-	 * @param  string  $value
-	 * @return string
-	 */
-	protected function wrapValue($value)
+		/**
+		 * Wrap a single string in keyword identifiers.
+		 *
+		 * @param  string  $value
+		 * @return string
+		 */
+		protected function wrapValue($value)
 	{
-		if ($value === '*')
-		{
-			return $value;
-		}
+			if ($value === '*') return $value;
 
 		return '`'.str_replace('`', '``', $value).'`';
 	}

@@ -117,10 +117,7 @@ class Connection implements ConnectionInterface {
 		// our callback. Once we hit the end of output, we'll bail out of here.
 		while (true)
 		{
-			if (is_null($line = $gateway->nextLine()))
-			{
-				break;
-			}
+			if (is_null($line = $gateway->nextLine()))break;
 
 			call_user_func($callback, $line, $this);
 		}
@@ -207,10 +204,7 @@ class Connection implements ConnectionInterface {
 	 */
 	protected function getCallback($callback)
 	{
-		if ( ! is_null($callback))
-		{
-			return $callback;
-		}
+		if ( ! is_null($callback)) return $callback;
 
 		return function($line)
 		{
@@ -236,7 +230,7 @@ class Connection implements ConnectionInterface {
 	 */
 	public function getGateway()
 	{
-		if ( ! $this->gateway->connected() &&  ! $this->gateway->connect($this->username))
+		if ( ! $this->gateway->connected() && ! $this->gateway->connect($this->username))
 		{
 			throw new \RuntimeException("Unable to connect to remote server.");
 		}
@@ -251,10 +245,7 @@ class Connection implements ConnectionInterface {
 	 */
 	public function getOutput()
 	{
-		if (is_null($this->output))
-		{
-			$this->output = new NullOutput;
-		}
+		if (is_null($this->output)) $this->output = new NullOutput;
 
 		return $this->output;
 	}

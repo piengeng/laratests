@@ -69,10 +69,7 @@ class SubscribeCommand extends Command {
 	 */
 	protected function getPushType()
 	{
-		if ($this->option('type'))
-		{
-			return $this->option('type');
-		}
+		if ($this->option('type')) return $this->option('type');
 
 		try
 		{
@@ -122,10 +119,7 @@ class SubscribeCommand extends Command {
 	 */
 	protected function getQueue()
 	{
-		if (isset($this->meta))
-		{
-			return $this->meta;
-		}
+		if (isset($this->meta)) return $this->meta;
 
 		return $this->meta = $this->laravel['queue']->getIron()->getQueue($this->argument('queue'));
 	}

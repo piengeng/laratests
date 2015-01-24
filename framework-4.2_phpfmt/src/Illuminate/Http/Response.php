@@ -54,10 +54,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response {
 	 */
 	protected function morphToJson($content)
 	{
-		if ($content instanceof JsonableInterface)
-		{
-			return $content->toJson();
-		}
+		if ($content instanceof JsonableInterface) return $content->toJson();
 
 		return json_encode($content);
 	}

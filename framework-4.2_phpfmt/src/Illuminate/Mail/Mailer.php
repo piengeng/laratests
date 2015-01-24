@@ -221,10 +221,7 @@ class Mailer {
 	 */
 	protected function buildQueueCallable($callback)
 	{
-		if ( ! $callback instanceof Closure)
-		{
-			return $callback;
-		}
+		if ( ! $callback instanceof Closure) return $callback;
 
 		return serialize(new SerializableClosure($callback));
 	}
@@ -291,10 +288,7 @@ class Mailer {
 	 */
 	protected function parseView($view)
 	{
-		if (is_string($view))
-		{
-			return array($view, null);
-		}
+		if (is_string($view)) return array($view, null);
 
 		// If the given view is an array with numeric keys, we will just assume that
 		// both a "pretty" and "plain" view were provided, so we will return this

@@ -26,10 +26,7 @@ class Filesystem {
 	 */
 	public function get($path)
 	{
-		if ($this->isFile($path))
-		{
-			return file_get_contents($path);
-		}
+		if ($this->isFile($path)) return file_get_contents($path);
 
 		throw new FileNotFoundException("File does not exist at path {$path}");
 	}
@@ -44,10 +41,7 @@ class Filesystem {
 	 */
 	public function getRequire($path)
 	{
-		if ($this->isFile($path))
-		{
-			return require $path;
-		}
+		if ($this->isFile($path)) return require $path;
 
 		throw new FileNotFoundException("File does not exist at path {$path}");
 	}
@@ -119,11 +113,7 @@ class Filesystem {
 
 		foreach ($paths as $path)
 		{
-			if ( ! @unlink($path))
-		{
-			$success = false;
-		}
-		}
+			if ( ! @unlink($path)) $success = false;}
 
 		return $success;
 	}
@@ -262,10 +252,7 @@ class Filesystem {
 	{
 		$glob = glob($directory.'/*');
 
-		if ($glob === false)
-		{
-			return array();
-		}
+		if ($glob === false) return array();
 
 		// To get the appropriate files, we'll simply glob the directory and filter
 		// out any "files" that are not truly files so we do not end up with any
@@ -334,39 +321,32 @@ class Filesystem {
 	 */
 	public function copyDirectory($directory, $destination, $options = null)
 	{
-		if ( ! $this->isDirectory($directory))
-		{
-			return false;
-		}
+		if ( ! $this->isDirectory($directory)) return false;
 
 		$options = $options ?: FilesystemIterator::SKIP_DOTS;
 
-		// If the destination directory does not actually exist, we will go ahead and
-		// create it recursively, which just gets the destination prepared to copy
-		// the files over. Once we make the directory we'll proceed the copying.
-		if ( ! $this->isDirectory($destination))
+			// If the destination directory does not actually exist, we will go ahead and
+			// create it recursively, which just gets the destination prepared to copy
+			// the files over. Once we make the directory we'll proceed the copying.
+			if ( ! $this->isDirectory($destination))
 		{
-			$this->makeDirectory($destination, 0777, true);
-		}
+				$this->makeDirectory($destination, 0777, true);
+			}
 
-		$items = new FilesystemIterator($directory, $options);
+			$items = new FilesystemIterator($directory, $options);
 
-		foreach ($items as $item)
+			foreach ($items as $item)
 		{
-			// As we spin through items, we will check to see if the current file is actually
-			// a directory or a file. When it is actually a directory we will need to call
-			// back into this function recursively to keep copying these nested folders.
-			$target = $destination.'/'.$item->getBasename();
+				// As we spin through items, we will check to see if the current file is actually
+				// a directory or a file. When it is actually a directory we will need to call
+				// back into this function recursively to keep copying these nested folders.
+				$target = $destination.'/'.$item->getBasename();
 
-			if ($item->isDir())
+				if ($item->isDir())
 			{
-				$path = $item->getPathname();
+					$path = $item->getPathname();
 
-				if ( ! $this->copyDirectory($path, $target, $options))
-				{
-					return false;
-				}
-
+					if ( ! $this->copyDirectory($path, $target, $options)) return false;
 			}
 
 			// If the current items is just a regular file, we will just copy this to the new
@@ -374,11 +354,7 @@ class Filesystem {
 			// and return false, so the developer is aware that the copy process failed.
 			else
 			{
-				if ( ! $this->copy($item->getPathname(), $target))
-				{
-					return false;
-				}
-
+					if ( ! $this->copy($item->getPathname(), $target)) return false;
 			}
 		}
 
@@ -396,36 +372,30 @@ class Filesystem {
 	 */
 	public function deleteDirectory($directory, $preserve = false)
 	{
-		if ( ! $this->isDirectory($directory))
-		{
-			return false;
-		}
+			if ( ! $this->isDirectory($directory)) return false;
 
 		$items = new FilesystemIterator($directory);
 
 		foreach ($items as $item)
 		{
-			// If the item is a directory, we can just recurse into the function and
-			// delete that sub-directory otherwise we'll just delete the file and
-			// keep iterating through each file until the directory is cleaned.
-			if ($item->isDir())
+				// If the item is a directory, we can just recurse into the function and
+				// delete that sub-directory otherwise we'll just delete the file and
+				// keep iterating through each file until the directory is cleaned.
+				if ($item->isDir())
 			{
-				$this->deleteDirectory($item->getPathname());
-			}
+					$this->deleteDirectory($item->getPathname());
+				}
 
-			// If the item is just a file, we can go ahead and delete it since we're
-			// just looping through and waxing all of the files in this directory
-			// and calling directories recursively, so we delete the real path.
+				// If the item is just a file, we can go ahead and delete it since we're
+				// just looping through and waxing all of the files in this directory
+				// and calling directories recursively, so we delete the real path.
 			else
 			{
 				$this->delete($item->getPathname());
 			}
 		}
 
-		if ( ! $preserve)
-		{
-			@rmdir($directory);
-		}
+		if ( ! $preserve)@rmdir($directory);
 
 		return true;
 	}

@@ -19,8 +19,8 @@ function fetch() {
 		$folder = implode('-', $matches);
 		$filename = $folder . '.zip'; // echo $filename;
 		try {
-			file_put_contents($filename, @file($target));
-			// file_put_contents($filename, @file($filename));
+			// file_put_contents($filename, @file($target));	//swap for fast execution
+			file_put_contents($filename, @file($filename)); //swap for fast execution
 			$zip = new ZipArchive;
 			$res = $zip->open($filename);
 			if ($res === TRUE) {
@@ -33,7 +33,7 @@ function fetch() {
 		echo "Downloaded $target, extracted to $folder", PHP_EOL;
 		echo removeNonePHP($folder, '');
 		echo recursiveCopy($folder, $folder . "_phpfmt");
-		echo recursiveCopy($folder, $folder . "_kdiff3");
+		// echo recursiveCopy($folder, $folder . "_kdiff3");
 	}
 	return true;
 }
@@ -77,6 +77,11 @@ function removeNonePHP($target, $appended) {
 			if (!preg_match('/\.php$/', $it->key())) {
 				unlink($it->key());
 				// echo "deleted file: ", $it->key(), PHP_EOL;
+			} else {
+				// see if can normalized.
+				$convertEOL = file_get_contents($it->key());
+				$convertEOL = str_replace("\r\n", "\n", $convertEOL);
+				file_put_contents($it->key(), $convertEOL);
 			}
 		}
 		$it->next();

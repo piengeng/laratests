@@ -44,7 +44,7 @@ class Repository implements ArrayAccess {
 	 */
 	public function has($key)
 	{
-		return  ! is_null($this->get($key));
+		return ! is_null($this->get($key));
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Repository implements ArrayAccess {
 	{
 		$value = $this->store->get($key);
 
-		return  ! is_null($value) ? $value : value($default);
+		return ! is_null($value) ? $value : value($default);
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Repository implements ArrayAccess {
 	{
 		if (is_null($this->get($key)))
 		{
-			$this->put($key, $value, $minutes);return true;
+			$this->put($key, $value, $minutes); return true;
 		}
 
 		return false;

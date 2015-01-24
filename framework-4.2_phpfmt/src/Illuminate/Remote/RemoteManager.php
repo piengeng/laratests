@@ -47,10 +47,7 @@ class RemoteManager {
 	 */
 	public function connection($name = null)
 	{
-		if (is_array($name))
-		{
-			return $this->multiple($name);
-		}
+		if (is_array($name)) return $this->multiple($name);
 
 		return $this->resolve($name ?: $this->getDefaultConnection());
 	}
@@ -161,10 +158,7 @@ class RemoteManager {
 	{
 		$config = $this->app['config']['remote.connections.'.$name];
 
-		if ( ! is_null($config))
-		{
-			return $config;
-		}
+		if ( ! is_null($config)) return $config;
 
 		throw new \InvalidArgumentException("Remote connection [$name] not defined.");
 	}

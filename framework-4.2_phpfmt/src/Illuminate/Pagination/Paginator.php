@@ -237,10 +237,7 @@ class Paginator implements ArrayableInterface, ArrayAccess, Countable, IteratorA
 	 */
 	public function fragment($fragment = null)
 	{
-		if (is_null($fragment))
-		{
-			return $this->fragment;
-		}
+		if (is_null($fragment)) return $this->fragment;
 
 		$this->fragment = $fragment;
 
@@ -266,10 +263,7 @@ class Paginator implements ArrayableInterface, ArrayAccess, Countable, IteratorA
 	 */
 	public function appends($key, $value = null)
 	{
-		if (is_array($key))
-		{
-			return $this->appendArray($key);
-		}
+		if (is_array($key)) return $this->appendArray($key);
 
 		return $this->addQuery($key, $value);
 	}

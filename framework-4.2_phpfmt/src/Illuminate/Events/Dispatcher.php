@@ -190,10 +190,7 @@ class Dispatcher {
 		// If an array is not given to us as the payload, we will turn it into one so
 		// we can easily use call_user_func_array on the listeners, passing in the
 		// payload to each of them so that they receive each of these arguments.
-		if ( ! is_array($payload))
-		{
-			$payload = array($payload);
-		}
+		if ( ! is_array($payload)) $payload = array($payload);
 
 		$this->firing[] = $event;
 
@@ -214,10 +211,7 @@ class Dispatcher {
 			// If a boolean false is returned from a listener, we will stop propagating
 			// the event to any further listeners down in the chain, else we keep on
 			// looping through the listeners and firing every one in our sequence.
-			if ($response === false)
-			{
-				break;
-			}
+			if ($response === false)break;
 
 			$responses[] = $response;
 		}
@@ -225,43 +219,39 @@ class Dispatcher {
 		array_pop($this->firing);
 
 		return $halt ? null : $responses;
-	}
-
-	/**
-	 * Get all of the listeners for a given event name.
-	 *
-	 * @param  string  $eventName
-	 * @return array
-	 */
-	public function getListeners($eventName)
-	{
-		$wildcards = $this->getWildcardListeners($eventName);
-
-		if ( ! isset($this->sorted[$eventName]))
-		{
-			$this->sortListeners($eventName);
 		}
 
-		return array_merge($this->sorted[$eventName], $wildcards);
-	}
-
-	/**
-	 * Get the wildcard listeners for the event.
-	 *
-	 * @param  string  $eventName
-	 * @return array
-	 */
-	protected function getWildcardListeners($eventName)
+		/**
+		 * Get all of the listeners for a given event name.
+		 *
+		 * @param  string  $eventName
+		 * @return array
+		 */
+		public function getListeners($eventName)
 	{
-		$wildcards = array();
+			$wildcards = $this->getWildcardListeners($eventName);
 
-		foreach ($this->wildcards as $key => $listeners)
+			if ( ! isset($this->sorted[$eventName]))
 		{
-			if (str_is($key, $eventName))
-			{
-				$wildcards = array_merge($wildcards, $listeners);
+				$this->sortListeners($eventName);
 			}
 
+			return array_merge($this->sorted[$eventName], $wildcards);
+		}
+
+		/**
+		 * Get the wildcard listeners for the event.
+		 *
+		 * @param  string  $eventName
+		 * @return array
+		 */
+		protected function getWildcardListeners($eventName)
+	{
+			$wildcards = array();
+
+			foreach ($this->wildcards as $key => $listeners)
+		{
+				if (str_is($key, $eventName)) $wildcards = array_merge($wildcards, $listeners);
 		}
 
 		return $wildcards;
@@ -275,90 +265,86 @@ class Dispatcher {
 	 */
 	protected function sortListeners($eventName)
 	{
-		$this->sorted[$eventName] = array();
+			$this->sorted[$eventName] = array();
 
-		// If listeners exist for the given event, we will sort them by the priority
-		// so that we can call them in the correct order. We will cache off these
-		// sorted event listeners so we do not have to re-sort on every events.
-		if (isset($this->listeners[$eventName]))
+			// If listeners exist for the given event, we will sort them by the priority
+			// so that we can call them in the correct order. We will cache off these
+			// sorted event listeners so we do not have to re-sort on every events.
+			if (isset($this->listeners[$eventName]))
 		{
-			krsort($this->listeners[$eventName]);
+				krsort($this->listeners[$eventName]);
 
-			$this->sorted[$eventName] = call_user_func_array('array_merge', $this->listeners[$eventName]);
-		}
-	}
-
-	/**
-	 * Register an event listener with the dispatcher.
-	 *
-	 * @param  mixed   $listener
-	 * @return mixed
-	 */
-	public function makeListener($listener)
-	{
-		if (is_string($listener))
-		{
-			$listener = $this->createClassListener($listener);
+				$this->sorted[$eventName] = call_user_func_array('array_merge', $this->listeners[$eventName]);
+			}
 		}
 
-		return $listener;
-	}
-
-	/**
-	 * Create a class based listener using the IoC container.
-	 *
-	 * @param  mixed    $listener
-	 * @return \Closure
-	 */
-	public function createClassListener($listener)
+		/**
+		 * Register an event listener with the dispatcher.
+		 *
+		 * @param  mixed   $listener
+		 * @return mixed
+		 */
+		public function makeListener($listener)
 	{
-		$container = $this->container;
-
-		return function() use ($listener, $container)
+			if (is_string($listener))
 		{
-			// If the listener has an @ sign, we will assume it is being used to delimit
-			// the class name from the handle method name. This allows for handlers
-			// to run multiple handler methods in a single class for convenience.
-			$segments = explode('@', $listener);
-
-			$method = count($segments) == 2 ? $segments[1] : 'handle';
-
-			$callable = array($container->make($segments[0]), $method);
-
-			// We will make a callable of the listener instance and a method that should
-			// be called on that instance, then we will pass in the arguments that we
-			// received in this method into this listener class instance's methods.
-			$data = func_get_args();
-
-			return call_user_func_array($callable, $data);
-		};
-	}
-
-	/**
-	 * Remove a set of listeners from the dispatcher.
-	 *
-	 * @param  string  $event
-	 * @return void
-	 */
-	public function forget($event)
-	{
-		unset($this->listeners[$event], $this->sorted[$event]);
-	}
-
-	/**
-	 * Forget all of the queued listeners.
-	 *
-	 * @return void
-	 */
-	public function forgetQueued()
-	{
-		foreach ($this->listeners as $key => $value)
-		{
-			if (ends_with($key, '_queue'))
-			{
-				$this->forget($key);
+				$listener = $this->createClassListener($listener);
 			}
 
+			return $listener;
+		}
+
+		/**
+		 * Create a class based listener using the IoC container.
+		 *
+		 * @param  mixed    $listener
+		 * @return \Closure
+		 */
+		public function createClassListener($listener)
+	{
+			$container = $this->container;
+
+			return function() use ($listener, $container)
+		{
+				// If the listener has an @ sign, we will assume it is being used to delimit
+				// the class name from the handle method name. This allows for handlers
+				// to run multiple handler methods in a single class for convenience.
+				$segments = explode('@', $listener);
+
+				$method = count($segments) == 2 ? $segments[1] : 'handle';
+
+				$callable = array($container->make($segments[0]), $method);
+
+				// We will make a callable of the listener instance and a method that should
+				// be called on that instance, then we will pass in the arguments that we
+				// received in this method into this listener class instance's methods.
+				$data = func_get_args();
+
+				return call_user_func_array($callable, $data);
+			};
+		}
+
+		/**
+		 * Remove a set of listeners from the dispatcher.
+		 *
+		 * @param  string  $event
+		 * @return void
+		 */
+		public function forget($event)
+	{
+			unset($this->listeners[$event], $this->sorted[$event]);
+		}
+
+		/**
+		 * Forget all of the queued listeners.
+		 *
+		 * @return void
+		 */
+		public function forgetQueued()
+	{
+			foreach ($this->listeners as $key => $value)
+		{
+				if (ends_with($key, '_queue')) $this->forget($key);
 		}
 	}
 

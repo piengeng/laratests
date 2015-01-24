@@ -197,96 +197,93 @@ class Factory {
 	 */
 	public function getViewName($view = null)
 	{
-		if ( ! is_null($view))
-		{
-			return $view;
-		}
+		if ( ! is_null($view)) return $view;
 
 		return $this->viewName ?: 'pagination::slider';
-	}
+		}
 
-	/**
-	 * Set the name of the pagination view.
-	 *
-	 * @param  string  $viewName
-	 * @return void
-	 */
-	public function setViewName($viewName)
+		/**
+		 * Set the name of the pagination view.
+		 *
+		 * @param  string  $viewName
+		 * @return void
+		 */
+		public function setViewName($viewName)
 	{
-		$this->viewName = $viewName;
-	}
+			$this->viewName = $viewName;
+		}
 
-	/**
-	 * Get the locale of the paginator.
-	 *
-	 * @return string
-	 */
-	public function getLocale()
+		/**
+		 * Get the locale of the paginator.
+		 *
+		 * @return string
+		 */
+		public function getLocale()
 	{
-		return $this->locale;
-	}
+			return $this->locale;
+		}
 
-	/**
-	 * Set the locale of the paginator.
-	 *
-	 * @param  string  $locale
-	 * @return void
-	 */
-	public function setLocale($locale)
+		/**
+		 * Set the locale of the paginator.
+		 *
+		 * @param  string  $locale
+		 * @return void
+		 */
+		public function setLocale($locale)
 	{
-		$this->locale = $locale;
-	}
+			$this->locale = $locale;
+		}
 
-	/**
-	 * Get the active request instance.
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Request
-	 */
-	public function getRequest()
+		/**
+		 * Get the active request instance.
+		 *
+		 * @return \Symfony\Component\HttpFoundation\Request
+		 */
+		public function getRequest()
 	{
-		return $this->request;
-	}
+			return $this->request;
+		}
 
-	/**
-	 * Set the active request instance.
-	 *
-	 * @param  \Symfony\Component\HttpFoundation\Request  $request
-	 * @return void
-	 */
-	public function setRequest(Request $request)
+		/**
+		 * Set the active request instance.
+		 *
+		 * @param  \Symfony\Component\HttpFoundation\Request  $request
+		 * @return void
+		 */
+		public function setRequest(Request $request)
 	{
-		$this->request = $request;
-	}
+			$this->request = $request;
+		}
 
-	/**
-	 * Get the current view factory.
-	 *
-	 * @return \Illuminate\View\Factory
-	 */
-	public function getViewFactory()
+		/**
+		 * Get the current view factory.
+		 *
+		 * @return \Illuminate\View\Factory
+		 */
+		public function getViewFactory()
 	{
-		return $this->view;
-	}
+			return $this->view;
+		}
 
-	/**
-	 * Set the current view factory.
-	 *
-	 * @param  \Illuminate\View\Factory  $view
-	 * @return void
-	 */
-	public function setViewFactory(ViewFactory $view)
+		/**
+		 * Set the current view factory.
+		 *
+		 * @param  \Illuminate\View\Factory  $view
+		 * @return void
+		 */
+		public function setViewFactory(ViewFactory $view)
 	{
-		$this->view = $view;
-	}
+			$this->view = $view;
+		}
 
-	/**
-	 * Get the translator instance.
-	 *
-	 * @return \Symfony\Component\Translation\TranslatorInterface
-	 */
-	public function getTranslator()
+		/**
+		 * Get the translator instance.
+		 *
+		 * @return \Symfony\Component\Translation\TranslatorInterface
+		 */
+		public function getTranslator()
 	{
-		return $this->trans;
-	}
+			return $this->trans;
+		}
 
-}
+	}

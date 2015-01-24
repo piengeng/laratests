@@ -98,7 +98,7 @@ class RedirectResponse extends \Symfony\Component\HttpFoundation\RedirectRespons
 
 		$this->session->flashInput(array_filter($input, function($value)
 		{
-			return  ! $value instanceof UploadedFile;
+			return ! $value instanceof UploadedFile;
 		}));
 
 		return $this;

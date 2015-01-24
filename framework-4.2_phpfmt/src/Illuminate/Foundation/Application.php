@@ -303,10 +303,8 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 */
 	public function register($provider, $options = array(), $force = false)
 	{
-		if ($registered = $this->getRegistered($provider) &&  ! $force)
-		{
-			return $registered;
-		}
+		if ($registered = $this->getRegistered($provider) && ! $force)
+		return $registered;
 
 		// If the given "provider" is a string, we will resolve it, passing in the
 		// application instance automatically for the developer. This is simply
@@ -331,10 +329,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		// If the application has already booted, we will call this boot method on
 		// the provider class so it has an opportunity to do its boot logic and
 		// will be ready for any usage by the developer's application logics.
-		if ($this->booted)
-		{
-			$provider->boot();
-		}
+		if ($this->booted) $provider->boot();
 
 		return $provider;
 	}
@@ -433,10 +428,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		// Once the provider that provides the deferred service has been registered we
 		// will remove it from our local list of the deferred services with related
 		// providers so that this container does not try to resolve it out again.
-		if ($service)
-		{
-			unset($this->deferredServices[$service]);
-		}
+		if ($service)unset($this->deferredServices[$service]);
 
 		$this->register($instance = new $provider($this));
 
@@ -588,10 +580,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 */
 	public function boot()
 	{
-		if ($this->booted)
-		{
-			return;
-		}
+		if ($this->booted) return;
 
 		array_walk($this->serviceProviders, function($p)
 		{
@@ -638,11 +627,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	{
 		$this->bootedCallbacks[] = $callback;
 
-		if ($this->isBooted())
-		{
-			$this->fireAppCallbacks(array($callback));
-		}
-
+		if ($this->isBooted()) $this->fireAppCallbacks(array($callback));
 	}
 
 	/**
@@ -763,10 +748,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		}
 		catch (\Exception $e)
 		{
-			if ( ! $catch || $this->runningUnitTests())
-			{
-				throw $e;
-			}
+			if ( ! $catch || $this->runningUnitTests())throw $e;
 
 			return $this['exception']->handleException($e);
 		}
@@ -784,14 +766,10 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		{
 			$response = $this['events']->until('illuminate.app.down');
 
-			if ( ! is_null($response))
-			{
-				return $this->prepareResponse($response, $request);
-			}
-
+			if ( ! is_null($response)) return $this->prepareResponse($response, $request);
 		}
 
-		if ($this->runningUnitTests() &&  ! $this['session']->isStarted())
+		if ($this->runningUnitTests() && ! $this['session']->isStarted())
 		{
 			$this['session']->start();
 		}
@@ -863,7 +841,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 */
 	public function prepareRequest(Request $request)
 	{
-		if ( ! is_null($this['config']['session.driver']) &&  ! $request->hasSession())
+		if ( ! is_null($this['config']['session.driver']) && ! $request->hasSession())
 		{
 			$request->setSession($this['session']->driver());
 		}
@@ -879,10 +857,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 */
 	public function prepareResponse($value)
 	{
-		if ( ! $value instanceof SymfonyResponse)
-		{
-			$value = new Response($value);
-		}
+		if ( ! $value instanceof SymfonyResponse) $value = new Response($value);
 
 		return $value->prepare($this['request']);
 	}
@@ -1061,10 +1036,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 */
 	public static function requestClass($class = null)
 	{
-		if ( ! is_null($class))
-		{
-			static::$requestClass = $class;
-		}
+		if ( ! is_null($class))static::$requestClass = $class;
 
 		return static::$requestClass;
 	}

@@ -86,7 +86,7 @@ class Route {
 		$this->methods = (array) $methods;
 		$this->action = $this->parseAction($action);
 
-		if (in_array('GET', $this->methods) &&  ! in_array('HEAD', $this->methods))
+		if (in_array('GET', $this->methods) && ! in_array('HEAD', $this->methods))
 		{
 			$this->methods[] = 'HEAD';
 		}
@@ -124,16 +124,9 @@ class Route {
 
 		foreach ($this->getValidators() as $validator)
 		{
-			if ( ! $includingMethod && $validator instanceof MethodValidator)
-			{
-				continue;
-			}
+			if ( ! $includingMethod && $validator instanceof MethodValidator)continue;
 
-			if ( ! $validator->matches($this, $request))
-			{
-				return false;
-			}
-
+			if ( ! $validator->matches($this, $request)) return false;
 		}
 
 		return true;
@@ -176,10 +169,7 @@ class Route {
 	 */
 	public function beforeFilters()
 	{
-		if ( ! isset($this->action['before']))
-		{
-			return array();
-		}
+		if ( ! isset($this->action['before'])) return array();
 
 		return $this->parseFilters($this->action['before']);
 	}
@@ -191,10 +181,7 @@ class Route {
 	 */
 	public function afterFilters()
 	{
-		if ( ! isset($this->action['after']))
-		{
-			return array();
-		}
+		if ( ! isset($this->action['after'])) return array();
 
 		return $this->parseFilters($this->action['after']);
 	}
@@ -221,10 +208,7 @@ class Route {
 	 */
 	protected static function explodeFilters($filters)
 	{
-		if (is_array($filters))
-		{
-			return static::explodeArrayFilters($filters);
-		}
+		if (is_array($filters)) return static::explodeArrayFilters($filters);
 
 		return array_map('trim', explode('|', $filters));
 	}
@@ -255,10 +239,7 @@ class Route {
 	 */
 	public static function parseFilter($filter)
 	{
-		if ( ! str_contains($filter, ':'))
-		{
-			return array($filter, array());
-		}
+		if ( ! str_contains($filter, ':')) return array($filter, array());
 
 		return static::parseParameterFilter($filter);
 	}
@@ -357,7 +338,7 @@ class Route {
 	{
 		return array_filter($this->parameters(), function($p)
 		{
-			return  ! is_null($p);});
+			return ! is_null($p);});
 	}
 
 	/**
@@ -367,10 +348,7 @@ class Route {
 	 */
 	public function parameterNames()
 	{
-		if (isset($this->parameterNames))
-		{
-			return $this->parameterNames;
-		}
+		if (isset($this->parameterNames)) return $this->parameterNames;
 
 		return $this->parameterNames = $this->compileParameterNames();
 	}
@@ -469,10 +447,7 @@ class Route {
 	 */
 	protected function matchToKeys(array $matches)
 	{
-		if (count($this->parameterNames()) == 0)
-		{
-			return array();
-		}
+		if (count($this->parameterNames()) == 0) return array();
 
 		$parameters = array_intersect_key($matches, array_flip($this->parameterNames()));
 
@@ -546,10 +521,7 @@ class Route {
 	 */
 	public static function getValidators()
 	{
-		if (isset(static::$validators))
-		{
-			return static::$validators;
-		}
+		if (isset(static::$validators)) return static::$validators;
 
 		// To match the route, we will use a chain of responsibility pattern with the
 		// validator implementations. We will spin through each one making sure it

@@ -98,7 +98,7 @@ class Listener {
 		// process managers will restart this with a clean slate of memory.
 		if ($this->memoryExceeded($memory))
 		{
-			$this->stop();return;
+			$this->stop(); return;
 		}
 	}
 

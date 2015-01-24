@@ -87,27 +87,22 @@ function phpfmtIt($container, $target, $appended, $file = null) {
 			$it->next();
 		}
 	} else {
-		echo 'reached';
+		// echo 'reached';
 		// print_r(file_get_contents($file . '.in'));
 		$got = $fmt->formatCode(file_get_contents($file . '.in'));
 		// print_r($got);
 		file_put_contents($file . '.out', $got);
-		echo ' and here';
+		// echo ' and here';
 	}
 
 	return true;
 }
-$wip = '../../laratests/to-tests-laravel/005-sort-use-namespace';
-phpfmtIt('', '', '', $wip);
-// phpfmtIt('laratests', 'laravel-master', '_phpfmt');
-// phpfmtIt('laratests','laravel-master', '_new');
+// $wip = '../../laratests/to-tests-laravel/no_expand';
+// phpfmtIt('', '', '', $wip);
 
-// phpfmtIt('laratests', 'framework-4.2', '_phpfmt');
-// phpfmtIt('laratests','framework-4.2', '_new');
+phpfmtIt('../../laratests', 'framework-4.2', '_phpfmt');
 
-// $source = file_get_contents('laratests\008-inline-html-with-use.in');
-// file_put_contents('laratests\008-inline-html-with-use.out', $qk->formatCode($source));
-
+// phpfmtIt('../../laratests', 'laravel-master', '_phpfmt');
 // ---------------------------------------------------------------------------------------------------------------
 echo "Took ", (microtime(true) - $start), PHP_EOL;
 exit(0);

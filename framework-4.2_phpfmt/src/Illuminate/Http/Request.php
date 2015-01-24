@@ -193,11 +193,7 @@ class Request extends SymfonyRequest {
 
 		foreach ($keys as $value)
 		{
-			if ( ! array_key_exists($value, $input))
-			{
-				return false;
-			}
-
+			if ( ! array_key_exists($value, $input)) return false;
 		}
 
 		return true;
@@ -215,11 +211,7 @@ class Request extends SymfonyRequest {
 
 		foreach ($keys as $value)
 		{
-			if ($this->isEmptyString($value))
-			{
-				return false;
-			}
-
+			if ($this->isEmptyString($value)) return false;
 		}
 
 		return true;
@@ -235,7 +227,7 @@ class Request extends SymfonyRequest {
 	{
 		$boolOrArray = is_bool($this->input($key)) || is_array($this->input($key));
 
-		return  ! $boolOrArray && trim((string) $this->input($key)) === '';
+		return ! $boolOrArray && trim((string) $this->input($key)) === '';
 	}
 
 	/**
@@ -321,7 +313,7 @@ class Request extends SymfonyRequest {
 	 */
 	public function hasCookie($key)
 	{
-		return  ! is_null($this->cookie($key));
+		return ! is_null($this->cookie($key));
 	}
 
 	/**
@@ -356,18 +348,11 @@ class Request extends SymfonyRequest {
 	 */
 	public function hasFile($key)
 	{
-		if ( ! is_array($files = $this->file($key)))
-		{
-			$files = array($files);
-		}
+		if ( ! is_array($files = $this->file($key))) $files = array($files);
 
 		foreach ($files as $file)
 		{
-			if ($this->isValidFile($file))
-			{
-				return true;
-			}
-
+			if ($this->isValidFile($file)) return true;
 		}
 
 		return false;
@@ -524,10 +509,7 @@ class Request extends SymfonyRequest {
 			$this->json = new ParameterBag((array) json_decode($this->getContent(), true));
 		}
 
-		if (is_null($key))
-		{
-			return $this->json;
-		}
+		if (is_null($key)) return $this->json;
 
 		return array_get($this->json->all(), $key, $default);
 	}
@@ -539,51 +521,44 @@ class Request extends SymfonyRequest {
 	 */
 	protected function getInputSource()
 	{
-		if ($this->isJson())
-		{
-			return $this->json();
-		}
+		if ($this->isJson()) return $this->json();
 
 		return $this->getMethod() == 'GET' ? $this->query : $this->request;
-	}
+		}
 
-	/**
-	 * Determine if the request is sending JSON.
-	 *
-	 * @return bool
-	 */
-	public function isJson()
+		/**
+		 * Determine if the request is sending JSON.
+		 *
+		 * @return bool
+		 */
+		public function isJson()
 	{
-		return str_contains($this->header('CONTENT_TYPE'), '/json');
-	}
+			return str_contains($this->header('CONTENT_TYPE'), '/json');
+		}
 
-	/**
-	 * Determine if the current request is asking for JSON in return.
-	 *
-	 * @return bool
-	 */
-	public function wantsJson()
+		/**
+		 * Determine if the current request is asking for JSON in return.
+		 *
+		 * @return bool
+		 */
+		public function wantsJson()
 	{
-		$acceptable = $this->getAcceptableContentTypes();
+			$acceptable = $this->getAcceptableContentTypes();
 
-		return isset($acceptable[0]) && $acceptable[0] == 'application/json';
-	}
+			return isset($acceptable[0]) && $acceptable[0] == 'application/json';
+		}
 
-	/**
-	 * Get the data format expected in the response.
-	 *
-	 * @param  string  $default
-	 * @return string
-	 */
-	public function format($default = 'html')
+		/**
+		 * Get the data format expected in the response.
+		 *
+		 * @param  string  $default
+		 * @return string
+		 */
+		public function format($default = 'html')
 	{
-		foreach ($this->getAcceptableContentTypes() as $type)
+			foreach ($this->getAcceptableContentTypes() as $type)
 		{
-			if ($format = $this->getFormat($type))
-			{
-				return $format;
-			}
-
+				if ($format = $this->getFormat($type)) return $format;
 		}
 
 		return $default;
@@ -597,10 +572,7 @@ class Request extends SymfonyRequest {
 	 */
 	public static function createFromBase(SymfonyRequest $request)
 	{
-		if ($request instanceof static )
-		{
-			return $request;
-		}
+			if ($request instanceof static ) return $request;
 
 		return (new static )->duplicate(
 
@@ -619,12 +591,12 @@ class Request extends SymfonyRequest {
 	 */
 	public function session()
 	{
-		if ( ! $this->hasSession())
+			if ( ! $this->hasSession())
 		{
-			throw new \RuntimeException("Session store not set on request.");
+				throw new \RuntimeException("Session store not set on request.");
+			}
+
+			return $this->getSession();
 		}
 
-		return $this->getSession();
 	}
-
-}

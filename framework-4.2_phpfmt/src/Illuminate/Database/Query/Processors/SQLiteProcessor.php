@@ -12,7 +12,7 @@ class SQLiteProcessor extends Processor {
 	{
 		return array_values(array_map(function($r)
 		{
-			$r = (object) $r;return $r->name;}, $results));
+			$r = (object) $r; return $r->name;}, $results));
 	}
 
 }

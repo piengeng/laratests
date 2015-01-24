@@ -86,10 +86,7 @@ class Store implements SessionInterface {
 	{
 		$this->loadSession();
 
-		if ( ! $this->has('_token'))
-		{
-			$this->regenerateToken();
-		}
+		if ( ! $this->has('_token')) $this->regenerateToken();
 
 		return $this->started = true;
 	}
@@ -209,14 +206,11 @@ class Store implements SessionInterface {
 	 */
 	public function migrate($destroy = false, $lifetime = null)
 	{
-		if ($destroy)
-		{
-			$this->handler->destroy($this->getId());
-		}
+		if ($destroy) $this->handler->destroy($this->getId());
 
 		$this->setExists(false);
 
-		$this->id = $this->generateSessionId();return true;
+		$this->id = $this->generateSessionId(); return true;
 	}
 
 	/**
@@ -278,7 +272,7 @@ class Store implements SessionInterface {
 	 */
 	public function has($name)
 	{
-		return  ! is_null($this->get($name));
+		return ! is_null($this->get($name));
 	}
 
 	/**
@@ -311,7 +305,7 @@ class Store implements SessionInterface {
 	{
 		$old = $this->getOldInput($key);
 
-		return is_null($key) ? count($old) > 0 :  ! is_null($old);
+		return is_null($key) ? count($old) > 0 : ! is_null($old);
 	}
 
 	/**
@@ -348,10 +342,7 @@ class Store implements SessionInterface {
 	 */
 	public function put($key, $value = null)
 	{
-		if ( ! is_array($key))
-		{
-			$key = array($key => $value);
-		}
+		if ( ! is_array($key)) $key = array($key => $value);
 
 		foreach ($key as $arrayKey => $arrayValue)
 		{

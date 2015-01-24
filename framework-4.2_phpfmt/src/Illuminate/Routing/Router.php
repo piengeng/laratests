@@ -422,10 +422,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function getResourceUri($resource)
 	{
-		if ( ! str_contains($resource, '.'))
-		{
-			return $resource;
-		}
+		if ( ! str_contains($resource, '.')) return $resource;
 
 		// Once we have built the base URI, we'll remove the wildcard holder for this
 		// base resource name so that the individual route adders can suffix these
@@ -481,270 +478,264 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function getResourceName($resource, $method, $options)
 	{
-		if (isset($options['names'][$method]))
-		{
-			return $options['names'][$method];
-		}
+		if (isset($options['names'][$method])) return $options['names'][$method];
 
 		// If a global prefix has been assigned to all names for this resource, we will
 		// grab that so we can prepend it onto the name when we create this name for
 		// the resource action. Otherwise we'll just use an empty string for here.
 		$prefix = isset($options['as']) ? $options['as'].'.' : '';
 
-		if (empty($this->groupStack))
+			if (empty($this->groupStack))
 		{
-			return $prefix.$resource.'.'.$method;
+				return $prefix.$resource.'.'.$method;
+			}
+
+			return $this->getGroupResourceName($prefix, $resource, $method);
 		}
 
-		return $this->getGroupResourceName($prefix, $resource, $method);
-	}
-
-	/**
-	 * Get the resource name for a grouped resource.
-	 *
-	 * @param  string  $prefix
-	 * @param  string  $resource
-	 * @param  string  $method
-	 * @return string
-	 */
-	protected function getGroupResourceName($prefix, $resource, $method)
+		/**
+		 * Get the resource name for a grouped resource.
+		 *
+		 * @param  string  $prefix
+		 * @param  string  $resource
+		 * @param  string  $method
+		 * @return string
+		 */
+		protected function getGroupResourceName($prefix, $resource, $method)
 	{
-		$group = str_replace('/', '.', $this->getLastGroupPrefix());
+			$group = str_replace('/', '.', $this->getLastGroupPrefix());
 
-		return trim("{$prefix}{$group}.{$resource}.{$method}", '.');
-	}
-
-	/**
-	 * Format a resource wildcard for usage.
-	 *
-	 * @param  string  $value
-	 * @return string
-	 */
-	public function getResourceWildcard($value)
-	{
-		return str_replace('-', '_', $value);
-	}
-
-	/**
-	 * Add the index method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addResourceIndex($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name);
-
-		$action = $this->getResourceAction($name, $controller, 'index', $options);
-
-		return $this->get($uri, $action);
-	}
-
-	/**
-	 * Add the create method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addResourceCreate($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name).'/create';
-
-		$action = $this->getResourceAction($name, $controller, 'create', $options);
-
-		return $this->get($uri, $action);
-	}
-
-	/**
-	 * Add the store method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addResourceStore($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name);
-
-		$action = $this->getResourceAction($name, $controller, 'store', $options);
-
-		return $this->post($uri, $action);
-	}
-
-	/**
-	 * Add the show method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addResourceShow($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name).'/{'.$base.'}';
-
-		$action = $this->getResourceAction($name, $controller, 'show', $options);
-
-		return $this->get($uri, $action);
-	}
-
-	/**
-	 * Add the edit method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addResourceEdit($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name).'/{'.$base.'}/edit';
-
-		$action = $this->getResourceAction($name, $controller, 'edit', $options);
-
-		return $this->get($uri, $action);
-	}
-
-	/**
-	 * Add the update method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return void
-	 */
-	protected function addResourceUpdate($name, $base, $controller, $options)
-	{
-		$this->addPutResourceUpdate($name, $base, $controller, $options);
-
-		return $this->addPatchResourceUpdate($name, $base, $controller);
-	}
-
-	/**
-	 * Add the update method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addPutResourceUpdate($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name).'/{'.$base.'}';
-
-		$action = $this->getResourceAction($name, $controller, 'update', $options);
-
-		return $this->put($uri, $action);
-	}
-
-	/**
-	 * Add the update method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @return void
-	 */
-	protected function addPatchResourceUpdate($name, $base, $controller)
-	{
-		$uri = $this->getResourceUri($name).'/{'.$base.'}';
-
-		$this->patch($uri, $controller.'@update');
-	}
-
-	/**
-	 * Add the destroy method for a resourceful route.
-	 *
-	 * @param  string  $name
-	 * @param  string  $base
-	 * @param  string  $controller
-	 * @param  array   $options
-	 * @return \Illuminate\Routing\Route
-	 */
-	protected function addResourceDestroy($name, $base, $controller, $options)
-	{
-		$uri = $this->getResourceUri($name).'/{'.$base.'}';
-
-		$action = $this->getResourceAction($name, $controller, 'destroy', $options);
-
-		return $this->delete($uri, $action);
-	}
-
-	/**
-	 * Create a route group with shared attributes.
-	 *
-	 * @param  array     $attributes
-	 * @param  \Closure  $callback
-	 * @return void
-	 */
-	public function group(array $attributes, Closure $callback)
-	{
-		$this->updateGroupStack($attributes);
-
-		// Once we have updated the group stack, we will execute the user Closure and
-		// merge in the groups attributes when the route is created. After we have
-		// run the callback, we will pop the attributes off of this group stack.
-		call_user_func($callback, $this);
-
-		array_pop($this->groupStack);
-	}
-
-	/**
-	 * Update the group stack with the given attributes.
-	 *
-	 * @param  array  $attributes
-	 * @return void
-	 */
-	protected function updateGroupStack(array $attributes)
-	{
-		if ( ! empty($this->groupStack))
-		{
-			$attributes = $this->mergeGroup($attributes, last($this->groupStack));
+			return trim("{$prefix}{$group}.{$resource}.{$method}", '.');
 		}
 
-		$this->groupStack[] = $attributes;
-	}
-
-	/**
-	 * Merge the given array with the last group stack.
-	 *
-	 * @param  array  $new
-	 * @return array
-	 */
-	public function mergeWithLastGroup($new)
+		/**
+		 * Format a resource wildcard for usage.
+		 *
+		 * @param  string  $value
+		 * @return string
+		 */
+		public function getResourceWildcard($value)
 	{
-		return $this->mergeGroup($new, last($this->groupStack));
-	}
-
-	/**
-	 * Merge the given group attributes.
-	 *
-	 * @param  array  $new
-	 * @param  array  $old
-	 * @return array
-	 */
-	public static function mergeGroup($new, $old)
-	{
-		$new['namespace'] = static::formatUsesPrefix($new, $old);
-
-		$new['prefix'] = static::formatGroupPrefix($new, $old);
-
-		if (isset($new['domain']))
-		{
-			unset($old['domain']);
+			return str_replace('-', '_', $value);
 		}
+
+		/**
+		 * Add the index method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addResourceIndex($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name);
+
+			$action = $this->getResourceAction($name, $controller, 'index', $options);
+
+			return $this->get($uri, $action);
+		}
+
+		/**
+		 * Add the create method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addResourceCreate($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name).'/create';
+
+			$action = $this->getResourceAction($name, $controller, 'create', $options);
+
+			return $this->get($uri, $action);
+		}
+
+		/**
+		 * Add the store method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addResourceStore($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name);
+
+			$action = $this->getResourceAction($name, $controller, 'store', $options);
+
+			return $this->post($uri, $action);
+		}
+
+		/**
+		 * Add the show method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addResourceShow($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name).'/{'.$base.'}';
+
+			$action = $this->getResourceAction($name, $controller, 'show', $options);
+
+			return $this->get($uri, $action);
+		}
+
+		/**
+		 * Add the edit method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addResourceEdit($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name).'/{'.$base.'}/edit';
+
+			$action = $this->getResourceAction($name, $controller, 'edit', $options);
+
+			return $this->get($uri, $action);
+		}
+
+		/**
+		 * Add the update method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return void
+		 */
+		protected function addResourceUpdate($name, $base, $controller, $options)
+	{
+			$this->addPutResourceUpdate($name, $base, $controller, $options);
+
+			return $this->addPatchResourceUpdate($name, $base, $controller);
+		}
+
+		/**
+		 * Add the update method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addPutResourceUpdate($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name).'/{'.$base.'}';
+
+			$action = $this->getResourceAction($name, $controller, 'update', $options);
+
+			return $this->put($uri, $action);
+		}
+
+		/**
+		 * Add the update method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @return void
+		 */
+		protected function addPatchResourceUpdate($name, $base, $controller)
+	{
+			$uri = $this->getResourceUri($name).'/{'.$base.'}';
+
+			$this->patch($uri, $controller.'@update');
+		}
+
+		/**
+		 * Add the destroy method for a resourceful route.
+		 *
+		 * @param  string  $name
+		 * @param  string  $base
+		 * @param  string  $controller
+		 * @param  array   $options
+		 * @return \Illuminate\Routing\Route
+		 */
+		protected function addResourceDestroy($name, $base, $controller, $options)
+	{
+			$uri = $this->getResourceUri($name).'/{'.$base.'}';
+
+			$action = $this->getResourceAction($name, $controller, 'destroy', $options);
+
+			return $this->delete($uri, $action);
+		}
+
+		/**
+		 * Create a route group with shared attributes.
+		 *
+		 * @param  array     $attributes
+		 * @param  \Closure  $callback
+		 * @return void
+		 */
+		public function group(array $attributes, Closure $callback)
+	{
+			$this->updateGroupStack($attributes);
+
+			// Once we have updated the group stack, we will execute the user Closure and
+			// merge in the groups attributes when the route is created. After we have
+			// run the callback, we will pop the attributes off of this group stack.
+			call_user_func($callback, $this);
+
+			array_pop($this->groupStack);
+		}
+
+		/**
+		 * Update the group stack with the given attributes.
+		 *
+		 * @param  array  $attributes
+		 * @return void
+		 */
+		protected function updateGroupStack(array $attributes)
+	{
+			if ( ! empty($this->groupStack))
+		{
+				$attributes = $this->mergeGroup($attributes, last($this->groupStack));
+			}
+
+			$this->groupStack[] = $attributes;
+		}
+
+		/**
+		 * Merge the given array with the last group stack.
+		 *
+		 * @param  array  $new
+		 * @return array
+		 */
+		public function mergeWithLastGroup($new)
+	{
+			return $this->mergeGroup($new, last($this->groupStack));
+		}
+
+		/**
+		 * Merge the given group attributes.
+		 *
+		 * @param  array  $new
+		 * @param  array  $old
+		 * @return array
+		 */
+		public static function mergeGroup($new, $old)
+	{
+			$new['namespace'] = static::formatUsesPrefix($new, $old);
+
+			$new['prefix'] = static::formatGroupPrefix($new, $old);
+
+			if (isset($new['domain']))unset($old['domain']);
 
 		$new['where'] = array_merge(array_get($old, 'where', []), array_get($new, 'where', []));
 
@@ -760,10 +751,10 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected static function formatUsesPrefix($new, $old)
 	{
-		if (isset($new['namespace']) && isset($old['namespace']))
+			if (isset($new['namespace']) && isset($old['namespace']))
 		{
-			return trim(array_get($old, 'namespace'), '\\').'\\'.trim($new['namespace'], '\\');
-		}
+				return trim(array_get($old, 'namespace'), '\\').'\\'.trim($new['namespace'], '\\');
+			}
 		elseif (isset($new['namespace']))
 		{
 			return trim($new['namespace'], '\\');
@@ -913,10 +904,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function routingToController($action)
 	{
-		if ($action instanceof Closure)
-		{
-			return false;
-		}
+		if ($action instanceof Closure) return false;
 
 		return is_string($action) || is_string(array_get($action, 'uses'));
 	}
@@ -929,10 +917,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function getControllerAction($action)
 	{
-		if (is_string($action))
-		{
-			$action = array('uses' => $action);
-		}
+		if (is_string($action)) $action = array('uses' => $action);
 
 		// Here we'll get an instance of this controller dispatcher and hand it off to
 		// the Closure so it will be used to resolve the class instances out of our
@@ -1165,7 +1150,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function parseFilter($callback)
 	{
-		if (is_string($callback) &&  ! str_contains($callback, '@'))
+		if (is_string($callback) && ! str_contains($callback, '@'))
 		{
 			return $callback.'@filter';
 		}
@@ -1183,10 +1168,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function when($pattern, $name, $methods = null)
 	{
-		if ( ! is_null($methods))
-		{
-			$methods = array_map('strtoupper', (array) $methods);
-		}
+		if ( ! is_null($methods)) $methods = array_map('strtoupper', (array) $methods);
 
 		$this->patternFilters[$pattern][] = compact('name', 'methods');
 	}
@@ -1201,10 +1183,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function whenRegex($pattern, $name, $methods = null)
 	{
-		if ( ! is_null($methods))
-		{
-			$methods = array_map('strtoupper', (array) $methods);
-		}
+		if ( ! is_null($methods)) $methods = array_map('strtoupper', (array) $methods);
 
 		$this->regexFilters[$pattern][] = compact('name', 'methods');
 	}
@@ -1223,10 +1202,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	{
 		$this->bind($key, function($value) use ($class, $callback)
 		{
-			if (is_null($value))
-			{
-				return null;
-			}
+			if (is_null($value)) return null;
 
 			// For model binders, we will attempt to retrieve the models using the find
 			// method on the model instance. If we cannot retrieve the models we'll
@@ -1324,10 +1300,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	protected function callFilter($filter, $request, $response = null)
 	{
-		if ( ! $this->filtering)
-		{
-			return null;
-		}
+		if ( ! $this->filtering) return null;
 
 		return $this->events->until('router.'.$filter, array($request, $response));
 	}
@@ -1359,11 +1332,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 		{
 			$response = $this->callRouteFilter($filter, $parameters, $route, $request);
 
-			if ( ! is_null($response))
-			{
-				return $response;
-			}
-
+			if ( ! is_null($response)) return $response;
 		}
 	}
 
@@ -1462,11 +1431,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 		{
 			$response = $this->callRouteFilter($filter, $parameters, $route, $request);
 
-			if ( ! is_null($response))
-			{
-				return $response;
-			}
-
+			if ( ! is_null($response)) return $response;
 		}
 	}
 
@@ -1498,10 +1463,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function callRouteFilter($filter, $parameters, $route, $request, $response = null)
 	{
-		if ( ! $this->filtering)
-		{
-			return null;
-		}
+		if ( ! $this->filtering) return null;
 
 		$data = array_merge(array($route, $request, $response), $parameters);
 
@@ -1518,7 +1480,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	{
 		return array_filter($parameters, function($p)
 		{
-			return  ! is_null($p) && $p !== '';
+			return ! is_null($p) && $p !== '';
 		});
 	}
 
@@ -1664,123 +1626,120 @@ class Router implements HttpKernelInterface, RouteFiltererInterface {
 	 */
 	public function currentRouteAction()
 	{
-		if ( ! $this->current())
-		{
-			return;
-		}
+		if ( ! $this->current()) return;
 
 		$action = $this->current()->getAction();
 
 		return isset($action['controller']) ? $action['controller'] : null;
-	}
+		}
 
-	/**
-	 * Alias for the "currentRouteUses" method.
-	 *
-	 * @param  mixed  string
-	 * @return bool
-	 */
-	public function uses()
+		/**
+		 * Alias for the "currentRouteUses" method.
+		 *
+		 * @param  mixed  string
+		 * @return bool
+		 */
+		public function uses()
 	{
-		foreach (func_get_args() as $pattern)
+			foreach (func_get_args() as $pattern)
 		{
-			if (str_is($pattern, $this->currentRouteAction()))
+				if (str_is($pattern, $this->currentRouteAction()))
 			{
-				return true;
+					return true;
+				}
 			}
+
+			return false;
 		}
 
-		return false;
-	}
-
-	/**
-	 * Determine if the current route action matches a given action.
-	 *
-	 * @param  string  $action
-	 * @return bool
-	 */
-	public function currentRouteUses($action)
+		/**
+		 * Determine if the current route action matches a given action.
+		 *
+		 * @param  string  $action
+		 * @return bool
+		 */
+		public function currentRouteUses($action)
 	{
-		return $this->currentRouteAction() == $action;
-	}
+			return $this->currentRouteAction() == $action;
+		}
 
-	/**
-	 * Get the request currently being dispatched.
-	 *
-	 * @return \Illuminate\Http\Request
-	 */
-	public function getCurrentRequest()
+		/**
+		 * Get the request currently being dispatched.
+		 *
+		 * @return \Illuminate\Http\Request
+		 */
+		public function getCurrentRequest()
 	{
-		return $this->currentRequest;
-	}
+			return $this->currentRequest;
+		}
 
-	/**
-	 * Get the underlying route collection.
-	 *
-	 * @return \Illuminate\Routing\RouteCollection
-	 */
-	public function getRoutes()
+		/**
+		 * Get the underlying route collection.
+		 *
+		 * @return \Illuminate\Routing\RouteCollection
+		 */
+		public function getRoutes()
 	{
-		return $this->routes;
-	}
+			return $this->routes;
+		}
 
-	/**
-	 * Get the controller dispatcher instance.
-	 *
-	 * @return \Illuminate\Routing\ControllerDispatcher
-	 */
-	public function getControllerDispatcher()
+		/**
+		 * Get the controller dispatcher instance.
+		 *
+		 * @return \Illuminate\Routing\ControllerDispatcher
+		 */
+		public function getControllerDispatcher()
 	{
-		if (is_null($this->controllerDispatcher))
+			if (is_null($this->controllerDispatcher))
 		{
-			$this->controllerDispatcher = new ControllerDispatcher($this, $this->container);
+				$this->controllerDispatcher = new ControllerDispatcher($this, $this->container);
+			}
+
+			return $this->controllerDispatcher;
 		}
 
-		return $this->controllerDispatcher;
-	}
-
-	/**
-	 * Set the controller dispatcher instance.
-	 *
-	 * @param  \Illuminate\Routing\ControllerDispatcher  $dispatcher
-	 * @return void
-	 */
-	public function setControllerDispatcher(ControllerDispatcher $dispatcher)
+		/**
+		 * Set the controller dispatcher instance.
+		 *
+		 * @param  \Illuminate\Routing\ControllerDispatcher  $dispatcher
+		 * @return void
+		 */
+		public function setControllerDispatcher(ControllerDispatcher $dispatcher)
 	{
-		$this->controllerDispatcher = $dispatcher;
-	}
+			$this->controllerDispatcher = $dispatcher;
+		}
 
-	/**
-	 * Get a controller inspector instance.
-	 *
-	 * @return \Illuminate\Routing\ControllerInspector
-	 */
-	public function getInspector()
+		/**
+		 * Get a controller inspector instance.
+		 *
+		 * @return \Illuminate\Routing\ControllerInspector
+		 */
+		public function getInspector()
 	{
-		return $this->inspector ?: $this->inspector = new ControllerInspector;
-	}
+			return $this->inspector ?: $this->inspector = new ControllerInspector;
+		}
 
-	/**
-	 * Get the global "where" patterns.
-	 *
-	 * @return array
-	 */
-	public function getPatterns()
+		/**
+		 * Get the global "where" patterns.
+		 *
+		 * @return array
+		 */
+		public function getPatterns()
 	{
-		return $this->patterns;
-	}
+			return $this->patterns;
+		}
 
-	/**
-	 * Get the response for a given request.
-	 *
-	 * @param  \Symfony\Component\HttpFoundation\Request  $request
-	 * @param  int   $type
-	 * @param  bool  $catch
-	 * @return \Illuminate\Http\Response
-	 */
-	public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+		/**
+		 * Get the response for a given request.
+		 *
+		 * @param  \Symfony\Component\HttpFoundation\Request  $request
+		 * @param  int   $type
+		 * @param  bool  $catch
+		 * @return \Illuminate\Http\Response
+		 */
+		public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
 	{
-		return $this->dispatch(Request::createFromBase($request));
-	}
+			return $this->dispatch(Request::createFromBase($request));
+		}
 
-}
+	}

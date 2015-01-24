@@ -63,7 +63,7 @@ class MigrationPublisher {
 	{
 		return array_filter($this->getPackageMigrations($source), function($file) use ($destination)
 		{
-			return  ! $this->migrationExists($file, $destination);
+			return ! $this->migrationExists($file, $destination);
 		});
 	}
 
@@ -89,10 +89,7 @@ class MigrationPublisher {
 	 */
 	public function getExistingMigrationNames($destination)
 	{
-		if (isset($this->existing[$destination]))
-		{
-			return $this->existing[$destination];
-		}
+		if (isset($this->existing[$destination])) return $this->existing[$destination];
 
 		return $this->existing[$destination] = array_map(function($file)
 		{
@@ -111,7 +108,7 @@ class MigrationPublisher {
 	{
 		$files = array_filter($this->files->files($source), function($file)
 		{
-			return  ! starts_with($file, '.');
+			return ! starts_with($file, '.');
 		});
 
 		sort($files);

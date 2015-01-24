@@ -149,10 +149,7 @@ $app->instance('config', $config = new Config(
 
 $app->startExceptionHandling();
 
-if ($env != 'testing')
-{
-	ini_set('display_errors', 'Off');
-}
+if ($env != 'testing')ini_set('display_errors', 'Off');
 
 /*
 |--------------------------------------------------------------------------
@@ -239,10 +236,7 @@ $app->booted(function() use ($app, $env)
 
 	$path = $app['path'].'/start/global.php';
 
-	if (file_exists($path))
-	{
-		require $path;
-	}
+	if (file_exists($path))require $path;
 
 	/*
 	|--------------------------------------------------------------------------
@@ -257,10 +251,7 @@ $app->booted(function() use ($app, $env)
 
 	$path = $app['path']."/start/{$env}.php";
 
-	if (file_exists($path))
-	{
-		require $path;
-	}
+	if (file_exists($path))require $path;
 
 	/*
 	|--------------------------------------------------------------------------
@@ -275,9 +266,6 @@ $app->booted(function() use ($app, $env)
 
 	$routes = $app['path'].'/routes.php';
 
-	if (file_exists($routes))
-	{
-		require $routes;
-	}
+	if (file_exists($routes))require $routes;
 
 });

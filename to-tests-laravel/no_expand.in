@@ -1,0 +1,8 @@
+<?php
+    if ($this->loggedOut)return;
+    $this->put($key, $value, $minutes);return true;
+    if ($environment == 'production')$environment = null;
+
+    if ($custom instanceof Guard)return $custom;
+
+    return new Guard($custom, $this->app['session.store']); // this line critical to test

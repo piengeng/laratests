@@ -47,10 +47,7 @@ class ClassLoader {
 	 */
 	public static function normalizeClass($class)
 	{
-		if ($class[0] == '\\')
-		{
-			$class = substr($class, 1);
-		}
+		if ($class[0] == '\\') $class = substr($class, 1);
 
 		return str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $class).'.php';
 	}

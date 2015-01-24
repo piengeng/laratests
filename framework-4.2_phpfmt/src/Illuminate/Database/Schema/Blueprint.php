@@ -46,11 +46,7 @@ class Blueprint {
 	{
 		$this->table = $table;
 
-		if ( ! is_null($callback))
-		{
-			$callback($this);
-		}
-
+		if ( ! is_null($callback)) $callback($this);
 	}
 
 	/**
@@ -107,7 +103,7 @@ class Blueprint {
 	 */
 	protected function addImpliedCommands()
 	{
-		if (count($this->columns) > 0 &&  ! $this->creating())
+		if (count($this->columns) > 0 && ! $this->creating())
 		{
 			array_unshift($this->commands, $this->createCommand('add'));
 		}
@@ -158,11 +154,7 @@ class Blueprint {
 	{
 		foreach ($this->commands as $command)
 		{
-			if ($command->name == 'create')
-			{
-				return true;
-			}
-
+			if ($command->name == 'create') return true;
 		}
 
 		return false;

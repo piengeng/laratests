@@ -91,10 +91,7 @@ class Builder {
 	 */
 	public function findMany($id, $columns = array('*'))
 	{
-		if (empty($id))
-		{
-			return $this->model->newCollection();
-		}
+		if (empty($id)) return $this->model->newCollection();
 
 		$this->query->whereIn($this->model->getQualifiedKeyName(), $id);
 
@@ -112,10 +109,7 @@ class Builder {
 	 */
 	public function findOrFail($id, $columns = array('*'))
 	{
-		if ( ! is_null($model = $this->find($id, $columns)))
-		{
-			return $model;
-		}
+		if ( ! is_null($model = $this->find($id, $columns))) return $model;
 
 		throw (new ModelNotFoundException)->setModel(get_class($this->model));
 	}
@@ -141,10 +135,7 @@ class Builder {
 	 */
 	public function firstOrFail($columns = array('*'))
 	{
-		if ( ! is_null($model = $this->first($columns)))
-		{
-			return $model;
-		}
+		if ( ! is_null($model = $this->first($columns))) return $model;
 
 		throw (new ModelNotFoundException)->setModel(get_class($this->model));
 	}
@@ -180,11 +171,7 @@ class Builder {
 	{
 		$result = $this->first(array($column));
 
-		if ($result)
-		{
-			return $result->{$column};
-		}
-
+		if ($result) return $result->{$column};
 	}
 
 	/**
@@ -367,10 +354,7 @@ class Builder {
 	 */
 	protected function addUpdatedAtColumn(array $values)
 	{
-		if ( ! $this->model->usesTimestamps())
-		{
-			return $values;
-		}
+		if ( ! $this->model->usesTimestamps()) return $values;
 
 		$column = $this->model->getUpdatedAtColumn();
 
@@ -622,10 +606,7 @@ class Builder {
 
 		$query = $relation->getRelationCountQuery($relation->getRelated()->newQuery(), $this);
 
-		if ($callback)
-		{
-			call_user_func($callback, $query);
-		}
+		if ($callback)call_user_func($callback, $query);
 
 		return $this->addHasWhere($query, $relation, $operator, $count, $boolean);
 	}
@@ -795,10 +776,7 @@ class Builder {
 	 */
 	public function with($relations)
 	{
-		if (is_string($relations))
-		{
-			$relations = func_get_args();
-		}
+		if (is_string($relations)) $relations = func_get_args();
 
 		$eagers = $this->parseRelations($relations);
 

@@ -176,10 +176,7 @@ class SecLibGateway implements GatewayInterface {
 	 */
 	protected function getAuthForLogin()
 	{
-		if ($this->useAgent())
-		{
-			return $this->getAgent();
-		}
+		if ($this->useAgent()) return $this->getAgent();
 
 		// If a "key" was specified in the auth credentials, we will load it into a
 		// secure RSA key instance, which will be used to connect to the servers
@@ -233,10 +230,7 @@ class SecLibGateway implements GatewayInterface {
 	 */
 	protected function readRsaKey(array $auth)
 	{
-		if (isset($auth['key']))
-		{
-			return $this->files->get($auth['key']);
-		}
+		if (isset($auth['key'])) return $this->files->get($auth['key']);
 
 		return $auth['keytext'];
 	}
@@ -321,10 +315,7 @@ class SecLibGateway implements GatewayInterface {
 	 */
 	public function getConnection()
 	{
-		if ($this->connection)
-		{
-			return $this->connection;
-		}
+		if ($this->connection) return $this->connection;
 
 		return $this->connection = new Net_SFTP($this->host, $this->port);
 	}

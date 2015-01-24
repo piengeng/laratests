@@ -103,11 +103,7 @@ abstract class Facade {
 	 */
 	protected static function getMockableClass()
 	{
-		if ($root = static::getFacadeRoot())
-		{
-			return get_class($root);
-		}
-
+		if ($root = static::getFacadeRoot()) return get_class($root);
 	}
 
 	/**
@@ -140,10 +136,7 @@ abstract class Facade {
 	 */
 	protected static function resolveFacadeInstance($name)
 	{
-		if (is_object($name))
-		{
-			return $name;
-		}
+		if (is_object($name)) return $name;
 
 		if (isset(static::$resolvedInstance[$name]))
 		{

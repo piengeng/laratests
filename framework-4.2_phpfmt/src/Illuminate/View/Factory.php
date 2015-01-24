@@ -119,10 +119,7 @@ class Factory {
 	 */
 	public function make($view, $data = array(), $mergeData = array())
 	{
-		if (isset($this->aliases[$view]))
-		{
-			$view = $this->aliases[$view];
-		}
+		if (isset($this->aliases[$view])) $view = $this->aliases[$view];
 
 		$path = $this->finder->find($view);
 
@@ -289,10 +286,7 @@ class Factory {
 	 */
 	public function share($key, $value = null)
 	{
-		if ( ! is_array($key))
-		{
-			return $this->shared[$key] = $value;
-		}
+		if ( ! is_array($key)) return $this->shared[$key] = $value;
 
 		foreach ($key as $innerKey => $innerValue)
 		{
@@ -630,11 +624,7 @@ class Factory {
 	 */
 	public function flushSectionsIfDoneRendering()
 	{
-		if ($this->doneRendering())
-		{
-			$this->flushSections();
-		}
-
+		if ($this->doneRendering()) $this->flushSections();
 	}
 
 	/**

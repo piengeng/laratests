@@ -35,10 +35,7 @@ class Collection extends BaseCollection {
 	{
 		if (count($this->items) > 0)
 		{
-			if (is_string($relations))
-			{
-				$relations = func_get_args();
-			}
+			if (is_string($relations)) $relations = func_get_args();
 
 			$query = $this->first()->newQuery()->with($relations);
 
@@ -69,7 +66,7 @@ class Collection extends BaseCollection {
 	 */
 	public function contains($key)
 	{
-		return  ! is_null($this->find($key));
+		return ! is_null($this->find($key));
 	}
 
 	/**

@@ -12,7 +12,7 @@ class MySqlProcessor extends Processor {
 	{
 		return array_map(function($r)
 		{
-			$r = (object) $r;return $r->column_name;}, $results);
+			$r = (object) $r; return $r->column_name;}, $results);
 	}
 
 }

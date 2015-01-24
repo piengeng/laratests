@@ -44,10 +44,7 @@ class IronConnector implements ConnectorInterface {
 	{
 		$ironConfig = array('token' => $config['token'], 'project_id' => $config['project']);
 
-		if (isset($config['host']))
-		{
-			$ironConfig['host'] = $config['host'];
-		}
+		if (isset($config['host'])) $ironConfig['host'] = $config['host'];
 
 		$iron = new IronMQ($ironConfig);
 

@@ -170,15 +170,9 @@ class Pluralizer {
 	 */
 	public static function plural($value, $count = 2)
 	{
-		if ($count == 1)
-		{
-			return $value;
-		}
+		if ($count == 1) return $value;
 
-		if (in_array($value, static::$irregular))
-		{
-			return $value;
-		}
+		if (in_array($value, static::$irregular)) return $value;
 
 		// First we'll check the cache of inflected values. We cache each word that
 		// is inflected so we don't have to spin through the regular expressions
@@ -210,10 +204,7 @@ class Pluralizer {
 	 */
 	protected static function inflect($value, $source, $irregular)
 	{
-		if (static::uncountable($value))
-		{
-			return $value;
-		}
+		if (static::uncountable($value)) return $value;
 
 		// Next, we will check the "irregular" patterns which contain words that are
 		// not easily summarized in regular expression rules, like "children" and

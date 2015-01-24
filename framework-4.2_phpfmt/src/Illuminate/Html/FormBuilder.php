@@ -223,10 +223,7 @@ class FormBuilder {
 	 */
 	public function input($type, $name, $value = null, $options = array())
 	{
-		if ( ! isset($options['name']))
-		{
-			$options['name'] = $name;
-		}
+		if ( ! isset($options['name'])) $options['name'] = $name;
 
 		// We will get the appropriate value for the given field. We will look for the
 		// value in the session for the value in the old input data then we'll look
@@ -334,10 +331,7 @@ class FormBuilder {
 	 */
 	public function textarea($name, $value = null, $options = array())
 	{
-		if ( ! isset($options['name']))
-		{
-			$options['name'] = $name;
-		}
+		if ( ! isset($options['name'])) $options['name'] = $name;
 
 		// Next we will look for the rows and cols attributes, as each of these are put
 		// on the textarea element definition. If they are not present, we will just
@@ -425,10 +419,7 @@ class FormBuilder {
 
 		$options['id'] = $this->getIdAttribute($name, $options);
 
-		if ( ! isset($options['name']))
-		{
-			$options['name'] = $name;
-		}
+		if ( ! isset($options['name'])) $options['name'] = $name;
 
 		// We will simply loop through the options and build an HTML value for each of
 		// them until we have an array of HTML declarations. Then we will join them
@@ -600,10 +591,7 @@ class FormBuilder {
 	 */
 	public function radio($name, $value = null, $checked = null, $options = array())
 	{
-		if (is_null($value))
-		{
-			$value = $name;
-		}
+		if (is_null($value)) $value = $name;
 
 		return $this->checkable('radio', $name, $value, $checked, $options);
 	}
@@ -622,10 +610,7 @@ class FormBuilder {
 	{
 		$checked = $this->getCheckedState($type, $name, $value, $checked);
 
-		if ($checked)
-		{
-			$options['checked'] = 'checked';
-		}
+		if ($checked) $options['checked'] = 'checked';
 
 		return $this->input($type, $name, $value, $options);
 	}
@@ -664,35 +649,26 @@ class FormBuilder {
 	 */
 	protected function getCheckboxCheckedState($name, $value, $checked)
 	{
-		if (isset($this->session) &&  ! $this->oldInputIsEmpty() && is_null($this->old($name)))
-		{
-			return false;
-		}
+		if (isset($this->session) && ! $this->oldInputIsEmpty() && is_null($this->old($name))) return false;
 
-		if ($this->missingOldAndModel($name))
-		{
-			return $checked;
-		}
+		if ($this->missingOldAndModel($name)) return $checked;
 
 		$posted = $this->getValueAttribute($name);
 
 		return is_array($posted) ? in_array($value, $posted) : (bool) $posted;
-	}
-
-	/**
-	 * Get the check state for a radio input.
-	 *
-	 * @param  string  $name
-	 * @param  mixed  $value
-	 * @param  bool  $checked
-	 * @return bool
-	 */
-	protected function getRadioCheckedState($name, $value, $checked)
-	{
-		if ($this->missingOldAndModel($name))
-		{
-			return $checked;
 		}
+
+		/**
+		 * Get the check state for a radio input.
+		 *
+		 * @param  string  $name
+		 * @param  mixed  $value
+		 * @param  bool  $checked
+		 * @return bool
+		 */
+		protected function getRadioCheckedState($name, $value, $checked)
+	{
+			if ($this->missingOldAndModel($name)) return $checked;
 
 		return $this->getValueAttribute($name) == $value;
 	}
@@ -705,102 +681,102 @@ class FormBuilder {
 	 */
 	protected function missingOldAndModel($name)
 	{
-		return (is_null($this->old($name)) && is_null($this->getModelValueAttribute($name)));
-	}
-
-	/**
-	 * Create a HTML reset input element.
-	 *
-	 * @param  string  $value
-	 * @param  array   $attributes
-	 * @return string
-	 */
-	public function reset($value, $attributes = array())
-	{
-		return $this->input('reset', null, $value, $attributes);
-	}
-
-	/**
-	 * Create a HTML image input element.
-	 *
-	 * @param  string  $url
-	 * @param  string  $name
-	 * @param  array   $attributes
-	 * @return string
-	 */
-	public function image($url, $name = null, $attributes = array())
-	{
-		$attributes['src'] = $this->url->asset($url);
-
-		return $this->input('image', $name, null, $attributes);
-	}
-
-	/**
-	 * Create a submit button element.
-	 *
-	 * @param  string  $value
-	 * @param  array   $options
-	 * @return string
-	 */
-	public function submit($value = null, $options = array())
-	{
-		return $this->input('submit', null, $value, $options);
-	}
-
-	/**
-	 * Create a button element.
-	 *
-	 * @param  string  $value
-	 * @param  array   $options
-	 * @return string
-	 */
-	public function button($value = null, $options = array())
-	{
-		if ( ! array_key_exists('type', $options))
-		{
-			$options['type'] = 'button';
+			return (is_null($this->old($name)) && is_null($this->getModelValueAttribute($name)));
 		}
 
-		return '<button'.$this->html->attributes($options).'>'.$value.'</button>';
-	}
-
-	/**
-	 * Parse the form action method.
-	 *
-	 * @param  string  $method
-	 * @return string
-	 */
-	protected function getMethod($method)
+		/**
+		 * Create a HTML reset input element.
+		 *
+		 * @param  string  $value
+		 * @param  array   $attributes
+		 * @return string
+		 */
+		public function reset($value, $attributes = array())
 	{
-		$method = strtoupper($method);
-
-		return $method != 'GET' ? 'POST' : $method;
-	}
-
-	/**
-	 * Get the form action from the options.
-	 *
-	 * @param  array   $options
-	 * @return string
-	 */
-	protected function getAction(array $options)
-	{
-		// We will also check for a "route" or "action" parameter on the array so that
-		// developers can easily specify a route or controller action when creating
-		// a form providing a convenient interface for creating the form actions.
-		if (isset($options['url']))
-		{
-			return $this->getUrlAction($options['url']);
+			return $this->input('reset', null, $value, $attributes);
 		}
 
-		if (isset($options['route']))
-		{
-			return $this->getRouteAction($options['route']);
+		/**
+		 * Create a HTML image input element.
+		 *
+		 * @param  string  $url
+		 * @param  string  $name
+		 * @param  array   $attributes
+		 * @return string
+		 */
+		public function image($url, $name = null, $attributes = array())
+	{
+			$attributes['src'] = $this->url->asset($url);
+
+			return $this->input('image', $name, null, $attributes);
 		}
 
-		// If an action is available, we are attempting to open a form to a controller
-		// action route. So, we will use the URL generator to get the path to these
-		// actions and return them from the method. Otherwise, we'll use current.
+		/**
+		 * Create a submit button element.
+		 *
+		 * @param  string  $value
+		 * @param  array   $options
+		 * @return string
+		 */
+		public function submit($value = null, $options = array())
+	{
+			return $this->input('submit', null, $value, $options);
+		}
+
+		/**
+		 * Create a button element.
+		 *
+		 * @param  string  $value
+		 * @param  array   $options
+		 * @return string
+		 */
+		public function button($value = null, $options = array())
+	{
+			if ( ! array_key_exists('type', $options))
+		{
+				$options['type'] = 'button';
+			}
+
+			return '<button'.$this->html->attributes($options).'>'.$value.'</button>';
+		}
+
+		/**
+		 * Parse the form action method.
+		 *
+		 * @param  string  $method
+		 * @return string
+		 */
+		protected function getMethod($method)
+	{
+			$method = strtoupper($method);
+
+			return $method != 'GET' ? 'POST' : $method;
+		}
+
+		/**
+		 * Get the form action from the options.
+		 *
+		 * @param  array   $options
+		 * @return string
+		 */
+		protected function getAction(array $options)
+	{
+			// We will also check for a "route" or "action" parameter on the array so that
+			// developers can easily specify a route or controller action when creating
+			// a form providing a convenient interface for creating the form actions.
+			if (isset($options['url']))
+		{
+				return $this->getUrlAction($options['url']);
+			}
+
+			if (isset($options['route']))
+		{
+				return $this->getRouteAction($options['route']);
+			}
+
+			// If an action is available, we are attempting to open a form to a controller
+			// action route. So, we will use the URL generator to get the path to these
+			// actions and return them from the method. Otherwise, we'll use current.
 		elseif (isset($options['action']))
 		{
 			return $this->getControllerAction($options['action']);
@@ -915,20 +891,14 @@ class FormBuilder {
 	 */
 	public function getValueAttribute($name, $value = null)
 	{
-		if (is_null($name))
-		{
-			return $value;
-		}
+		if (is_null($name)) return $value;
 
 		if ( ! is_null($this->old($name)))
 		{
 			return $this->old($name);
 		}
 
-		if ( ! is_null($value))
-		{
-			return $value;
-		}
+		if ( ! is_null($value)) return $value;
 
 		if (isset($this->model))
 		{

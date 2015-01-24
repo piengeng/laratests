@@ -295,10 +295,7 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, $bindings, function($me, $query, $bindings) use ($useReadPdo)
 		{
-			if ($me->pretending())
-			{
-				return array();
-			}
+			if ($me->pretending()) return array();
 
 			// For select statements, we'll simply execute the query and return an array
 			// of the database result set. Each element in the array will be a single
@@ -369,10 +366,7 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, $bindings, function($me, $query, $bindings)
 		{
-			if ($me->pretending())
-			{
-				return true;
-			}
+			if ($me->pretending()) return true;
 
 			$bindings = $me->prepareBindings($bindings);
 
@@ -391,10 +385,7 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, $bindings, function($me, $query, $bindings)
 		{
-			if ($me->pretending())
-			{
-				return 0;
-			}
+			if ($me->pretending()) return 0;
 
 			// For update or delete statements, we want to get the number of rows affected
 			// by the statement and return that back to the developer. We'll first need
@@ -417,10 +408,7 @@ class Connection implements ConnectionInterface {
 	{
 		return $this->run($query, array(), function($me, $query)
 		{
-			if ($me->pretending())
-			{
-				return true;
-			}
+			if ($me->pretending()) return true;
 
 			return (bool) $me->getPdo()->exec($query);
 		});
@@ -513,10 +501,7 @@ class Connection implements ConnectionInterface {
 	 */
 	public function commit()
 	{
-		if ($this->transactions == 1)
-		{
-			$this->pdo->commit();
-		}
+		if ($this->transactions == 1) $this->pdo->commit();
 
 		--$this->transactions;
 
@@ -738,10 +723,7 @@ class Connection implements ConnectionInterface {
 			$this->events->fire('illuminate.query', array($query, $bindings, $time, $this->getName()));
 		}
 
-		if ( ! $this->loggingQueries)
-		{
-			return;
-		}
+		if ( ! $this->loggingQueries) return;
 
 		$this->queryLog[] = compact('query', 'bindings', 'time');
 	}
@@ -840,26 +822,21 @@ class Connection implements ConnectionInterface {
 	 */
 	public function getReadPdo()
 	{
-		if ($this->transactions >= 1)
-		{
-			return $this->getPdo();
-		}
+		if ($this->transactions >= 1) return $this->getPdo();
 
 		return $this->readPdo ?: $this->pdo;
-	}
-
-	/**
-	 * Set the PDO connection.
-	 *
-	 * @param  \PDO|null  $pdo
-	 * @return $this
-	 */
-	public function setPdo($pdo)
-	{
-		if ($this->transactions >= 1)
-		{
-			throw new \RuntimeException("Can't swap PDO instance while within transaction.");
 		}
+
+		/**
+		 * Set the PDO connection.
+		 *
+		 * @param  \PDO|null  $pdo
+		 * @return $this
+		 */
+		public function setPdo($pdo)
+	{
+			if ($this->transactions >= 1)
+		throw new \RuntimeException("Can't swap PDO instance while within transaction.");
 
 		$this->pdo = $pdo;
 
@@ -874,327 +851,327 @@ class Connection implements ConnectionInterface {
 	 */
 	public function setReadPdo($pdo)
 	{
-		$this->readPdo = $pdo;
+			$this->readPdo = $pdo;
 
-		return $this;
-	}
-
-	/**
-	 * Set the reconnect instance on the connection.
-	 *
-	 * @param  callable  $reconnector
-	 * @return $this
-	 */
-	public function setReconnector(callable $reconnector)
-	{
-		$this->reconnector = $reconnector;
-
-		return $this;
-	}
-
-	/**
-	 * Get the database connection name.
-	 *
-	 * @return string|null
-	 */
-	public function getName()
-	{
-		return $this->getConfig('name');
-	}
-
-	/**
-	 * Get an option from the configuration options.
-	 *
-	 * @param  string  $option
-	 * @return mixed
-	 */
-	public function getConfig($option)
-	{
-		return array_get($this->config, $option);
-	}
-
-	/**
-	 * Get the PDO driver name.
-	 *
-	 * @return string
-	 */
-	public function getDriverName()
-	{
-		return $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
-	}
-
-	/**
-	 * Get the query grammar used by the connection.
-	 *
-	 * @return \Illuminate\Database\Query\Grammars\Grammar
-	 */
-	public function getQueryGrammar()
-	{
-		return $this->queryGrammar;
-	}
-
-	/**
-	 * Set the query grammar used by the connection.
-	 *
-	 * @param  \Illuminate\Database\Query\Grammars\Grammar
-	 * @return void
-	 */
-	public function setQueryGrammar(Query\Grammars\Grammar $grammar)
-	{
-		$this->queryGrammar = $grammar;
-	}
-
-	/**
-	 * Get the schema grammar used by the connection.
-	 *
-	 * @return \Illuminate\Database\Query\Grammars\Grammar
-	 */
-	public function getSchemaGrammar()
-	{
-		return $this->schemaGrammar;
-	}
-
-	/**
-	 * Set the schema grammar used by the connection.
-	 *
-	 * @param  \Illuminate\Database\Schema\Grammars\Grammar
-	 * @return void
-	 */
-	public function setSchemaGrammar(Schema\Grammars\Grammar $grammar)
-	{
-		$this->schemaGrammar = $grammar;
-	}
-
-	/**
-	 * Get the query post processor used by the connection.
-	 *
-	 * @return \Illuminate\Database\Query\Processors\Processor
-	 */
-	public function getPostProcessor()
-	{
-		return $this->postProcessor;
-	}
-
-	/**
-	 * Set the query post processor used by the connection.
-	 *
-	 * @param  \Illuminate\Database\Query\Processors\Processor
-	 * @return void
-	 */
-	public function setPostProcessor(Processor $processor)
-	{
-		$this->postProcessor = $processor;
-	}
-
-	/**
-	 * Get the event dispatcher used by the connection.
-	 *
-	 * @return \Illuminate\Events\Dispatcher
-	 */
-	public function getEventDispatcher()
-	{
-		return $this->events;
-	}
-
-	/**
-	 * Set the event dispatcher instance on the connection.
-	 *
-	 * @param  \Illuminate\Events\Dispatcher
-	 * @return void
-	 */
-	public function setEventDispatcher(Dispatcher $events)
-	{
-		$this->events = $events;
-	}
-
-	/**
-	 * Get the paginator environment instance.
-	 *
-	 * @return \Illuminate\Pagination\Factory
-	 */
-	public function getPaginator()
-	{
-		if ($this->paginator instanceof Closure)
-		{
-			$this->paginator = call_user_func($this->paginator);
+			return $this;
 		}
 
-		return $this->paginator;
-	}
-
-	/**
-	 * Set the pagination environment instance.
-	 *
-	 * @param  \Illuminate\Pagination\Factory|\Closure  $paginator
-	 * @return void
-	 */
-	public function setPaginator($paginator)
+		/**
+		 * Set the reconnect instance on the connection.
+		 *
+		 * @param  callable  $reconnector
+		 * @return $this
+		 */
+		public function setReconnector(callable $reconnector)
 	{
-		$this->paginator = $paginator;
-	}
+			$this->reconnector = $reconnector;
 
-	/**
-	 * Get the cache manager instance.
-	 *
-	 * @return \Illuminate\Cache\CacheManager
-	 */
-	public function getCacheManager()
-	{
-		if ($this->cache instanceof Closure)
-		{
-			$this->cache = call_user_func($this->cache);
+			return $this;
 		}
 
-		return $this->cache;
-	}
-
-	/**
-	 * Set the cache manager instance on the connection.
-	 *
-	 * @param  \Illuminate\Cache\CacheManager|\Closure  $cache
-	 * @return void
-	 */
-	public function setCacheManager($cache)
+		/**
+		 * Get the database connection name.
+		 *
+		 * @return string|null
+		 */
+		public function getName()
 	{
-		$this->cache = $cache;
-	}
+			return $this->getConfig('name');
+		}
 
-	/**
-	 * Determine if the connection in a "dry run".
-	 *
-	 * @return bool
-	 */
-	public function pretending()
+		/**
+		 * Get an option from the configuration options.
+		 *
+		 * @param  string  $option
+		 * @return mixed
+		 */
+		public function getConfig($option)
 	{
-		return $this->pretending === true;
-	}
+			return array_get($this->config, $option);
+		}
 
-	/**
-	 * Get the default fetch mode for the connection.
-	 *
-	 * @return int
-	 */
-	public function getFetchMode()
+		/**
+		 * Get the PDO driver name.
+		 *
+		 * @return string
+		 */
+		public function getDriverName()
 	{
-		return $this->fetchMode;
-	}
+			return $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+		}
 
-	/**
-	 * Set the default fetch mode for the connection.
-	 *
-	 * @param  int  $fetchMode
-	 * @return int
-	 */
-	public function setFetchMode($fetchMode)
+		/**
+		 * Get the query grammar used by the connection.
+		 *
+		 * @return \Illuminate\Database\Query\Grammars\Grammar
+		 */
+		public function getQueryGrammar()
 	{
-		$this->fetchMode = $fetchMode;
-	}
+			return $this->queryGrammar;
+		}
 
-	/**
-	 * Get the connection query log.
-	 *
-	 * @return array
-	 */
-	public function getQueryLog()
+		/**
+		 * Set the query grammar used by the connection.
+		 *
+		 * @param  \Illuminate\Database\Query\Grammars\Grammar
+		 * @return void
+		 */
+		public function setQueryGrammar(Query\Grammars\Grammar $grammar)
 	{
-		return $this->queryLog;
-	}
+			$this->queryGrammar = $grammar;
+		}
 
-	/**
-	 * Clear the query log.
-	 *
-	 * @return void
-	 */
-	public function flushQueryLog()
+		/**
+		 * Get the schema grammar used by the connection.
+		 *
+		 * @return \Illuminate\Database\Query\Grammars\Grammar
+		 */
+		public function getSchemaGrammar()
 	{
-		$this->queryLog = array();
-	}
+			return $this->schemaGrammar;
+		}
 
-	/**
-	 * Enable the query log on the connection.
-	 *
-	 * @return void
-	 */
-	public function enableQueryLog()
+		/**
+		 * Set the schema grammar used by the connection.
+		 *
+		 * @param  \Illuminate\Database\Schema\Grammars\Grammar
+		 * @return void
+		 */
+		public function setSchemaGrammar(Schema\Grammars\Grammar $grammar)
 	{
-		$this->loggingQueries = true;
-	}
+			$this->schemaGrammar = $grammar;
+		}
 
-	/**
-	 * Disable the query log on the connection.
-	 *
-	 * @return void
-	 */
-	public function disableQueryLog()
+		/**
+		 * Get the query post processor used by the connection.
+		 *
+		 * @return \Illuminate\Database\Query\Processors\Processor
+		 */
+		public function getPostProcessor()
 	{
-		$this->loggingQueries = false;
-	}
+			return $this->postProcessor;
+		}
 
-	/**
-	 * Determine whether we're logging queries.
-	 *
-	 * @return bool
-	 */
-	public function logging()
+		/**
+		 * Set the query post processor used by the connection.
+		 *
+		 * @param  \Illuminate\Database\Query\Processors\Processor
+		 * @return void
+		 */
+		public function setPostProcessor(Processor $processor)
 	{
-		return $this->loggingQueries;
-	}
+			$this->postProcessor = $processor;
+		}
 
-	/**
-	 * Get the name of the connected database.
-	 *
-	 * @return string
-	 */
-	public function getDatabaseName()
+		/**
+		 * Get the event dispatcher used by the connection.
+		 *
+		 * @return \Illuminate\Events\Dispatcher
+		 */
+		public function getEventDispatcher()
 	{
-		return $this->database;
-	}
+			return $this->events;
+		}
 
-	/**
-	 * Set the name of the connected database.
-	 *
-	 * @param  string  $database
-	 * @return string
-	 */
-	public function setDatabaseName($database)
+		/**
+		 * Set the event dispatcher instance on the connection.
+		 *
+		 * @param  \Illuminate\Events\Dispatcher
+		 * @return void
+		 */
+		public function setEventDispatcher(Dispatcher $events)
 	{
-		$this->database = $database;
-	}
+			$this->events = $events;
+		}
 
-	/**
-	 * Get the table prefix for the connection.
-	 *
-	 * @return string
-	 */
-	public function getTablePrefix()
+		/**
+		 * Get the paginator environment instance.
+		 *
+		 * @return \Illuminate\Pagination\Factory
+		 */
+		public function getPaginator()
 	{
-		return $this->tablePrefix;
-	}
+			if ($this->paginator instanceof Closure)
+		{
+				$this->paginator = call_user_func($this->paginator);
+			}
 
-	/**
-	 * Set the table prefix in use by the connection.
-	 *
-	 * @param  string  $prefix
-	 * @return void
-	 */
-	public function setTablePrefix($prefix)
+			return $this->paginator;
+		}
+
+		/**
+		 * Set the pagination environment instance.
+		 *
+		 * @param  \Illuminate\Pagination\Factory|\Closure  $paginator
+		 * @return void
+		 */
+		public function setPaginator($paginator)
 	{
-		$this->tablePrefix = $prefix;
+			$this->paginator = $paginator;
+		}
 
-		$this->getQueryGrammar()->setTablePrefix($prefix);
-	}
-
-	/**
-	 * Set the table prefix and return the grammar.
-	 *
-	 * @param  \Illuminate\Database\Grammar  $grammar
-	 * @return \Illuminate\Database\Grammar
-	 */
-	public function withTablePrefix(Grammar $grammar)
+		/**
+		 * Get the cache manager instance.
+		 *
+		 * @return \Illuminate\Cache\CacheManager
+		 */
+		public function getCacheManager()
 	{
-		$grammar->setTablePrefix($this->tablePrefix);
+			if ($this->cache instanceof Closure)
+		{
+				$this->cache = call_user_func($this->cache);
+			}
 
-		return $grammar;
+			return $this->cache;
+		}
+
+		/**
+		 * Set the cache manager instance on the connection.
+		 *
+		 * @param  \Illuminate\Cache\CacheManager|\Closure  $cache
+		 * @return void
+		 */
+		public function setCacheManager($cache)
+	{
+			$this->cache = $cache;
+		}
+
+		/**
+		 * Determine if the connection in a "dry run".
+		 *
+		 * @return bool
+		 */
+		public function pretending()
+	{
+			return $this->pretending === true;
+		}
+
+		/**
+		 * Get the default fetch mode for the connection.
+		 *
+		 * @return int
+		 */
+		public function getFetchMode()
+	{
+			return $this->fetchMode;
+		}
+
+		/**
+		 * Set the default fetch mode for the connection.
+		 *
+		 * @param  int  $fetchMode
+		 * @return int
+		 */
+		public function setFetchMode($fetchMode)
+	{
+			$this->fetchMode = $fetchMode;
+		}
+
+		/**
+		 * Get the connection query log.
+		 *
+		 * @return array
+		 */
+		public function getQueryLog()
+	{
+			return $this->queryLog;
+		}
+
+		/**
+		 * Clear the query log.
+		 *
+		 * @return void
+		 */
+		public function flushQueryLog()
+	{
+			$this->queryLog = array();
+		}
+
+		/**
+		 * Enable the query log on the connection.
+		 *
+		 * @return void
+		 */
+		public function enableQueryLog()
+	{
+			$this->loggingQueries = true;
+		}
+
+		/**
+		 * Disable the query log on the connection.
+		 *
+		 * @return void
+		 */
+		public function disableQueryLog()
+	{
+			$this->loggingQueries = false;
+		}
+
+		/**
+		 * Determine whether we're logging queries.
+		 *
+		 * @return bool
+		 */
+		public function logging()
+	{
+			return $this->loggingQueries;
+		}
+
+		/**
+		 * Get the name of the connected database.
+		 *
+		 * @return string
+		 */
+		public function getDatabaseName()
+	{
+			return $this->database;
+		}
+
+		/**
+		 * Set the name of the connected database.
+		 *
+		 * @param  string  $database
+		 * @return string
+		 */
+		public function setDatabaseName($database)
+	{
+			$this->database = $database;
+		}
+
+		/**
+		 * Get the table prefix for the connection.
+		 *
+		 * @return string
+		 */
+		public function getTablePrefix()
+	{
+			return $this->tablePrefix;
+		}
+
+		/**
+		 * Set the table prefix in use by the connection.
+		 *
+		 * @param  string  $prefix
+		 * @return void
+		 */
+		public function setTablePrefix($prefix)
+	{
+			$this->tablePrefix = $prefix;
+
+			$this->getQueryGrammar()->setTablePrefix($prefix);
+		}
+
+		/**
+		 * Set the table prefix and return the grammar.
+		 *
+		 * @param  \Illuminate\Database\Grammar  $grammar
+		 * @return \Illuminate\Database\Grammar
+		 */
+		public function withTablePrefix(Grammar $grammar)
+	{
+			$grammar->setTablePrefix($this->tablePrefix);
+
+			return $grammar;
+		}
+
 	}
-
-}

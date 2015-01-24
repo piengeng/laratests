@@ -162,11 +162,7 @@ class Factory {
 	{
 		$this->extensions[$rule] = $extension;
 
-		if ($message)
-		{
-			$this->fallbackMessages[snake_case($rule)] = $message;
-		}
-
+		if ($message) $this->fallbackMessages[snake_case($rule)] = $message;
 	}
 
 	/**
@@ -181,11 +177,7 @@ class Factory {
 	{
 		$this->implicitExtensions[$rule] = $extension;
 
-		if ($message)
-		{
-			$this->fallbackMessages[snake_case($rule)] = $message;
-		}
-
+		if ($message) $this->fallbackMessages[snake_case($rule)] = $message;
 	}
 
 	/**

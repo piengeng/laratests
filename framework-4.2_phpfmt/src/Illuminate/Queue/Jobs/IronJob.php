@@ -75,10 +75,7 @@ class IronJob extends Job {
 	{
 		parent::delete();
 
-		if (isset($this->job->pushed))
-		{
-			return;
-		}
+		if (isset($this->job->pushed)) return;
 
 		$this->iron->deleteMessage($this->getQueue(), $this->job->id);
 	}
@@ -91,10 +88,7 @@ class IronJob extends Job {
 	 */
 	public function release($delay = 0)
 	{
-		if ( ! $this->pushed)
-		{
-			$this->delete();
-		}
+		if ( ! $this->pushed) $this->delete();
 
 		$this->recreateJob($delay);
 	}

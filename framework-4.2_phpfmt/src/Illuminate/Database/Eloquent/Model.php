@@ -288,10 +288,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 		{
 			if (preg_match('/^get(.+)Attribute$/', $method, $matches))
 			{
-				if (static::$snakeAttributes)
-				{
-					$matches[1] = snake_case($matches[1]);
-				}
+				if (static::$snakeAttributes) $matches[1] = snake_case($matches[1]);
 
 				static::$mutatorCache[$class][] = lcfirst($matches[1]);
 			}
@@ -335,7 +332,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public static function hasGlobalScope($scope)
 	{
-		return  ! is_null(static::getGlobalScope($scope));
+		return ! is_null(static::getGlobalScope($scope));
 	}
 
 	/**
@@ -426,7 +423,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	protected function fillableFromArray(array $attributes)
 	{
-		if (count($this->fillable) > 0 &&  ! static::$unguarded)
+		if (count($this->fillable) > 0 && ! static::$unguarded)
 		{
 			return array_intersect_key($attributes, array_flip($this->fillable));
 		}
@@ -654,10 +651,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	{
 		$instance = new static;
 
-		if (is_array($id) && empty($id))
-		{
-			return $instance->newCollection();
-		}
+		if (is_array($id) && empty($id)) return $instance->newCollection();
 
 		return $instance->newQuery()->find($id, $columns);
 	}
@@ -671,10 +665,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public static function findOrNew($id, $columns = array('*'))
 	{
-		if ( ! is_null($model = static::find($id, $columns)))
-		{
-			return $model;
-		}
+		if ( ! is_null($model = static::find($id, $columns))) return $model;
 
 		return new static;
 	}
@@ -690,10 +681,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public static function findOrFail($id, $columns = array('*'))
 	{
-		if ( ! is_null($model = static::find($id, $columns)))
-		{
-			return $model;
-		}
+		if ( ! is_null($model = static::find($id, $columns))) return $model;
 
 		throw (new ModelNotFoundException)->setModel(get_called_class());
 	}
@@ -706,10 +694,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public function load($relations)
 	{
-		if (is_string($relations))
-		{
-			$relations = func_get_args();
-		}
+		if (is_string($relations)) $relations = func_get_args();
 
 		$query = $this->newQuery()->with($relations);
 
@@ -726,10 +711,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public static function with($relations)
 	{
-		if (is_string($relations))
-		{
-			$relations = func_get_args();
-		}
+		if (is_string($relations)) $relations = func_get_args();
 
 		$instance = new static;
 
@@ -1049,7 +1031,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 			return ( ! in_array($caller, Model::$manyMethods) && $caller != $self);
 		});
 
-		return  ! is_null($caller) ? $caller['function'] : null;
+		return ! is_null($caller) ? $caller['function'] : null;
 	}
 
 	/**
@@ -1101,11 +1083,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 
 		foreach ($instance->whereIn($key, $ids)->get() as $model)
 		{
-			if ($model->delete())
-			{
-				$count++;
-			}
-
+			if ($model->delete()) $count++;
 		}
 
 		return $count;
@@ -1126,10 +1104,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 
 		if ($this->exists)
 		{
-			if ($this->fireModelEvent('deleting') === false)
-			{
-				return false;
-			}
+			if ($this->fireModelEvent('deleting') === false) return false;
 
 			// Here, we'll touch the owning models, verifying these timestamps get updated
 			// for the models. This will allow any caching to get broken on the parents
@@ -1266,10 +1241,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public static function flushEventListeners()
 	{
-		if ( ! isset(static::$dispatcher))
-		{
-			return;
-		}
+		if ( ! isset(static::$dispatcher)) return;
 
 		$instance = new static;
 
@@ -1434,10 +1406,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public function push()
 	{
-		if ( ! $this->save())
-		{
-			return false;
-		}
+		if ( ! $this->save()) return false;
 
 		// To sync all of the relationships to the database, we will simply spin through
 		// the relationships and save each model via this "push" method, which allows
@@ -1446,11 +1415,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 		{
 			foreach (Collection::make($models) as $model)
 			{
-				if ( ! $model->push())
-				{
-					return false;
-				}
-
+				if ( ! $model->push()) return false;
 			}
 		}
 
@@ -1491,10 +1456,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 			$saved = $this->performInsert($query, $options);
 		}
 
-		if ($saved)
-		{
-			$this->finishSave($options);
-		}
+		if ($saved) $this->finishSave($options);
 
 		return $saved;
 	}
@@ -1511,11 +1473,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 
 		$this->syncOriginal();
 
-		if (array_get($options, 'touch', true))
-		{
-			$this->touchOwners();
-		}
-
+		if (array_get($options, 'touch', true)) $this->touchOwners();
 	}
 
 	/**
@@ -1572,10 +1530,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	protected function performInsert(Builder $query, array $options = [])
 	{
-		if ($this->fireModelEvent('creating') === false)
-		{
-			return false;
-		}
+		if ($this->fireModelEvent('creating') === false) return false;
 
 		// First we'll need to create a fresh query instance and touch the creation and
 		// update timestamps on this model, which are maintained by us for developer
@@ -1665,10 +1620,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	protected function fireModelEvent($event, $halt = true)
 	{
-		if ( ! isset(static::$dispatcher))
-		{
-			return true;
-		}
+		if ( ! isset(static::$dispatcher)) return true;
 
 		// We will append the names of the class to the event to distinguish it from
 		// other model events that are fired, allowing us to listen on each model
@@ -1677,266 +1629,263 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 
 		$method = $halt ? 'until' : 'fire';
 
-		return static::$dispatcher->$method($event, $this);
-	}
-
-	/**
-	 * Set the keys for a save update query.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\Builder  $query
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	protected function setKeysForSaveQuery(Builder $query)
-	{
-		$query->where($this->getKeyName(), '=', $this->getKeyForSaveQuery());
-
-		return $query;
-	}
-
-	/**
-	 * Get the primary key value for a save query.
-	 *
-	 * @return mixed
-	 */
-	protected function getKeyForSaveQuery()
-	{
-		if (isset($this->original[$this->getKeyName()]))
-		{
-			return $this->original[$this->getKeyName()];
+			return static::$dispatcher->$method($event, $this);
 		}
 
-		return $this->getAttribute($this->getKeyName());
-	}
-
-	/**
-	 * Update the model's update timestamp.
-	 *
-	 * @return bool
-	 */
-	public function touch()
+		/**
+		 * Set the keys for a save update query.
+		 *
+		 * @param  \Illuminate\Database\Eloquent\Builder  $query
+		 * @return \Illuminate\Database\Eloquent\Builder
+		 */
+		protected function setKeysForSaveQuery(Builder $query)
 	{
-		$this->updateTimestamps();
+			$query->where($this->getKeyName(), '=', $this->getKeyForSaveQuery());
 
-		return $this->save();
-	}
-
-	/**
-	 * Update the creation and update timestamps.
-	 *
-	 * @return void
-	 */
-	protected function updateTimestamps()
-	{
-		$time = $this->freshTimestamp();
-
-		if ( ! $this->isDirty(static::UPDATED_AT))
-		{
-			$this->setUpdatedAt($time);
+			return $query;
 		}
 
-		if ( ! $this->exists &&  ! $this->isDirty(static::CREATED_AT))
+		/**
+		 * Get the primary key value for a save query.
+		 *
+		 * @return mixed
+		 */
+		protected function getKeyForSaveQuery()
+	{
+			if (isset($this->original[$this->getKeyName()]))
 		{
-			$this->setCreatedAt($time);
-		}
-	}
+				return $this->original[$this->getKeyName()];
+			}
 
-	/**
-	 * Set the value of the "created at" attribute.
-	 *
-	 * @param  mixed  $value
-	 * @return void
-	 */
-	public function setCreatedAt($value)
-	{
-		$this->{static::CREATED_AT} = $value;
-	}
-
-	/**
-	 * Set the value of the "updated at" attribute.
-	 *
-	 * @param  mixed  $value
-	 * @return void
-	 */
-	public function setUpdatedAt($value)
-	{
-		$this->{static::UPDATED_AT} = $value;
-	}
-
-	/**
-	 * Get the name of the "created at" column.
-	 *
-	 * @return string
-	 */
-	public function getCreatedAtColumn()
-	{
-		return static::CREATED_AT;
-	}
-
-	/**
-	 * Get the name of the "updated at" column.
-	 *
-	 * @return string
-	 */
-	public function getUpdatedAtColumn()
-	{
-		return static::UPDATED_AT;
-	}
-
-	/**
-	 * Get a fresh timestamp for the model.
-	 *
-	 * @return \Carbon\Carbon
-	 */
-	public function freshTimestamp()
-	{
-		return new Carbon;
-	}
-
-	/**
-	 * Get a fresh timestamp for the model.
-	 *
-	 * @return string
-	 */
-	public function freshTimestampString()
-	{
-		return $this->fromDateTime($this->freshTimestamp());
-	}
-
-	/**
-	 * Get a new query builder for the model's table.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	public function newQuery()
-	{
-		$builder = $this->newQueryWithoutScopes();
-
-		return $this->applyGlobalScopes($builder);
-	}
-
-	/**
-	 * Get a new query instance without a given scope.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\ScopeInterface  $scope
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	public function newQueryWithoutScope($scope)
-	{
-		$this->getGlobalScope($scope)->remove($builder = $this->newQuery(), $this);
-
-		return $builder;
-	}
-
-	/**
-	 * Get a new query builder that doesn't have any global scopes.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Builder|static
-	 */
-	public function newQueryWithoutScopes()
-	{
-		$builder = $this->newEloquentBuilder(
-			$this->newBaseQueryBuilder()
-		);
-
-		// Once we have the query builders, we will set the model instances so the
-		// builder can easily access any information it may need from the model
-		// while it is constructing and executing various queries against it.
-		return $builder->setModel($this)->with($this->with);
-	}
-
-	/**
-	 * Apply all of the global scopes to an Eloquent builder.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\Builder  $builder
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	public function applyGlobalScopes($builder)
-	{
-		foreach ($this->getGlobalScopes() as $scope)
-		{
-			$scope->apply($builder, $this);
+			return $this->getAttribute($this->getKeyName());
 		}
 
-		return $builder;
-	}
-
-	/**
-	 * Remove all of the global scopes from an Eloquent builder.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\Builder  $builder
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	public function removeGlobalScopes($builder)
+		/**
+		 * Update the model's update timestamp.
+		 *
+		 * @return bool
+		 */
+		public function touch()
 	{
-		foreach ($this->getGlobalScopes() as $scope)
-		{
-			$scope->remove($builder, $this);
+			$this->updateTimestamps();
+
+			return $this->save();
 		}
 
-		return $builder;
-	}
-
-	/**
-	 * Create a new Eloquent query builder for the model.
-	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
-	 * @return \Illuminate\Database\Eloquent\Builder|static
-	 */
-	public function newEloquentBuilder($query)
+		/**
+		 * Update the creation and update timestamps.
+		 *
+		 * @return void
+		 */
+		protected function updateTimestamps()
 	{
-		return new Builder($query);
-	}
+			$time = $this->freshTimestamp();
 
-	/**
-	 * Get a new query builder instance for the connection.
-	 *
-	 * @return \Illuminate\Database\Query\Builder
-	 */
-	protected function newBaseQueryBuilder()
-	{
-		$conn = $this->getConnection();
-
-		$grammar = $conn->getQueryGrammar();
-
-		return new QueryBuilder($conn, $grammar, $conn->getPostProcessor());
-	}
-
-	/**
-	 * Create a new Eloquent Collection instance.
-	 *
-	 * @param  array  $models
-	 * @return \Illuminate\Database\Eloquent\Collection
-	 */
-	public function newCollection(array $models = array())
-	{
-		return new Collection($models);
-	}
-
-	/**
-	 * Create a new pivot model instance.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\Model  $parent
-	 * @param  array   $attributes
-	 * @param  string  $table
-	 * @param  bool    $exists
-	 * @return \Illuminate\Database\Eloquent\Relations\Pivot
-	 */
-	public function newPivot(Model $parent, array $attributes, $table, $exists)
-	{
-		return new Pivot($parent, $attributes, $table, $exists);
-	}
-
-	/**
-	 * Get the table associated with the model.
-	 *
-	 * @return string
-	 */
-	public function getTable()
-	{
-		if (isset($this->table))
+			if ( ! $this->isDirty(static::UPDATED_AT))
 		{
-			return $this->table;
+				$this->setUpdatedAt($time);
+			}
+
+			if ( ! $this->exists && ! $this->isDirty(static::CREATED_AT))
+		{
+				$this->setCreatedAt($time);
+			}
 		}
+
+		/**
+		 * Set the value of the "created at" attribute.
+		 *
+		 * @param  mixed  $value
+		 * @return void
+		 */
+		public function setCreatedAt($value)
+	{
+			$this->{static::CREATED_AT} = $value;
+		}
+
+		/**
+		 * Set the value of the "updated at" attribute.
+		 *
+		 * @param  mixed  $value
+		 * @return void
+		 */
+		public function setUpdatedAt($value)
+	{
+			$this->{static::UPDATED_AT} = $value;
+		}
+
+		/**
+		 * Get the name of the "created at" column.
+		 *
+		 * @return string
+		 */
+		public function getCreatedAtColumn()
+	{
+			return static::CREATED_AT;
+		}
+
+		/**
+		 * Get the name of the "updated at" column.
+		 *
+		 * @return string
+		 */
+		public function getUpdatedAtColumn()
+	{
+			return static::UPDATED_AT;
+		}
+
+		/**
+		 * Get a fresh timestamp for the model.
+		 *
+		 * @return \Carbon\Carbon
+		 */
+		public function freshTimestamp()
+	{
+			return new Carbon;
+		}
+
+		/**
+		 * Get a fresh timestamp for the model.
+		 *
+		 * @return string
+		 */
+		public function freshTimestampString()
+	{
+			return $this->fromDateTime($this->freshTimestamp());
+		}
+
+		/**
+		 * Get a new query builder for the model's table.
+		 *
+		 * @return \Illuminate\Database\Eloquent\Builder
+		 */
+		public function newQuery()
+	{
+			$builder = $this->newQueryWithoutScopes();
+
+			return $this->applyGlobalScopes($builder);
+		}
+
+		/**
+		 * Get a new query instance without a given scope.
+		 *
+		 * @param  \Illuminate\Database\Eloquent\ScopeInterface  $scope
+		 * @return \Illuminate\Database\Eloquent\Builder
+		 */
+		public function newQueryWithoutScope($scope)
+	{
+			$this->getGlobalScope($scope)->remove($builder = $this->newQuery(), $this);
+
+			return $builder;
+		}
+
+		/**
+		 * Get a new query builder that doesn't have any global scopes.
+		 *
+		 * @return \Illuminate\Database\Eloquent\Builder|static
+		 */
+		public function newQueryWithoutScopes()
+	{
+			$builder = $this->newEloquentBuilder(
+				$this->newBaseQueryBuilder()
+			);
+
+			// Once we have the query builders, we will set the model instances so the
+			// builder can easily access any information it may need from the model
+			// while it is constructing and executing various queries against it.
+			return $builder->setModel($this)->with($this->with);
+		}
+
+		/**
+		 * Apply all of the global scopes to an Eloquent builder.
+		 *
+		 * @param  \Illuminate\Database\Eloquent\Builder  $builder
+		 * @return \Illuminate\Database\Eloquent\Builder
+		 */
+		public function applyGlobalScopes($builder)
+	{
+			foreach ($this->getGlobalScopes() as $scope)
+		{
+				$scope->apply($builder, $this);
+			}
+
+			return $builder;
+		}
+
+		/**
+		 * Remove all of the global scopes from an Eloquent builder.
+		 *
+		 * @param  \Illuminate\Database\Eloquent\Builder  $builder
+		 * @return \Illuminate\Database\Eloquent\Builder
+		 */
+		public function removeGlobalScopes($builder)
+	{
+			foreach ($this->getGlobalScopes() as $scope)
+		{
+				$scope->remove($builder, $this);
+			}
+
+			return $builder;
+		}
+
+		/**
+		 * Create a new Eloquent query builder for the model.
+		 *
+		 * @param  \Illuminate\Database\Query\Builder $query
+		 * @return \Illuminate\Database\Eloquent\Builder|static
+		 */
+		public function newEloquentBuilder($query)
+	{
+			return new Builder($query);
+		}
+
+		/**
+		 * Get a new query builder instance for the connection.
+		 *
+		 * @return \Illuminate\Database\Query\Builder
+		 */
+		protected function newBaseQueryBuilder()
+	{
+			$conn = $this->getConnection();
+
+			$grammar = $conn->getQueryGrammar();
+
+			return new QueryBuilder($conn, $grammar, $conn->getPostProcessor());
+		}
+
+		/**
+		 * Create a new Eloquent Collection instance.
+		 *
+		 * @param  array  $models
+		 * @return \Illuminate\Database\Eloquent\Collection
+		 */
+		public function newCollection(array $models = array())
+	{
+			return new Collection($models);
+		}
+
+		/**
+		 * Create a new pivot model instance.
+		 *
+		 * @param  \Illuminate\Database\Eloquent\Model  $parent
+		 * @param  array   $attributes
+		 * @param  string  $table
+		 * @param  bool    $exists
+		 * @return \Illuminate\Database\Eloquent\Relations\Pivot
+		 */
+		public function newPivot(Model $parent, array $attributes, $table, $exists)
+	{
+			return new Pivot($parent, $attributes, $table, $exists);
+		}
+
+		/**
+		 * Get the table associated with the model.
+		 *
+		 * @return string
+		 */
+		public function getTable()
+	{
+			if (isset($this->table)) return $this->table;
 
 		return str_replace('\\', '', snake_case(str_plural(class_basename($this))));
 	}
@@ -1949,265 +1898,256 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public function setTable($table)
 	{
-		$this->table = $table;
-	}
-
-	/**
-	 * Get the value of the model's primary key.
-	 *
-	 * @return mixed
-	 */
-	public function getKey()
-	{
-		return $this->getAttribute($this->getKeyName());
-	}
-
-	/**
-	 * Get the primary key for the model.
-	 *
-	 * @return string
-	 */
-	public function getKeyName()
-	{
-		return $this->primaryKey;
-	}
-
-	/**
-	 * Set the primary key for the model.
-	 *
-	 * @param  string  $key
-	 * @return void
-	 */
-	public function setKeyName($key)
-	{
-		$this->primaryKey = $key;
-	}
-
-	/**
-	 * Get the table qualified key name.
-	 *
-	 * @return string
-	 */
-	public function getQualifiedKeyName()
-	{
-		return $this->getTable().'.'.$this->getKeyName();
-	}
-
-	/**
-	 * Determine if the model uses timestamps.
-	 *
-	 * @return bool
-	 */
-	public function usesTimestamps()
-	{
-		return $this->timestamps;
-	}
-
-	/**
-	 * Get the polymorphic relationship columns.
-	 *
-	 * @param  string  $name
-	 * @param  string  $type
-	 * @param  string  $id
-	 * @return array
-	 */
-	protected function getMorphs($name, $type, $id)
-	{
-		$type = $type ?: $name.'_type';
-
-		$id = $id ?: $name.'_id';
-
-		return array($type, $id);
-	}
-
-	/**
-	 * Get the class name for polymorphic relations.
-	 *
-	 * @return string
-	 */
-	public function getMorphClass()
-	{
-		return $this->morphClass ?: get_class($this);
-	}
-
-	/**
-	 * Get the number of models to return per page.
-	 *
-	 * @return int
-	 */
-	public function getPerPage()
-	{
-		return $this->perPage;
-	}
-
-	/**
-	 * Set the number of models to return per page.
-	 *
-	 * @param  int   $perPage
-	 * @return void
-	 */
-	public function setPerPage($perPage)
-	{
-		$this->perPage = $perPage;
-	}
-
-	/**
-	 * Get the default foreign key name for the model.
-	 *
-	 * @return string
-	 */
-	public function getForeignKey()
-	{
-		return snake_case(class_basename($this)).'_id';
-	}
-
-	/**
-	 * Get the hidden attributes for the model.
-	 *
-	 * @return array
-	 */
-	public function getHidden()
-	{
-		return $this->hidden;
-	}
-
-	/**
-	 * Set the hidden attributes for the model.
-	 *
-	 * @param  array  $hidden
-	 * @return void
-	 */
-	public function setHidden(array $hidden)
-	{
-		$this->hidden = $hidden;
-	}
-
-	/**
-	 * Set the visible attributes for the model.
-	 *
-	 * @param  array  $visible
-	 * @return void
-	 */
-	public function setVisible(array $visible)
-	{
-		$this->visible = $visible;
-	}
-
-	/**
-	 * Set the accessors to append to model arrays.
-	 *
-	 * @param  array  $appends
-	 * @return void
-	 */
-	public function setAppends(array $appends)
-	{
-		$this->appends = $appends;
-	}
-
-	/**
-	 * Get the fillable attributes for the model.
-	 *
-	 * @return array
-	 */
-	public function getFillable()
-	{
-		return $this->fillable;
-	}
-
-	/**
-	 * Set the fillable attributes for the model.
-	 *
-	 * @param  array  $fillable
-	 * @return $this
-	 */
-	public function fillable(array $fillable)
-	{
-		$this->fillable = $fillable;
-
-		return $this;
-	}
-
-	/**
-	 * get the guarded attributes for the model.
-	 *
-	 * @return array
-	 */
-	public function getGuarded()
-	{
-		return $this->guarded;
-	}
-
-	/**
-	 * Set the guarded attributes for the model.
-	 *
-	 * @param  array  $guarded
-	 * @return $this
-	 */
-	public function guard(array $guarded)
-	{
-		$this->guarded = $guarded;
-
-		return $this;
-	}
-
-	/**
-	 * Disable all mass assignable restrictions.
-	 *
-	 * @return void
-	 */
-	public static function unguard()
-	{
-		static::$unguarded = true;
-	}
-
-	/**
-	 * Enable the mass assignment restrictions.
-	 *
-	 * @return void
-	 */
-	public static function reguard()
-	{
-		static::$unguarded = false;
-	}
-
-	/**
-	 * Set "unguard" to a given state.
-	 *
-	 * @param  bool  $state
-	 * @return void
-	 */
-	public static function setUnguardState($state)
-	{
-		static::$unguarded = $state;
-	}
-
-	/**
-	 * Determine if the given attribute may be mass assigned.
-	 *
-	 * @param  string  $key
-	 * @return bool
-	 */
-	public function isFillable($key)
-	{
-		if (static::$unguarded)
-		{
-			return true;
+			$this->table = $table;
 		}
+
+		/**
+		 * Get the value of the model's primary key.
+		 *
+		 * @return mixed
+		 */
+		public function getKey()
+	{
+			return $this->getAttribute($this->getKeyName());
+		}
+
+		/**
+		 * Get the primary key for the model.
+		 *
+		 * @return string
+		 */
+		public function getKeyName()
+	{
+			return $this->primaryKey;
+		}
+
+		/**
+		 * Set the primary key for the model.
+		 *
+		 * @param  string  $key
+		 * @return void
+		 */
+		public function setKeyName($key)
+	{
+			$this->primaryKey = $key;
+		}
+
+		/**
+		 * Get the table qualified key name.
+		 *
+		 * @return string
+		 */
+		public function getQualifiedKeyName()
+	{
+			return $this->getTable().'.'.$this->getKeyName();
+		}
+
+		/**
+		 * Determine if the model uses timestamps.
+		 *
+		 * @return bool
+		 */
+		public function usesTimestamps()
+	{
+			return $this->timestamps;
+		}
+
+		/**
+		 * Get the polymorphic relationship columns.
+		 *
+		 * @param  string  $name
+		 * @param  string  $type
+		 * @param  string  $id
+		 * @return array
+		 */
+		protected function getMorphs($name, $type, $id)
+	{
+			$type = $type ?: $name.'_type';
+
+			$id = $id ?: $name.'_id';
+
+			return array($type, $id);
+		}
+
+		/**
+		 * Get the class name for polymorphic relations.
+		 *
+		 * @return string
+		 */
+		public function getMorphClass()
+	{
+			return $this->morphClass ?: get_class($this);
+		}
+
+		/**
+		 * Get the number of models to return per page.
+		 *
+		 * @return int
+		 */
+		public function getPerPage()
+	{
+			return $this->perPage;
+		}
+
+		/**
+		 * Set the number of models to return per page.
+		 *
+		 * @param  int   $perPage
+		 * @return void
+		 */
+		public function setPerPage($perPage)
+	{
+			$this->perPage = $perPage;
+		}
+
+		/**
+		 * Get the default foreign key name for the model.
+		 *
+		 * @return string
+		 */
+		public function getForeignKey()
+	{
+			return snake_case(class_basename($this)).'_id';
+		}
+
+		/**
+		 * Get the hidden attributes for the model.
+		 *
+		 * @return array
+		 */
+		public function getHidden()
+	{
+			return $this->hidden;
+		}
+
+		/**
+		 * Set the hidden attributes for the model.
+		 *
+		 * @param  array  $hidden
+		 * @return void
+		 */
+		public function setHidden(array $hidden)
+	{
+			$this->hidden = $hidden;
+		}
+
+		/**
+		 * Set the visible attributes for the model.
+		 *
+		 * @param  array  $visible
+		 * @return void
+		 */
+		public function setVisible(array $visible)
+	{
+			$this->visible = $visible;
+		}
+
+		/**
+		 * Set the accessors to append to model arrays.
+		 *
+		 * @param  array  $appends
+		 * @return void
+		 */
+		public function setAppends(array $appends)
+	{
+			$this->appends = $appends;
+		}
+
+		/**
+		 * Get the fillable attributes for the model.
+		 *
+		 * @return array
+		 */
+		public function getFillable()
+	{
+			return $this->fillable;
+		}
+
+		/**
+		 * Set the fillable attributes for the model.
+		 *
+		 * @param  array  $fillable
+		 * @return $this
+		 */
+		public function fillable(array $fillable)
+	{
+			$this->fillable = $fillable;
+
+			return $this;
+		}
+
+		/**
+		 * get the guarded attributes for the model.
+		 *
+		 * @return array
+		 */
+		public function getGuarded()
+	{
+			return $this->guarded;
+		}
+
+		/**
+		 * Set the guarded attributes for the model.
+		 *
+		 * @param  array  $guarded
+		 * @return $this
+		 */
+		public function guard(array $guarded)
+	{
+			$this->guarded = $guarded;
+
+			return $this;
+		}
+
+		/**
+		 * Disable all mass assignable restrictions.
+		 *
+		 * @return void
+		 */
+		public static function unguard()
+	{
+			static::$unguarded = true;
+		}
+
+		/**
+		 * Enable the mass assignment restrictions.
+		 *
+		 * @return void
+		 */
+		public static function reguard()
+	{
+			static::$unguarded = false;
+		}
+
+		/**
+		 * Set "unguard" to a given state.
+		 *
+		 * @param  bool  $state
+		 * @return void
+		 */
+		public static function setUnguardState($state)
+	{
+			static::$unguarded = $state;
+		}
+
+		/**
+		 * Determine if the given attribute may be mass assigned.
+		 *
+		 * @param  string  $key
+		 * @return bool
+		 */
+		public function isFillable($key)
+	{
+			if (static::$unguarded) return true;
 
 		// If the key is in the "fillable" array, we can of course assume that it's
 		// a fillable attribute. Otherwise, we will check the guarded array when
 		// we need to determine if the attribute is black-listed on the model.
-		if (in_array($key, $this->fillable))
-		{
-			return true;
-		}
+		if (in_array($key, $this->fillable)) return true;
 
-		if ($this->isGuarded($key))
-		{
-			return false;
-		}
+		if ($this->isGuarded($key)) return false;
 
-		return empty($this->fillable) &&  ! starts_with($key, '_');
+		return empty($this->fillable) && ! starts_with($key, '_');
 	}
 
 	/**
@@ -2218,31 +2158,28 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public function isGuarded($key)
 	{
-		return in_array($key, $this->guarded) || $this->guarded == array('*');
-	}
-
-	/**
-	 * Determine if the model is totally guarded.
-	 *
-	 * @return bool
-	 */
-	public function totallyGuarded()
-	{
-		return count($this->fillable) == 0 && $this->guarded == array('*');
-	}
-
-	/**
-	 * Remove the table name from a given key.
-	 *
-	 * @param  string  $key
-	 * @return string
-	 */
-	protected function removeTableFromKey($key)
-	{
-		if ( ! str_contains($key, '.'))
-		{
-			return $key;
+			return in_array($key, $this->guarded) || $this->guarded == array('*');
 		}
+
+		/**
+		 * Determine if the model is totally guarded.
+		 *
+		 * @return bool
+		 */
+		public function totallyGuarded()
+	{
+			return count($this->fillable) == 0 && $this->guarded == array('*');
+		}
+
+		/**
+		 * Remove the table name from a given key.
+		 *
+		 * @param  string  $key
+		 * @return string
+		 */
+		protected function removeTableFromKey($key)
+	{
+			if ( ! str_contains($key, '.')) return $key;
 
 		return last(explode('.', $key));
 	}
@@ -2254,92 +2191,89 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public function getTouchedRelations()
 	{
-		return $this->touches;
-	}
+			return $this->touches;
+		}
 
-	/**
-	 * Set the relationships that are touched on save.
-	 *
-	 * @param  array  $touches
-	 * @return void
-	 */
-	public function setTouchedRelations(array $touches)
+		/**
+		 * Set the relationships that are touched on save.
+		 *
+		 * @param  array  $touches
+		 * @return void
+		 */
+		public function setTouchedRelations(array $touches)
 	{
-		$this->touches = $touches;
-	}
+			$this->touches = $touches;
+		}
 
-	/**
-	 * Get the value indicating whether the IDs are incrementing.
-	 *
-	 * @return bool
-	 */
-	public function getIncrementing()
+		/**
+		 * Get the value indicating whether the IDs are incrementing.
+		 *
+		 * @return bool
+		 */
+		public function getIncrementing()
 	{
-		return $this->incrementing;
-	}
+			return $this->incrementing;
+		}
 
-	/**
-	 * Set whether IDs are incrementing.
-	 *
-	 * @param  bool  $value
-	 * @return void
-	 */
-	public function setIncrementing($value)
+		/**
+		 * Set whether IDs are incrementing.
+		 *
+		 * @param  bool  $value
+		 * @return void
+		 */
+		public function setIncrementing($value)
 	{
-		$this->incrementing = $value;
-	}
+			$this->incrementing = $value;
+		}
 
-	/**
-	 * Convert the model instance to JSON.
-	 *
-	 * @param  int  $options
-	 * @return string
-	 */
-	public function toJson($options = 0)
+		/**
+		 * Convert the model instance to JSON.
+		 *
+		 * @param  int  $options
+		 * @return string
+		 */
+		public function toJson($options = 0)
 	{
-		return json_encode($this->toArray(), $options);
-	}
+			return json_encode($this->toArray(), $options);
+		}
 
-	/**
-	 * Convert the object into something JSON serializable.
-	 *
-	 * @return array
-	 */
-	public function jsonSerialize()
+		/**
+		 * Convert the object into something JSON serializable.
+		 *
+		 * @return array
+		 */
+		public function jsonSerialize()
 	{
-		return $this->toArray();
-	}
+			return $this->toArray();
+		}
 
-	/**
-	 * Convert the model instance to an array.
-	 *
-	 * @return array
-	 */
-	public function toArray()
+		/**
+		 * Convert the model instance to an array.
+		 *
+		 * @return array
+		 */
+		public function toArray()
 	{
-		$attributes = $this->attributesToArray();
+			$attributes = $this->attributesToArray();
 
-		return array_merge($attributes, $this->relationsToArray());
-	}
+			return array_merge($attributes, $this->relationsToArray());
+		}
 
-	/**
-	 * Convert the model's attributes to an array.
-	 *
-	 * @return array
-	 */
-	public function attributesToArray()
+		/**
+		 * Convert the model's attributes to an array.
+		 *
+		 * @return array
+		 */
+		public function attributesToArray()
 	{
-		$attributes = $this->getArrayableAttributes();
+			$attributes = $this->getArrayableAttributes();
 
-		// If an attribute is a date, we will cast it to a string after converting it
-		// to a DateTime / Carbon instance. This is so we will get some consistent
-		// formatting while accessing attributes vs. arraying / JSONing a model.
-		foreach ($this->getDates() as $key)
+			// If an attribute is a date, we will cast it to a string after converting it
+			// to a DateTime / Carbon instance. This is so we will get some consistent
+			// formatting while accessing attributes vs. arraying / JSONing a model.
+			foreach ($this->getDates() as $key)
 		{
-			if ( ! isset($attributes[$key]))
-			{
-				continue;
-			}
+				if ( ! isset($attributes[$key]))continue;
 
 			$attributes[$key] = (string) $this->asDateTime($attributes[$key]);
 		}
@@ -2349,10 +2283,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 		// we don't have to constantly check on attributes that actually change.
 		foreach ($this->getMutatedAttributes() as $key)
 		{
-			if ( ! array_key_exists($key, $attributes))
-			{
-				continue;
-			}
+				if ( ! array_key_exists($key, $attributes))continue;
 
 			$attributes[$key] = $this->mutateAttributeForArray(
 				$key, $attributes[$key]
@@ -2364,33 +2295,30 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 		// when we need to array or JSON the model for convenience to the coder.
 		foreach ($this->getArrayableAppends() as $key)
 		{
-			$attributes[$key] = $this->mutateAttributeForArray($key, null);
+				$attributes[$key] = $this->mutateAttributeForArray($key, null);
+			}
+
+			return $attributes;
 		}
 
-		return $attributes;
-	}
-
-	/**
-	 * Get an attribute array of all arrayable attributes.
-	 *
-	 * @return array
-	 */
-	protected function getArrayableAttributes()
+		/**
+		 * Get an attribute array of all arrayable attributes.
+		 *
+		 * @return array
+		 */
+		protected function getArrayableAttributes()
 	{
-		return $this->getArrayableItems($this->attributes);
-	}
-
-	/**
-	 * Get all of the appendable values that are arrayable.
-	 *
-	 * @return array
-	 */
-	protected function getArrayableAppends()
-	{
-		if ( ! count($this->appends))
-		{
-			return [];
+			return $this->getArrayableItems($this->attributes);
 		}
+
+		/**
+		 * Get all of the appendable values that are arrayable.
+		 *
+		 * @return array
+		 */
+		protected function getArrayableAppends()
+	{
+			if ( ! count($this->appends)) return [];
 
 		return $this->getArrayableItems(
 			array_combine($this->appends, $this->appends)
@@ -2404,26 +2332,23 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	 */
 	public function relationsToArray()
 	{
-		$attributes = array();
+			$attributes = array();
 
-		foreach ($this->getArrayableRelations() as $key => $value)
+			foreach ($this->getArrayableRelations() as $key => $value)
 		{
-			if (in_array($key, $this->hidden))
-			{
-				continue;
-			}
+				if (in_array($key, $this->hidden))continue;
 
 			// If the values implements the Arrayable interface we can just call this
 			// toArray method on the instances which will convert both models and
 			// collections to their proper array form and we'll set the values.
 			if ($value instanceof ArrayableInterface)
 			{
-				$relation = $value->toArray();
-			}
+					$relation = $value->toArray();
+				}
 
-			// If the value is null, we'll still go ahead and set it in this list of
-			// attributes since null is used to represent empty relationships if
-			// if it a has one or belongs to type relationships on the models.
+				// If the value is null, we'll still go ahead and set it in this list of
+				// attributes since null is used to represent empty relationships if
+				// if it a has one or belongs to type relationships on the models.
 			elseif (is_null($value))
 			{
 				$relation = $value;
@@ -2537,11 +2462,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 		// date fields without having to create a mutator for each property.
 		elseif (in_array($key, $this->getDates()))
 		{
-			if ($value)
-			{
-				return $this->asDateTime($value);
-			}
-
+			if ($value) return $this->asDateTime($value);
 		}
 
 		return $value;
@@ -2807,11 +2728,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	{
 		$this->attributes = $attributes;
 
-		if ($sync)
-		{
-			$this->syncOriginal();
-		}
-
+		if ($sync) $this->syncOriginal();
 	}
 
 	/**
@@ -2861,23 +2778,13 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	{
 		$dirty = $this->getDirty();
 
-		if (is_null($attributes))
-		{
-			return count($dirty) > 0;
-		}
+		if (is_null($attributes)) return count($dirty) > 0;
 
-		if ( ! is_array($attributes))
-		{
-			$attributes = func_get_args();
-		}
+		if ( ! is_array($attributes)) $attributes = func_get_args();
 
 		foreach ($attributes as $attribute)
 		{
-			if (array_key_exists($attribute, $dirty))
-			{
-				return true;
-			}
-
+			if (array_key_exists($attribute, $dirty)) return true;
 		}
 
 		return false;
@@ -3171,7 +3078,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
 	public function __isset($key)
 	{
 		return ((isset($this->attributes[$key]) || isset($this->relations[$key])) ||
-			($this->hasGetMutator($key) &&  ! is_null($this->getAttributeValue($key))));
+			($this->hasGetMutator($key) && ! is_null($this->getAttributeValue($key))));
 	}
 
 	/**
