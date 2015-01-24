@@ -87,22 +87,27 @@ function phpfmtIt($container, $target, $appended, $file = null) {
 			$it->next();
 		}
 	} else {
-		// echo 'reached';
-		// print_r(file_get_contents($file . '.in'));
-		$got = $fmt->formatCode(file_get_contents($file . '.in'));
-		// print_r($got);
-		file_put_contents($file . '.out', $got);
-		// echo ' and here';
+		$input = $file . '.in';
+		$last_line = system("php -l $input", $retval);
+		if ($retval == 0) {
+			$got = $fmt->formatCode(file_get_contents($input));
+			file_put_contents($file . '.out', $got);
+		} else {
+			echo "DAYUM!!\n";
+		}
 	}
 
 	return true;
 }
-// $wip = '../../laratests/to-tests-laravel/no_expand';
-// phpfmtIt('', '', '', $wip);
-
-phpfmtIt('../../laratests', 'framework-4.2', '_phpfmt');
-
-// phpfmtIt('../../laratests', 'laravel-master', '_phpfmt');
+$singleFile = false;
+if ($singleFile) {
+	$currentFile = '020-keep-non-empty-curly-braces';
+	$wip = "../../laratests/to-tests-laravel/$currentFile";
+	phpfmtIt('', '', '', $wip);
+} else {
+	phpfmtIt('../../laratests', 'framework-4.2', '_phpfmt');
+	phpfmtIt('../../laratests', 'laravel-master', '_phpfmt');
+}
 // ---------------------------------------------------------------------------------------------------------------
 echo "Took ", (microtime(true) - $start), PHP_EOL;
 exit(0);

@@ -19,8 +19,8 @@ function fetch() {
 		$folder = implode('-', $matches);
 		$filename = $folder . '.zip'; // echo $filename;
 		try {
-			// file_put_contents($filename, @file($target));	//swap for fast execution
-			file_put_contents($filename, @file($filename)); //swap for fast execution
+			file_put_contents($filename, @file($target)); //swap for fast execution
+			// file_put_contents($filename, @file($filename)); //swap for fast execution
 			$zip = new ZipArchive;
 			$res = $zip->open($filename);
 			if ($res === TRUE) {
