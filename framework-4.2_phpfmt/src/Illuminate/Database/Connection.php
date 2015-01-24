@@ -194,8 +194,7 @@ class Connection implements ConnectionInterface {
 	 * @return \Illuminate\Database\Schema\Grammars\Grammar
 	 */
 	protected function getDefaultSchemaGrammar()
-	{
-		}
+	{}
 
 	/**
 	 * Set the query post processor to the default implementation.

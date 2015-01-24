@@ -51,8 +51,7 @@ class SyncQueue extends Queue implements QueueInterface {
 	 * @return \Illuminate\Queue\Jobs\Job|null
 	 */
 	public function pop($queue = null)
-	{
-		}
+	{}
 
 	/**
 	 * Resolve a Sync job instance.

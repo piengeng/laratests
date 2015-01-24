@@ -216,8 +216,7 @@ abstract class Controller {
 	 * @return void
 	 */
 	protected function setupLayout()
-	{
-		}
+	{}
 
 	/**
 	 * Execute an action on the controller.

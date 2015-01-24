@@ -35,8 +35,7 @@ abstract class ServiceProvider {
 	 * @return void
 	 */
 	public function boot()
-	{
-		}
+	{}
 
 	/**
 	 * Register the service provider.

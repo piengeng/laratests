@@ -144,7 +144,7 @@ class PasswordBroker {
 		{
 			$m->to($user->getReminderEmail());
 
-			if ( ! is_null($callback))call_user_func($callback, $m, $user, $token);
+			if ( ! is_null($callback)) call_user_func($callback, $m, $user, $token);
 		});
 	}
 

@@ -2,6 +2,8 @@
 if ($this->loggedOut) return;
 $this->put($key, $value, $minutes); return true;
 if ($environment == 'production') $environment = null;
+if ($count == 0) break;
+if ($callback) call_user_func($callback, $query);
 
 if ($custom instanceof Guard) return $custom;
 

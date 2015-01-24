@@ -606,7 +606,7 @@ class Builder {
 
 		$query = $relation->getRelationCountQuery($relation->getRelated()->newQuery(), $this);
 
-		if ($callback)call_user_func($callback, $query);
+		if ($callback) call_user_func($callback, $query);
 
 		return $this->addHasWhere($query, $relation, $operator, $count, $boolean);
 	}
@@ -803,8 +803,7 @@ class Builder {
 			if (is_numeric($name))
 			{
 				$f = function()
-				{
-					};
+				{};
 
 				list($name, $constraints) = array($constraints, $f);
 			}
@@ -841,8 +840,7 @@ class Builder {
 			if ( ! isset($results[$last = implode('.', $progress)]))
 			{
 				$results[$last] = function()
-				{
-					};
+				{};
 			}
 		}
 
