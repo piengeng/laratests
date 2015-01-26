@@ -572,9 +572,9 @@ class Request extends SymfonyRequest {
 	 */
 	public static function createFromBase(SymfonyRequest $request)
 	{
-			if ($request instanceof static ) return $request;
+			if ($request instanceof static) return $request;
 
-		return (new static )->duplicate(
+		return (new static)->duplicate(
 
 			$request->query->all(), $request->request->all(), $request->attributes->all(),
 

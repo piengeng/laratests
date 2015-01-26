@@ -108,7 +108,7 @@ trait SoftDeletingTrait {
 	 */
 	public static function withTrashed()
 	{
-		return (new static )->newQueryWithoutScope(new SoftDeletingScope);
+		return (new static)->newQueryWithoutScope(new SoftDeletingScope);
 	}
 
 	/**

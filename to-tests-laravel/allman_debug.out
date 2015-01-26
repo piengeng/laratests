@@ -1,0 +1,68 @@
+<?php
+
+abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterface, JsonSerializable {
+	/**
+	 * Create a new Eloquent model instance.
+	 *
+	 * @param  array  $attributes
+	 * @return void
+	 */
+	public function __construct(array $attributes = array())
+	{
+		$this->bootIfNotBooted();
+
+		$this->bind('_missing', function($v)
+		{
+			$this->bind('_missing', function($v) {return explode('/', $v);});
+		{
+			{
+			{
+			 $var = 1;
+
+		}}}$var = 2;
+
+		$shit = 2;{
+			{
+			{
+			 $var = 1;
+
+		}}}$var = 2;
+	}
+
+	protected function getStringParameters(array $parameters)
+		{
+		return array_where($parameters, function($k, $v) {return is_string($k);});
+	}
+	protected function getDefaultConfirmCallback()
+		{
+		return function() {return $this->getLaravel()->environment() == 'production';};
+	}
+	/**
+	 * Check if the model needs to be booted and if so, do it.
+	 *
+	 * @return void
+	 */
+	protected function bootIfNotBooted()
+		{
+		$class = get_class($this);
+
+		if ( ! isset(static::$booted[$class]))
+			{
+			static::$booted[$class] = true;
+
+			$this->fireModelEvent('booting', false);
+
+/* arbitrary comment block
+text
+| character
+any text
+*/
+
+			return function() {};
+		}
+		$cream = <<<SQL
+something
+SQL;
+	}
+// arbitrary comment
+}

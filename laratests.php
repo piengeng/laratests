@@ -101,7 +101,8 @@ function phpfmtIt($container, $target, $appended, $file = null) {
 }
 $singleFile = false;
 if ($singleFile) {
-	$currentFile = '020-keep-non-empty-curly-braces';
+	$currentFile = 'allman_debug_full';
+	$currentFile = 'allman_debug';
 	$wip = "../../laratests/to-tests-laravel/$currentFile";
 	phpfmtIt('', '', '', $wip);
 } else {
